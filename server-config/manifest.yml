@@ -1,0 +1,9 @@
+---
+applications:
+- name: config-server
+  memory: 512M 
+  instances: 1
+  host: config-leagues
+  path: ./target/config-server-0.0.1.jar
+  env:
+   JAVA_OPTS: -Djava.security.egd=file:///dev/urandom

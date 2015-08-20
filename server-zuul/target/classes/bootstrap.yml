@@ -1,0 +1,15 @@
+server:
+  port: 8765
+
+spring:
+  application:
+    name: edgeserver
+  cloud:
+    config:
+      uri: ${vcap.services.${PREFIX:}configserver.credentials.uri:http://user:password@localhost:8888}
+
+eureka: 
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    metadataMap:
+      instanceId: ${vcap.application.instance_id:${spring.application.name}:${server.port}} 

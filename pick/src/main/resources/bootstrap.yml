@@ -1,0 +1,23 @@
+server:
+  port: 8083
+
+spring:
+  application:
+   name: pick
+  cloud:
+   config:
+    uri: ${vcap.services.springbox-config-service.credentials.uri:http://localhost:8888}    
+    discovery:
+      enabled: true
+      serviceId: config-server
+
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    metadataMap:
+      instanceId: ${vcap.application.instance_id:${spring.application.name}:${server.port:8080}} 
+---
+spring:
+  cloud:
+    profiles: local
+    

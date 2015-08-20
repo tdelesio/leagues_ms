@@ -1,0 +1,7 @@
+---
+applications:
+- name: eureka
+  memory: 512M 
+  instances: 1
+  host: eureka-leagues
+  path: ./target/eureka-0.0.1.jar

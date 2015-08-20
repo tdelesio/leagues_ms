@@ -1,0 +1,13 @@
+security:
+  user:
+    password:
+      password
+
+#turbine:
+#  appConfig: game,league,pick,player
+#  clusterNameExpression: 'default'
+
+#turbine:
+#  aggregator:
+#    clusterConfig: MYP
+#  appConfig: myp
