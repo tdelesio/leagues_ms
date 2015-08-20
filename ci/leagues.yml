@@ -9,7 +9,8 @@ jobs:
 - name: build-rc
   plan:
   - get: leagues
+    trigger: true
   - task: hello-world
-    file: hello-world.yml
+    file: leagues_ms/ci/hello-world.yml
 
   

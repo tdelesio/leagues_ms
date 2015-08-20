@@ -2,7 +2,8 @@
 platform: linux
 
 image: docker:///busybox
-
+inputs:
+  - name: leagues
 run:
   path: echo
   args: [hello world]
