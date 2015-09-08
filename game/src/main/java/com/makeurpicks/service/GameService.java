@@ -1,21 +1,14 @@
 package com.makeurpicks.service;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.makeurpicks.GameValidationException;
 import com.makeurpicks.GameValidationException.GameExceptions;
 import com.makeurpicks.domain.Game;
-import com.makeurpicks.domain.LeagueType;
-import com.makeurpicks.domain.Season;
 import com.makeurpicks.domain.Team;
 import com.makeurpicks.domain.Week;
 import com.makeurpicks.repository.GameRepository;
-import com.makeurpicks.repository.SeasonRepository;
 import com.makeurpicks.repository.TeamRepository;
 import com.makeurpicks.repository.WeekRepository;
 
@@ -31,8 +24,6 @@ public class GameService {
 	@Autowired
 	private TeamRepository teamRepository;
 	
-	@Autowired 
-	private SeasonRepository seasonRepository;
 	
 	public Iterable<Week> getWeeksBySeason(String seasonId)
 	{
@@ -42,38 +33,6 @@ public class GameService {
 	public Week createWeek(Week week)
 	{
 		return weekRepository.createUpdateWeek(week);
-	}
-	
-	public List<Season> getCurrentSeasons()
-	{
-		List<Season> s = new ArrayList<Season>();
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTimeInMillis(System.currentTimeMillis());
-		int currentYear = calendar.get(Calendar.YEAR);
-		
-		for (LeagueType lt : LeagueType.values())
-		{
-			Iterable<Season> seasons = seasonRepository.getSeasonsByLeagueType(lt.toString());
-			for (Season season:seasons)
-			{
-				if (season.getStartYear() >= currentYear)
-					s.add(season);
-			}
-		}
-		
-		return s;
-	}
-	
-	public Season createUpdateSeason(Season season)
-	{
-		return seasonRepository.createUpdateSeason(season);
-	}
-	
-	
-	
-	public LeagueType[] getLeagueType()
-	{
-		return LeagueType.values();
 	}
 	
 	public Iterable<Team> getTeams(String leagueType)

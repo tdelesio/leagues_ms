@@ -1,7 +1,5 @@
 package com.makeurpicks.config;
 
-import java.util.List;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -9,10 +7,13 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 import com.makeurpicks.domain.KeyValue;
 import com.makeurpicks.domain.League;
+import com.makeurpicks.domain.Season;
 import com.makeurpicks.repository.LeagueRepository;
+import com.makeurpicks.repository.SeasonRepository;
 import com.makeurpicks.repository.redis.RedisLeagueRepository;
 import com.makeurpicks.repository.redis.RedisLeaguesPlayerHasJoinedRepository;
 import com.makeurpicks.repository.redis.RedisPlayersInLeagueRespository;
+import com.makeurpicks.repository.redis.RedisSeasonRepository;
 
 @Configuration
 public class RedisConfig {
@@ -53,4 +54,21 @@ public class RedisConfig {
 	{	
 		return new RedisLeaguesPlayerHasJoinedRepository(keyValueRedisTemplate(redisConnectionFactory));
 	}
+	
+	@Bean
+	public RedisTemplate<String, Season> seasonRedisTemplate(
+			RedisConnectionFactory redisConnectionFactory) {
+		RedisTemplate<String, Season> template = new RedisTemplate<String, Season>();
+		template.setConnectionFactory(redisConnectionFactory);
+		
+		return template;
+	}
+	
+	@Bean
+	public SeasonRepository seasonRepository(RedisConnectionFactory redisConnectionFactory)
+	{
+		SeasonRepository seasonRepository = new RedisSeasonRepository(seasonRedisTemplate(redisConnectionFactory));
+		return seasonRepository;
+	}
+	
 }

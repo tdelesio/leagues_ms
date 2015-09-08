@@ -21,9 +21,9 @@ spring:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://eureka-leagues.pivotal.io
+      defaultZone: http://eureka-leagues.cfapps.io/eureka/
   instance:
-    hostname: config.pcf.hertz.com
+    hostname: config-leagues.cfapps.io/
     nonSecurePort: 80
     leaseRenewalIntervalInSeconds: 10
     metadataMap:

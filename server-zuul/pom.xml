@@ -4,8 +4,8 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.makeurpicks</groupId>
-	<artifactId>edge-server</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>zuul-server</artifactId>
+	<version>0.0.1</version>
 	<packaging>jar</packaging>
 
 	<name>edge-server</name>

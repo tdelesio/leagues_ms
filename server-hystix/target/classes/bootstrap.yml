@@ -1,23 +1,30 @@
-server:
-  port: 7979
+spring:
+  application:
+   name: hystrix-server
+  profiles:
+    active: local, cloud
 
-eureka: 
+---
+spring:
+  profiles: local
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
   instance:
     leaseRenewalIntervalInSeconds: 10
     metadataMap:
-      instanceId: ${vcap.application.instance_id:${spring.application.name}:${server.port}} 
-
-spring:
-  application:
-   name: hystrix
-  cloud:
-   config:
-    uri: ${vcap.services.springbox-config-service.credentials.uri:http://localhost:8888}    
-    discovery:
-      enabled: true
-      serviceId: config-server
+      instanceId: ${vcap.application.instance_id:${spring.application.name}:${server.port}}
 ---
 spring:
-  cloud:
-    profiles: local
-    
+  profiles: cloud
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka-leagues.cfapps.io/eureka/
+  instance:
+    hostname: hystrix-leagues.cfapps.io/
+    nonSecurePort: 80
+    leaseRenewalIntervalInSeconds: 10
+    metadataMap:
+      instanceId: hystrix    

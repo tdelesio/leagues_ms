@@ -1,15 +1,32 @@
 server:
-  port: 8765
-
+  port: 0
 spring:
   application:
-    name: edgeserver
-  cloud:
-    config:
-      uri: ${vcap.services.${PREFIX:}configserver.credentials.uri:http://user:password@localhost:8888}
+   name: zuul-server
+  profiles:
+    active: local, cloud
 
-eureka: 
+---
+spring:
+  profiles: local
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
   instance:
     leaseRenewalIntervalInSeconds: 10
     metadataMap:
-      instanceId: ${vcap.application.instance_id:${spring.application.name}:${server.port}} 
+      instanceId: ${vcap.application.instance_id:${spring.application.name}:${server.port}}
+---
+spring:
+  profiles: cloud
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka-leagues.cfapps.io/eureka/
+  instance:
+    hostname: zuul-leagues.cfapps.io
+    nonSecurePort: 80
+    leaseRenewalIntervalInSeconds: 10
+    metadataMap:
+      instanceId: zuul

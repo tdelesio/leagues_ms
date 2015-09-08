@@ -1,10 +1,7 @@
 package com.makeurpicks;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-
 import javax.ws.rs.PathParam;
+import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,14 +11,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.makeurpicks.domain.Game;
-import com.makeurpicks.domain.LeagueType;
-import com.makeurpicks.domain.Season;
 import com.makeurpicks.domain.Team;
 import com.makeurpicks.domain.Week;
 import com.makeurpicks.service.GameService;
 
 @RestController
-@RequestMapping(produces = "application/json", consumes = "application/json")
+@RequestMapping(value="/game", produces = MediaType.APPLICATION_JSON, consumes = {MediaType.APPLICATION_JSON,MediaType.TEXT_PLAIN})
 public class GameController {
 
 	@Autowired
@@ -37,30 +32,6 @@ public class GameController {
 	public @ResponseBody Week createWeek(@RequestBody Week week)
 	{
 		return gameService.createWeek(week);
-	}
-	
-	@RequestMapping(method=RequestMethod.GET, value="/season/current")
-	public @ResponseBody List<Season> getCurrentSeasons()
-	{
-		return gameService.getCurrentSeasons();
-	}
-	
-	@RequestMapping(method=RequestMethod.POST, value="/season")
-	public @ResponseBody Season createSeason(@RequestBody Season season)
-	{
-		return gameService.createUpdateSeason(season);
-	}
-	
-	@RequestMapping(method=RequestMethod.PUT, value="/season")
-	public @ResponseBody Season updateSeason(@RequestBody Season season)
-	{
-		return gameService.createUpdateSeason(season);
-	}
-	
-	@RequestMapping(method=RequestMethod.GET, value="/leaguetype")
-	public @ResponseBody LeagueType[] getLeagueType()
-	{
-		return gameService.getLeagueType();
 	}
 	
 	@RequestMapping(method=RequestMethod.GET, value="/team/leaguetype/{lt}")

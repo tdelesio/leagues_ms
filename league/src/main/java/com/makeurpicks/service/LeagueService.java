@@ -1,19 +1,24 @@
 package com.makeurpicks.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import com.makeurpicks.domain.League;
+import com.makeurpicks.domain.LeagueType;
 import com.makeurpicks.domain.PlayerResponse;
+import com.makeurpicks.domain.Season;
 import com.makeurpicks.exception.LeagueServerException;
 import com.makeurpicks.exception.LeagueValidationException;
 import com.makeurpicks.exception.LeagueValidationException.LeagueExceptions;
 import com.makeurpicks.repository.LeagueRepository;
+import com.makeurpicks.repository.SeasonRepository;
 import com.makeurpicks.repository.redis.RedisLeaguesPlayerHasJoinedRepository;
 import com.makeurpicks.repository.redis.RedisPlayersInLeagueRespository;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
@@ -33,6 +38,9 @@ public class LeagueService {
 	@Autowired
 	private RedisLeaguesPlayerHasJoinedRepository leaguesPlayerHasJoinedRepository;
 
+	@Autowired 
+	private SeasonRepository seasonRepository;
+	
 	// @Autowired
 	// private DiscoveryClient discoveryClient;
 
@@ -45,6 +53,10 @@ public class LeagueService {
 	public League createLeague(League league) throws LeagueValidationException {
 		validateLeague(league);
 
+		UUID uuid = UUID.randomUUID();
+		String id = String.valueOf(uuid.getMostSignificantBits())+String.valueOf(uuid.getLeastSignificantBits());
+		
+		league.setId(id);
 		leagueRepository.save(league);
 
 		addPlayerToLeague(league.getId(), league.getAdminId());
@@ -188,5 +200,50 @@ public class LeagueService {
 	public Iterable<League> getAllLeagues()
 	{
 		return leagueRepository.findAll();
+	}
+
+	public void setPlayerClient(PlayerClient playerClient) {
+		this.playerClient = playerClient;
+	}
+	
+	
+	public List<Season> getCurrentSeasons()
+	{
+		List<Season> s = new ArrayList<Season>();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(System.currentTimeMillis());
+		int currentYear = calendar.get(Calendar.YEAR);
+		
+		for (LeagueType lt : LeagueType.values())
+		{
+			Iterable<Season> seasons = seasonRepository.getSeasonsByLeagueType(lt.toString());
+			for (Season season:seasons)
+			{
+				if (season.getStartYear() >= currentYear)
+					s.add(season);
+			}
+		}
+		
+		return s;
+	}
+	
+	public Season createSeason(Season season)
+	{
+		UUID uuid = UUID.randomUUID();
+		String id = String.valueOf(uuid.getMostSignificantBits())+String.valueOf(uuid.getLeastSignificantBits());
+		
+		season.setId(id);
+		
+		return seasonRepository.createUpdateSeason(season);
+	}
+	
+	public Season updateSeason(Season season)
+	{
+		return seasonRepository.createUpdateSeason(season);
+	}
+	
+	public LeagueType[] getLeagueType()
+	{
+		return LeagueType.values();
 	}
 }

@@ -22,6 +22,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import scala.annotation.meta.setter;
+
 import com.makeurpicks.LeagueApplication;
 import com.makeurpicks.domain.League;
 import com.makeurpicks.domain.LeagueBuilder;
@@ -60,6 +62,7 @@ public class LeagueServiceTest {
 	
 	@BeforeClass
 	public static void init() throws Exception {
+	
 //		String baseDir = ConfigServerTestUtils
 //				.getBaseDirectory("league");
 //		
@@ -79,6 +82,8 @@ public class LeagueServiceTest {
 	public void setup()
 	{
 		MockitoAnnotations.initMocks(this);
+		
+		leagueService.setPlayerClient(playerClientMock);
 		
 		leagueRepository.deleteAll();
 		
