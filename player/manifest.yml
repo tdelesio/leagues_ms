@@ -1,0 +1,12 @@
+---
+applications:
+- name: player
+  memory: 512M 
+  instances: 1
+  host: player
+  path: ./target/player-0.0.1.jar
+  services:
+  - redis-myp
+  - amqp-myp
+  env:
+   JAVA_OPTS: -Djava.security.egd=file:///dev/urandom

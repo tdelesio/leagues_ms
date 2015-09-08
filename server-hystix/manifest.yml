@@ -1,0 +1,9 @@
+---
+applications:
+- name: hystrix-server
+  memory: 512M 
+  instances: 1
+  host: hystrix-leagues
+  path: ./target/hystrix-server-0.0.1.jar
+  env:
+   JAVA_OPTS: -Djava.security.egd=file:///dev/urandom

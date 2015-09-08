@@ -1,0 +1,9 @@
+---
+applications:
+- name: zuul-server
+  memory: 512M 
+  instances: 1
+  host: zuul-leagues
+  path: ./target/zuul-server-0.0.1.jar
+  env:
+   JAVA_OPTS: -Djava.security.egd=file:///dev/urandom
