@@ -38,3 +38,8 @@
 ehthumbs.db
 Thumbs.db
 */target/*
+
+Servers/
+config-repo/
+RemoteSystemsTempFiles/
+.metadata/
