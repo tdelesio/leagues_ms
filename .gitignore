@@ -6,6 +6,7 @@
 *.exe
 *.o
 *.so
+*.bak
 
 # Packages #
 ############
@@ -36,4 +37,4 @@
 .Trashes
 ehthumbs.db
 Thumbs.db
-target/*
+/target/*
