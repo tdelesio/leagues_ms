@@ -1,18 +1,16 @@
 package com.makeurpicks.repository.redis;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.springframework.data.redis.core.RedisTemplate;
 
-import com.makeurpicks.domain.KeyValue;
+import com.makeurpicks.domain.League;
+import com.makeurpicks.domain.LeagueName;
+import com.makeurpicks.domain.LeaguesPlayerJoined;
 import com.makeurpicks.repository.LeaguesAPlayHasJoinedRespository;
 
-public class RedisLeaguesPlayerHasJoinedRepository extends AbstractRedisCRUDRepository<KeyValue> implements LeaguesAPlayHasJoinedRespository {
+public class RedisLeaguesPlayerHasJoinedRepository extends AbstractRedisCRUDRepository<LeaguesPlayerJoined> implements LeaguesAPlayHasJoinedRespository {
 
 
-	public RedisLeaguesPlayerHasJoinedRepository(RedisTemplate<String, KeyValue> redisTemplate)
+	public RedisLeaguesPlayerHasJoinedRepository(RedisTemplate<String, LeaguesPlayerJoined> redisTemplate)
 	{
 		super(redisTemplate);
 	}
@@ -23,38 +21,35 @@ public class RedisLeaguesPlayerHasJoinedRepository extends AbstractRedisCRUDRepo
 	}
 
 	@Override
-	public void addPlayerToLeague(String leagueId, String playerId) {
-		KeyValue keyValue = findOne(playerId);
-		if (keyValue == null)
+	public void addPlayerToLeague(League leauge, String playerId) {
+		LeaguesPlayerJoined leaguesPlayerJoined = findOne(playerId);
+		
+		if (leaguesPlayerJoined == null)
 		{
-			keyValue = new KeyValue();
+			leaguesPlayerJoined = new LeaguesPlayerJoined();
+			leaguesPlayerJoined.setId(playerId);
 		}
 		
-	
-		Set<String> list = keyValue.getList();
-		if (list == null)
-			list = new HashSet<String>();
+		LeagueName leagueName = new LeagueName();
+		leagueName.setLeagueId(leauge.getId());
+		leagueName.setLeagueName(leauge.getLeagueName());
+		leaguesPlayerJoined.addLeagueName(leagueName);
 		
-		list.add(leagueId);
-		keyValue.setList(list);
-		keyValue.setId(playerId);
-		
-		save(keyValue);
+		save(leaguesPlayerJoined);
 	}
 
 	@Override
-	public void removePlayerFromLeague(String leagueId, String playerId) {
-		KeyValue keyValue = findOne(playerId);
-		if (keyValue == null)
+	public void removePlayerFromLeague(League league, String playerId) {
+		LeaguesPlayerJoined leaguesPlayerJoined = findOne(playerId);
+		if (leaguesPlayerJoined == null)
 			return;
 		
-		Set<String> list = keyValue.getList();
-		if (list == null)
-			return;
+		LeagueName leagueName = new LeagueName();
+		leagueName.setLeagueId(league.getId());
+		leagueName.setLeagueName(league.getLeagueName());
+		leaguesPlayerJoined.removeLeagueName(leagueName);
 		
-		list.remove(leagueId);
-		
-		save(keyValue);
+		save(leaguesPlayerJoined);
 	}
 	
 	

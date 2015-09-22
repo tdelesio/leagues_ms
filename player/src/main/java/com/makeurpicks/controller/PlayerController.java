@@ -20,7 +20,7 @@ public class PlayerController {
 	private PlayerService playerService;
 	
 	@RequestMapping(method=RequestMethod.POST, value="/login")
-	public @ResponseBody User login(@RequestBody User user)
+	public @ResponseBody Player login(@RequestBody User user)
 	{
 		return playerService.login(user);
 	}

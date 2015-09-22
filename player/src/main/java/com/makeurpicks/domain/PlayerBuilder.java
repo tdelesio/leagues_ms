@@ -42,4 +42,27 @@ public class PlayerBuilder {
 		return player;
 	}
 	
+	public PlayerBuilder withEmail(String e)
+	{
+		this.email = e;
+		return this;
+	}
+	
+	public PlayerBuilder asAdmin()
+	{
+		this.memberLevel = MemberLevel.ADMIN;
+		return this;
+	}
+	
+	public PlayerBuilder withPassword(String p)
+	{
+		this.password = p;
+		return this;
+	}
+	
+	public PlayerBuilder withUserName(String u)
+	{
+		this.username = u;
+		return this;
+	}
 }

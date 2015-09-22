@@ -23,7 +23,6 @@ import org.springframework.context.annotation.Configuration;
 public class LeagueApplication {
 
 	
-
 	public static void main(String[] args) {
 		SpringApplication.run(LeagueApplication.class, args);
 	}

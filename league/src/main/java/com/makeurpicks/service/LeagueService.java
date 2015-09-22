@@ -1,7 +1,6 @@
 package com.makeurpicks.service;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -11,16 +10,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import com.makeurpicks.domain.League;
-import com.makeurpicks.domain.LeagueType;
+import com.makeurpicks.domain.LeagueName;
 import com.makeurpicks.domain.PlayerResponse;
-import com.makeurpicks.domain.Season;
 import com.makeurpicks.exception.LeagueServerException;
 import com.makeurpicks.exception.LeagueValidationException;
 import com.makeurpicks.exception.LeagueValidationException.LeagueExceptions;
 import com.makeurpicks.repository.LeagueRepository;
-import com.makeurpicks.repository.SeasonRepository;
 import com.makeurpicks.repository.redis.RedisLeaguesPlayerHasJoinedRepository;
 import com.makeurpicks.repository.redis.RedisPlayersInLeagueRespository;
+import com.netflix.config.validation.ValidationException;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
 @Component
@@ -37,9 +35,6 @@ public class LeagueService {
 
 	@Autowired
 	private RedisLeaguesPlayerHasJoinedRepository leaguesPlayerHasJoinedRepository;
-
-	@Autowired 
-	private SeasonRepository seasonRepository;
 	
 	// @Autowired
 	// private DiscoveryClient discoveryClient;
@@ -59,7 +54,7 @@ public class LeagueService {
 		league.setId(id);
 		leagueRepository.save(league);
 
-		addPlayerToLeague(league.getId(), league.getAdminId());
+		addPlayerToLeague(league, league.getAdminId());
 		
 		return league;
 	}
@@ -72,19 +67,9 @@ public class LeagueService {
 		return league;
 	}
 
-	public List<League> getLeaguesForPlayer(String playerId) throws LeagueValidationException {
-		Set<String> leagueIds = leaguesPlayerHasJoinedRepository.findOne(playerId).getList();
-		List<League> leagues = new ArrayList<League>();
-		for (String id:leagueIds)
-		{
-			League league = getLeagueById(id); 
-			if (league == null)
-				throw new LeagueValidationException(LeagueExceptions.LEAGUE_NOT_FOUND);
-			
-			leagues.add(league);
-		}
+	public Set<LeagueName> getLeaguesForPlayer(String playerId) throws LeagueValidationException {
+		return leaguesPlayerHasJoinedRepository.findOne(playerId).getLeauges();
 		
-		return leagues;
 	}
 	
 
@@ -100,14 +85,15 @@ public class LeagueService {
 		if (!league.getPassword().equals(password))
 			throw new LeagueValidationException(LeagueExceptions.INVALID_LEAGUE_PASSWORD);
 		
-		addPlayerToLeague(leagueId, playerId);
+		addPlayerToLeague(league, playerId);
 
 	}
 	
-	protected void addPlayerToLeague(String leagueId, String playerId)
+	protected void addPlayerToLeague(League league, String playerId)
 	{
-		playersInLeagueRespository.addPlayerToLeague(leagueId, playerId);
-		leaguesPlayerHasJoinedRepository.addPlayerToLeague(leagueId, playerId);
+		PlayerResponse playerResponse = getPlayer(playerId);
+		playersInLeagueRespository.addPlayerToLeague(playerResponse, league.getId());
+		leaguesPlayerHasJoinedRepository.addPlayerToLeague(league, playerId);
 	}
 
 	public League getLeagueById(String leagueId) {
@@ -115,12 +101,24 @@ public class LeagueService {
 	}
 
 	public League getLeagueByName(String name) {
+		Iterable<League> leagues = leagueRepository.findAll();
+		for (League league:leagues)
+		{
+			if (league.getLeagueName().equals(name))
+				return league;
+		}
+		
 		return null;
 	}
 
 	public void removePlayerFromLeagye(String leagueId, String playerId) {
-		playersInLeagueRespository.removePlayerFromLeague(leagueId, playerId);
-		leaguesPlayerHasJoinedRepository.removePlayerFromLeague(leagueId, playerId);
+		League league = leagueRepository.findOne(leagueId);
+		if (league == null)
+			throw new LeagueValidationException(LeagueExceptions.LEAGUE_NOT_FOUND);
+		
+		PlayerResponse playerResponse = getPlayer(playerId);
+		playersInLeagueRespository.removePlayerFromLeague(playerResponse, league.getId());
+		leaguesPlayerHasJoinedRepository.removePlayerFromLeague(league, playerId);
 	}
 
 	/*
@@ -154,13 +152,19 @@ public class LeagueService {
 		else
 			return true;
 	}
+
 	
-	protected boolean defaultIsValidPlayer(String playerId)
+	@HystrixCommand(fallbackMethod="defaultGetPlayer")
+	protected PlayerResponse getPlayer(String playerId)
 	{
-		return false;
+		return playerClient.getPlayerById(playerId);
 	}
 	
-	@HystrixCommand(fallbackMethod="defaultIsValidPlayer")
+	protected PlayerResponse defaultGetPlayer(String playerId)
+	{
+		throw new LeagueValidationException(LeagueExceptions.PLAYER_NOT_FOUND);
+	}
+	
 	protected boolean isValidPlayer(String playerId) {
 		// InstanceInfo instance =
 		// discoveryClient.getNextServerFromEureka("player", false);
@@ -182,7 +186,7 @@ public class LeagueService {
 //		PlayerResponse response = restTemplate.getForObject(uri,
 //				PlayerResponse.class);
 
-		PlayerResponse response = playerClient.getPlayerById(playerId);
+		PlayerResponse response = getPlayer(playerId);
 		if (response != null && response.getId() != null)
 			return true;
 		else
@@ -205,45 +209,5 @@ public class LeagueService {
 	public void setPlayerClient(PlayerClient playerClient) {
 		this.playerClient = playerClient;
 	}
-	
-	
-	public List<Season> getCurrentSeasons()
-	{
-		List<Season> s = new ArrayList<Season>();
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTimeInMillis(System.currentTimeMillis());
-		int currentYear = calendar.get(Calendar.YEAR);
-		
-		for (LeagueType lt : LeagueType.values())
-		{
-			Iterable<Season> seasons = seasonRepository.getSeasonsByLeagueType(lt.toString());
-			for (Season season:seasons)
-			{
-				if (season.getStartYear() >= currentYear)
-					s.add(season);
-			}
-		}
-		
-		return s;
-	}
-	
-	public Season createSeason(Season season)
-	{
-		UUID uuid = UUID.randomUUID();
-		String id = String.valueOf(uuid.getMostSignificantBits())+String.valueOf(uuid.getLeastSignificantBits());
-		
-		season.setId(id);
-		
-		return seasonRepository.createUpdateSeason(season);
-	}
-	
-	public Season updateSeason(Season season)
-	{
-		return seasonRepository.createUpdateSeason(season);
-	}
-	
-	public LeagueType[] getLeagueType()
-	{
-		return LeagueType.values();
-	}
+
 }

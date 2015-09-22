@@ -8,9 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.makeurpicks.domain.Player;
-import com.makeurpicks.domain.PlayerBuilder;
-import com.makeurpicks.domain.User;
 import com.makeurpicks.domain.Player.MemberLevel;
+import com.makeurpicks.domain.User;
 import com.makeurpicks.exception.PlayerValidationException;
 import com.makeurpicks.exception.PlayerValidationException.PlayerExceptions;
 import com.makeurpicks.repository.PlayerByUsernameRepository;
@@ -34,9 +33,13 @@ public class PlayerService {
 	    	return playerRepository.findOne(id);
 	    }
 	    
-	    public User login(User user)
+	    public Player login(User user)
 		{
-			return null;
+			Player player = playerByUsernameRepository.findOne(user.getUsername());
+			if (player == null)
+				throw new PlayerValidationException(PlayerExceptions.USER_NOT_FOUND);
+			
+			return player;
 		}
 		
 		public  User updatePassword(User user)

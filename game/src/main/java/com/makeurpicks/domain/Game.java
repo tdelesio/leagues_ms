@@ -1,5 +1,8 @@
 package com.makeurpicks.domain;
 
+import javax.persistence.Entity;
+
+@Entity
 public class Game extends AbstractModel{
 
 	private double spread = 0.5;
@@ -10,6 +13,7 @@ public class Game extends AbstractModel{
 	private String dogId;
 	private long gameStart;
 	private String weekId;
+	
 	public double getSpread() {
 		return spread;
 	}

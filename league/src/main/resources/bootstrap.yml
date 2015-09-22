@@ -23,6 +23,9 @@ eureka:
 ---
 spring:
   profiles: cloud
+  cloud:
+    config:
+      uri: http://config-leagues.cfapps.io
 eureka:
   client:
     serviceUrl:

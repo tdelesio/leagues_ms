@@ -1,5 +1,8 @@
 package com.makeurpicks.domain;
 
+import javax.persistence.Entity;
+
+@Entity
 public class Week extends AbstractModel {
 
 	private int weekNumber;

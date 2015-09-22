@@ -1,11 +1,15 @@
 package com.makeurpicks.repository;
 
+import java.util.List;
+
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
 import com.makeurpicks.domain.Game;
 
+@Repository
+public interface GameRepository extends CrudRepository<Game, String>{
 
-public interface GameRepository {
+	public List<Game> findByWeekId(String weekId);
 
-	public Game createUpdateGame(Game game);
-	public Iterable<Game> getGamesByWeek(String weekId);
-	public Game getGameById(String gameId);
 }

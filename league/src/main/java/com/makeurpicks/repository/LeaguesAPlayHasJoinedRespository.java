@@ -2,12 +2,13 @@ package com.makeurpicks.repository;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.makeurpicks.domain.KeyValue;
+import com.makeurpicks.domain.League;
+import com.makeurpicks.domain.LeaguesPlayerJoined;
 
-public interface LeaguesAPlayHasJoinedRespository extends CrudRepository<KeyValue, String>{
+public interface LeaguesAPlayHasJoinedRespository extends CrudRepository<LeaguesPlayerJoined, String>{
 
 
-	public void addPlayerToLeague(String leagueId, String playerId);
-	public void removePlayerFromLeague(String leagueId, String playerId);
+	public void addPlayerToLeague(League leauge, String playerId);
+	public void removePlayerFromLeague(League league, String playerId);
 }
  

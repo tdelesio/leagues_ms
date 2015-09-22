@@ -1,15 +1,15 @@
 package com.makeurpicks.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.makeurpicks.GameValidationException;
-import com.makeurpicks.GameValidationException.GameExceptions;
 import com.makeurpicks.domain.Game;
-import com.makeurpicks.domain.Team;
 import com.makeurpicks.domain.Week;
+import com.makeurpicks.exception.GameValidationException;
+import com.makeurpicks.exception.GameValidationException.GameExceptions;
 import com.makeurpicks.repository.GameRepository;
-import com.makeurpicks.repository.TeamRepository;
 import com.makeurpicks.repository.WeekRepository;
 
 @Component
@@ -18,50 +18,28 @@ public class GameService {
 	@Autowired
 	private GameRepository gameRepository;
 	
-	@Autowired
-	private WeekRepository weekRepository;
-	
-	@Autowired
-	private TeamRepository teamRepository;
-	
-	
-	public Iterable<Week> getWeeksBySeason(String seasonId)
-	{
-		return weekRepository.getWeeksBySeason(seasonId);
-	}
-	
-	public Week createWeek(Week week)
-	{
-		return weekRepository.createUpdateWeek(week);
-	}
-	
-	public Iterable<Team> getTeams(String leagueType)
-	{
-		return teamRepository.getTeamsByLeagueType(leagueType);
-	}
-	
-	public Game getGameById(String gameId)
-	{
-		return gameRepository.getGameById(gameId);
-	}
-	
 	public Game createGame(Game game)
 	{
 		validateGame(game);
 		
-		return gameRepository.createUpdateGame(game);
+		return gameRepository.save(game);
 	}
 	
 	public Game updateGame(Game game)
 	{
 		validateGame(game);
 		
-		return gameRepository.createUpdateGame(game);
+		return gameRepository.save(game);
 	}
 	
-	public Iterable<Game> getGamesByWeek(String weekId)
+	public List<Game> getGamesByWeek(String weekId)
 	{
-		return gameRepository.getGamesByWeek(weekId);
+		return gameRepository.findByWeekId(weekId);
+	}
+	
+	public Game getGameById(String gameId)
+	{
+		return gameRepository.findOne(gameId);
 	}
 	
 	private void validateGame(Game game)

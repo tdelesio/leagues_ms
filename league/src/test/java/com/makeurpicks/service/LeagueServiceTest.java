@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
 import java.util.Set;
 
 import org.junit.AfterClass;
@@ -22,11 +23,10 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import scala.annotation.meta.setter;
-
 import com.makeurpicks.LeagueApplication;
 import com.makeurpicks.domain.League;
 import com.makeurpicks.domain.LeagueBuilder;
+import com.makeurpicks.domain.LeagueName;
 import com.makeurpicks.domain.PlayerResponse;
 import com.makeurpicks.exception.LeagueValidationException;
 import com.makeurpicks.repository.LeagueRepository;
@@ -134,10 +134,13 @@ public class LeagueServiceTest {
 			assertEquals(league.getId(), leagueRepository.findOne(league.getId()).getId());
 			
 			//check to see that player is part of league
-			assertTrue(leaguesAPlayerHasJoinedRespository.findOne(league.getAdminId()).getList().contains(league.getId()));
+			Set<LeagueName> leagueNames = leaguesAPlayerHasJoinedRespository.findOne(league.getAdminId()).getLeauges();
+			LeagueName leagueName = new LeagueName(league);
+			assertTrue(leagueNames.contains(leagueName));
 			
 			//check to see that league has the player in it
-			assertTrue(playersInLeagueRepository.findOne(league.getId()).getList().contains(league.getAdminId()));
+			Set<PlayerResponse> playerResponses = playersInLeagueRepository.findOne(league.getId()).getPlayers();
+			assertTrue(playerResponses.contains(new PlayerResponse(league.getAdminId())));
 			
 		} catch (LeagueValidationException e) {
 			fail(e.getMessage());
@@ -191,80 +194,80 @@ public class LeagueServiceTest {
 		league3 = createLeague(league3);
 		
 		//player 2 will join both leagues
-		leagueService.addPlayerToLeague(league1.getId(), player2Id); 
-		leagueService.addPlayerToLeague(league2.getId(), player2Id);
+		leagueService.addPlayerToLeague(league1, player2Id); 
+		leagueService.addPlayerToLeague(league2, player2Id);
 		
 		//player 3 will join first league
-		leagueService.addPlayerToLeague(league1.getId(), player3Id);
+		leagueService.addPlayerToLeague(league1, player3Id);
 		
 		//player 4 will join second league
-		leagueService.addPlayerToLeague(league2.getId(), player4Id);
+		leagueService.addPlayerToLeague(league2, player4Id);
 		
 		Set<String> list;
 		
 		//player 5 won't join any leagues
 		
 		//league1 should have 3 players, 1, 2, 3
-		list = playersInLeagueRepository.findOne(league1.getId()).getList();
-		assertTrue(list.contains(player1Id));
-		assertTrue(list.contains(player2Id));
-		assertTrue(list.contains(player3Id));
-		assertEquals(3, list.size());
+		Set<PlayerResponse> playerResponses = playersInLeagueRepository.findOne(league1.getId()).getPlayers();
+		assertTrue(playerResponses.contains(new PlayerResponse(player1Id)));
+		assertTrue(playerResponses.contains(new PlayerResponse(player2Id)));
+		assertTrue(playerResponses.contains(new PlayerResponse(player3Id)));
+		assertEquals(3, playerResponses.size());
 		
 		//league2 should have 3 players, 1, 2, 4
-		list = playersInLeagueRepository.findOne(league2.getId()).getList();
-		assertTrue(list.contains(player1Id));
-		assertTrue(list.contains(player2Id));
-		assertTrue(list.contains(player4Id));
-		assertEquals(3, list.size());
+		playerResponses = playersInLeagueRepository.findOne(league2.getId()).getPlayers();
+		assertTrue(playerResponses.contains(new PlayerResponse(player1Id)));
+		assertTrue(playerResponses.contains(new PlayerResponse(player2Id)));
+		assertTrue(playerResponses.contains(new PlayerResponse(player4Id)));
+		assertEquals(3, playerResponses.size());
 		
 		//league3 should have 1 player, 1
-		list = playersInLeagueRepository.findOne(league3.getId()).getList();
-		assertTrue(list.contains(player1Id));
-		assertEquals(1, list.size());
+		playerResponses = playersInLeagueRepository.findOne(league3.getId()).getPlayers();
+		assertTrue(playerResponses.contains(new PlayerResponse(player1Id)));
+		assertEquals(1, playerResponses.size());
 		
 		//player 1 should be part of leagues 1,2,3
-		list = leaguesAPlayerHasJoinedRespository.findOne(player1Id).getList();
-		assertTrue(list.contains(league1.getId()));
-		assertTrue(list.contains(league2.getId()));
-		assertTrue(list.contains(league3.getId()));
-		assertEquals(3, list.size());
+		Set<LeagueName> leagueNames = leaguesAPlayerHasJoinedRespository.findOne(player1Id).getLeauges();
+		assertTrue(leagueNames.contains(new LeagueName(league1)));
+		assertTrue(leagueNames.contains(new LeagueName(league2)));
+		assertTrue(leagueNames.contains(new LeagueName(league3)));
+		assertEquals(3, leagueNames.size());
 		
 		//player 2 should be part of leagues 1,2
-		list = leaguesAPlayerHasJoinedRespository.findOne(player2Id).getList();
-		assertTrue(list.contains(league1.getId()));
-		assertTrue(list.contains(league2.getId()));
-		assertEquals(2, list.size());
+		leagueNames = leaguesAPlayerHasJoinedRespository.findOne(player2Id).getLeauges();
+		assertTrue(leagueNames.contains(new LeagueName(league1)));
+		assertTrue(leagueNames.contains(new LeagueName(league2)));
+		assertEquals(2, leagueNames.size());
 		
 		//player 3 should be part of leagues 1
-		list = leaguesAPlayerHasJoinedRespository.findOne(player3Id).getList();
-		assertTrue(list.contains(league1.getId()));
-		assertEquals(1, list.size());
+		leagueNames = leaguesAPlayerHasJoinedRespository.findOne(player3Id).getLeauges();
+		assertTrue(leagueNames.contains(new LeagueName(league1)));
+		assertEquals(1, leagueNames.size());
 		
 		//player 4 should be part of leagues 2
-		list = leaguesAPlayerHasJoinedRespository.findOne(player4Id).getList();
-		assertTrue(list.contains(league2.getId()));
-		assertEquals(1, list.size());
+		leagueNames = leaguesAPlayerHasJoinedRespository.findOne(player4Id).getLeauges();
+		assertTrue(leagueNames.contains(new LeagueName(league2)));
+		assertEquals(1, leagueNames.size());
 		
 		 //player 5 should not be part of any leagues
 		assertTrue(leaguesAPlayerHasJoinedRespository.findOne(player5Id) == null);
 		
 		//readd player 1 to league 1 and make sure he is not in there twice
-		leagueService.addPlayerToLeague(league1.getId(), player1Id);
+		leagueService.addPlayerToLeague(league1, player1Id);
 		
 		//should be same as above
-		list = playersInLeagueRepository.findOne(league1.getId()).getList();
-		assertTrue(list.contains(player1Id));
-		assertTrue(list.contains(player2Id));
-		assertTrue(list.contains(player3Id));
-		assertEquals(3, list.size());
+		playerResponses = playersInLeagueRepository.findOne(league1.getId()).getPlayers();
+		assertTrue(playerResponses.contains(new PlayerResponse(player1Id)));
+		assertTrue(playerResponses.contains(new PlayerResponse(player2Id)));
+		assertTrue(playerResponses.contains(new PlayerResponse(player3Id)));
+		assertEquals(3, playerResponses.size());
 		
 		//should be same as above
-		list = leaguesAPlayerHasJoinedRespository.findOne(player1Id).getList();
-		assertTrue(list.contains(league1.getId()));
-		assertTrue(list.contains(league2.getId()));
-		assertTrue(list.contains(league3.getId()));
-		assertEquals(3, list.size());
+		leagueNames = leaguesAPlayerHasJoinedRespository.findOne(player1Id).getLeauges();
+		assertTrue(leagueNames.contains(new LeagueName(league1)));
+		assertTrue(leagueNames.contains(new LeagueName(league2)));
+		assertTrue(leagueNames.contains(new LeagueName(league3)));
+		assertEquals(3, leagueNames.size());
 		
 	}
 

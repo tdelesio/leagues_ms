@@ -1,16 +1,14 @@
 package com.makeurpicks.repository.redis;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.springframework.data.redis.core.RedisTemplate;
 
-import com.makeurpicks.domain.KeyValue;
+import com.makeurpicks.domain.PlayerResponse;
+import com.makeurpicks.domain.PlayersInLeague;
 import com.makeurpicks.repository.PlayersInLeagueRepository;
 
-public class RedisPlayersInLeagueRespository extends AbstractRedisCRUDRepository<KeyValue> implements PlayersInLeagueRepository {
+public class RedisPlayersInLeagueRespository extends AbstractRedisCRUDRepository<PlayersInLeague> implements PlayersInLeagueRepository {
 
-	public RedisPlayersInLeagueRespository(RedisTemplate<String, KeyValue> redisTemplate)
+	public RedisPlayersInLeagueRespository(RedisTemplate<String, PlayersInLeague> redisTemplate)
 	{
 		super(redisTemplate);
 	}
@@ -21,38 +19,27 @@ public class RedisPlayersInLeagueRespository extends AbstractRedisCRUDRepository
 	}
 
 	@Override
-	public void addPlayerToLeague(String leagueId, String playerId) {
-		KeyValue keyValue = findOne(leagueId);
-		if (keyValue == null)
+	public void addPlayerToLeague(PlayerResponse player, String leagueId) {
+		PlayersInLeague playersInLeague = findOne(leagueId);
+		if (playersInLeague == null)
 		{
-			keyValue = new KeyValue();
+			playersInLeague = new PlayersInLeague();
+			playersInLeague.setId(leagueId);
 		}
 		
-	
-		Set<String> list = keyValue.getList();
-		if (list == null)
-			list = new HashSet<String>();
-		
-		list.add(playerId);
-		keyValue.setId(leagueId);
-		keyValue.setList(list);
-		
-		save(keyValue);
+		playersInLeague.addPlayer(player);
+		save(playersInLeague);
 	}
 
 	
-	public void removePlayerFromLeague(String leagueId, String playerId) {
-		KeyValue keyValue = findOne(leagueId);
-		if (keyValue == null)
+	public void removePlayerFromLeague(PlayerResponse player, String leagueId) {
+		PlayersInLeague playersInLeague = findOne(leagueId);
+		if (playersInLeague == null)
 			return;
 		
-		Set<String> list = keyValue.getList();
-		if (list == null)
-			return;
+		playersInLeague.removePlayer(player);
 		
-		list.remove(playerId);
-		
-		save(keyValue);
+		save(playersInLeague);
 	}
 	
 }

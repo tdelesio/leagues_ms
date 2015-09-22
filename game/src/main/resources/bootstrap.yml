@@ -9,8 +9,7 @@ spring:
     uri: ${vcap.services.springbox-config-service.credentials.uri:http://localhost:8888}    
     discovery:
       enabled: true
-      serviceId: config-server
-      
+      serviceId: config-server      
 eureka:
   instance:
     leaseRenewalIntervalInSeconds: 10
@@ -20,4 +19,9 @@ eureka:
 spring:
   cloud:
     profiles: local
+  datasource:
+    url: jdbc:mysql://localhost/game
+    username: root
+    password: rage311
+    driver-class-name: com.mysql.jdbc.Driver
     

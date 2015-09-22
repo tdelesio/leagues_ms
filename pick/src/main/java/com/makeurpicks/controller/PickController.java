@@ -5,6 +5,8 @@ import java.util.List;
 import javax.ws.rs.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,47 +17,40 @@ import com.makeurpicks.domain.Pick;
 import com.makeurpicks.service.PickService;
 
 @RestController
-@RequestMapping(produces = "application/json", consumes = "application/json")
+@RequestMapping(value="/pick")
 public class PickController {
 
 	@Autowired
 	private PickService pickService;
 	
-	//Path("/picks/leagueid/{leagueid}/weekid/{weekid}")
-	@RequestMapping(method=RequestMethod.GET, value="/pick/leagueid/{leagueId}/weekid/{weekId}")
-	public @ResponseBody Iterable<Pick> getPicksByLeagueAndWeek(@PathParam("leagueId")String leagueid, @PathParam("id")String weekId)
+	@RequestMapping(method=RequestMethod.GET, value="/leagueid/{leagueid}/weekid/{weekid}")
+	public @ResponseBody Iterable<Pick> getPicksByLeagueAndWeek(@PathVariable String leagueid, @PathVariable String weekid)
 	{
-		return pickService.getPicksByLeagueAndWeek(leagueid, weekId);
+		return pickService.getPicksByLeagueAndWeek(leagueid, weekid);
 	}
 
-
-
-//	@Path("/picks/leagueid/{leagueid}/weekid/{weekid}/player/{playerid}")
-	@RequestMapping(method=RequestMethod.GET, value="/pick/leagueid/{leagueid}/weekid/{weekid}/player/{playerid}")
-	public @ResponseBody Iterable<Pick> getPicksByLeagueWeekAndPlayer(@PathParam("leagueid")String leagueid, @PathParam("weekid")String weekid, @PathParam("playerid")String playerid)
+	@RequestMapping(method=RequestMethod.GET, value="/leagueid/{leagueid}/weekid/{weekid}/player/{playerid}")
+	public @ResponseBody Iterable<Pick> getPicksByLeagueWeekAndPlayer(@PathVariable String leagueid, @PathVariable String weekid, @PathVariable String playerid)
 	{
 		return pickService.getPicksByLeagueWeekAndPlayer(leagueid, weekid, playerid);
 	}
 	
 	
-//	@Path("/pick")
-	@RequestMapping(method=RequestMethod.POST, value="/pick")
-	public @ResponseBody Pick makePick(Pick pick)
+	@RequestMapping(method=RequestMethod.POST, value="/")
+	public @ResponseBody Pick makePick(@RequestBody Pick pick)
 	{
 		return pickService.makePick(pick);
 	}
 	
-//	@Path("/pick")
-	@RequestMapping(method=RequestMethod.PUT, value="/pick")
-	public @ResponseBody Pick updatePick(Pick pick)
+	@RequestMapping(method=RequestMethod.PUT, value="/")
+	public @ResponseBody Pick updatePick(@RequestBody Pick pick)
 	{
 		return pickService.updatePick(pick, pick.getPlayerId());
 	}
 	
 	
-//	@Path("/double/{pickid}")
-	@RequestMapping(method=RequestMethod.PUT, value="/pick/double")
-	public @ResponseBody DoublePick makeDoublePick(DoublePick pick)
+	@RequestMapping(method=RequestMethod.PUT, value="/double")
+	public @ResponseBody DoublePick makeDoublePick(@RequestBody DoublePick pick)
 	{
 		return pickService.makeDoublePick(pick.getPickId(), "");
 	}

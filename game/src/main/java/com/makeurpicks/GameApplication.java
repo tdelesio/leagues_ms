@@ -9,8 +9,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-
-import com.makeurpicks.service.GameService;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @Configuration
@@ -20,6 +19,7 @@ import com.makeurpicks.service.GameService;
 @EnableFeignClients
 @EnableDiscoveryClient
 @EnableCircuitBreaker
+@EnableJpaRepositories
 public class GameApplication {
 
     public static void main(String[] args) {
