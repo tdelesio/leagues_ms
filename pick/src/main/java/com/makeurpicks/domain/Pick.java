@@ -10,7 +10,6 @@ public class Pick extends AbstractModel {
 	private boolean noPick=false;
 	private long pickLastUpdated = System.currentTimeMillis();
 	
-	enum Status {WINNER, LOSER, UNPLAYED}
 
 	public String getTeamId() {
 		return teamId;

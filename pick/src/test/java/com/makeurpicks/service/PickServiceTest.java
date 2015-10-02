@@ -99,6 +99,10 @@ private static ConfigurableApplicationContext server;
 		
 		stringRedisTemplate.getConnectionFactory().getConnection().flushDb();
 		
+		pickService.setGameClient(gameClientMock);
+		
+		pickService.setLeagueClient(leagueClientMock);
+		
 //		pickByLeagueWeekPlayerRepository.deleteAll();
 //		
 //		picksByLeagueWeekRepository.deleteAll();

@@ -14,8 +14,8 @@
 	<parent>
 		<groupId>org.springframework.cloud</groupId>
 		<artifactId>spring-cloud-starter-parent</artifactId>
-		<version>1.0.2.RELEASE</version>
-		<relativePath /> <!-- lookup parent from repository -->
+		<version>Angel.SR3</version>
+<!-- 		<version>1.0.2.RELEASE</version> -->
 	</parent>
 
 	<properties>
@@ -100,20 +100,21 @@
 		</dependency>
 
 		<!-- sercurity server -->
-		<!-- <dependency> -->
-		<!-- <groupId>org.springframework.cloud</groupId> -->
-		<!-- <artifactId>spring-cloud-starter-oauth2</artifactId> -->
-		<!-- </dependency> -->
-		<!-- <dependency> -->
-		<!-- <groupId>org.springframework.boot</groupId> -->
-		<!-- <artifactId>spring-boot-starter-security</artifactId> -->
-		<!-- <version>1.0.1.RELEASE</version> -->
-		<!-- </dependency> -->
-		<!-- <dependency> -->
-		<!-- <groupId>org.springframework.cloud</groupId> -->
-		<!-- <artifactId>spring-cloud-starter-security</artifactId> -->
-		<!-- <version>1.0.1.RELEASE</version> -->
-		<!-- </dependency> -->
+<!-- 		<dependency> -->
+<!--       <groupId>io.pivotal.spring.cloud</groupId> -->
+<!--       <artifactId>spring-cloud-sso-connector</artifactId> -->
+<!--       <version>1.0.0</version> -->
+<!--     </dependency> -->
+    <dependency>
+	<groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-oauth2</artifactId>
+<!--       <version>1.0.1.RELEASE</version> -->
+    </dependency>
+<!-- 		<dependency> -->
+<!-- 		<groupId>org.springframework.cloud</groupId> -->
+<!-- 		<artifactId>spring-cloud-starter-security</artifactId> -->
+<!-- 	<version>1.0.1.RELEASE</version> --> 
+<!-- 		</dependency> -->
 
 
 	</dependencies>
@@ -128,5 +129,16 @@
 			</plugin>
 		</plugins>
 	</build>
+	
+	<repositories>
+    <repository>
+      <id>spring-snapshot</id>
+      <url>https://repo.spring.io/libs-snapshot</url>
+    </repository>
+    <repository>
+      <id>spring-release</id>
+      <url>https://repo.spring.io/libs-release</url>
+    </repository>
+  </repositories>
 
 </project>

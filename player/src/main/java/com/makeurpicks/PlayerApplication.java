@@ -5,9 +5,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.security.oauth2.sso.EnableOAuth2Sso;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
+import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 
 @SpringBootApplication
 //@RestController
@@ -16,6 +23,7 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableCircuitBreaker
 @ComponentScan
 //@EnableResourceServer
+@EnableOAuth2Sso
 public class PlayerApplication {
 
 	private static final Logger LOG = LoggerFactory.getLogger(PlayerApplication.class);
@@ -26,6 +34,44 @@ public class PlayerApplication {
     public static void main(String[] args) {
         SpringApplication.run(PlayerApplication.class, args);
     }
+    
+    @Bean
+    public ResourceServerConfigurer resourceServer(SecurityProperties securityProperties) {
+        return new ResourceServerConfigurerAdapter() {
+//            @Override
+//            public void configure(ResourceServerSecurityConfigurer resources) {
+//                resources.resourceId("order");
+//            }
+
+            @Override
+            public void configure(HttpSecurity http) throws Exception {
+                if (securityProperties.isRequireSsl()) {
+                    http.requiresChannel().anyRequest().requiresSecure();
+                }
+                http.authorizeRequests()
+                        .antMatchers("/players/userinfo/**").access("#oauth2.hasScope('openid')");
+            }
+        };
+    }
+    
+//    @Bean
+//    public OAuth2SsoConfigurerAdapter oAuth2SsoConfigurerAdapter(SecurityProperties securityProperties) {
+//        return new OAuth2SsoConfigurerAdapter() {
+//            @Override
+//            public void match(RequestMatchers matchers) {
+////                matchers.antMatchers("/userinfo");
+//                matchers.antMatchers("/**").authorizeRequests().anyRequest().permitAll();
+//            }
+//
+//            @Override
+//            public void configure(HttpSecurity http) throws Exception {
+//                if (securityProperties.isRequireSsl()) {
+//                    http.requiresChannel().anyRequest().requiresSecure();
+//                }
+//                http.authorizeRequests().anyRequest().authenticated();
+//            }
+//        };
+//    }
     
 //    @Configuration
 //    @EnableAuthorizationServer

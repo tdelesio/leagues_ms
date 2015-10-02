@@ -42,7 +42,7 @@ public class RedisTeamRepository extends AbstractRedisCRUDRepository<Team>
 			
 		for (Team team:teams)
 		{
-			if (leagueType.equals(team.getLeagueType()))
+			if (leagueType.equalsIgnoreCase(team.getLeagueType()))
 				teamByLeagueType.put(team.getId(), team);
 		}
 		

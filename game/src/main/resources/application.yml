@@ -2,4 +2,11 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
-    database: MYSQL
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+  datasource:
+    url: jdbc:mysql://localhost/game
+    username: root
+    password: rage311
+    driver-class-name: com.mysql.jdbc.Driver

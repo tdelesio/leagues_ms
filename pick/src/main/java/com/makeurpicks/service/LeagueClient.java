@@ -15,10 +15,10 @@ import com.makeurpicks.domain.LeagueResponse;
 @FeignClient("league")
 public interface LeagueClient {
 	
-	@RequestMapping(value = "/leauge/{id}", method=RequestMethod.GET ,produces = "application/json")
+	@RequestMapping(value = "/leauges/{id}", method=RequestMethod.GET ,produces="application/json", consumes="application/json")
     public @ResponseBody LeagueResponse getLeagueById(@PathVariable("id") String id);
 	
-	@RequestMapping(method=RequestMethod.GET, value="/league/player/playerId/{id}")
+	@RequestMapping(method=RequestMethod.GET, value="/leagues/player/playerId/{id}",produces="application/json", consumes="application/json")
 	public @ResponseBody List<LeagueResponse> getLeaguesForPlayer(@PathParam("id")String playerId);
 
 }

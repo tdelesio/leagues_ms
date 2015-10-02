@@ -1,6 +1,12 @@
 package com.makeurpicks.controller;
 
+import java.security.Principal;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.security.oauth2.resource.ResourceServerProperties;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,16 +14,26 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.makeurpicks.domain.Player;
 import com.makeurpicks.domain.User;
 import com.makeurpicks.service.PlayerService;
 
 @RestController
-@RequestMapping(value="/player", produces = "application/json", consumes = "application/json")
+@RequestMapping(value="/players")
 public class PlayerController {
 
 	@Autowired
 	private PlayerService playerService;
+	
+	@Autowired
+    private ResourceServerProperties resourceServerProperties;
+
+    @Autowired
+    private OAuth2RestTemplate oauth2RestTemplate;
+    
+    @Autowired
+    private ObjectMapper objectMapper;
 	
 	@RequestMapping(method=RequestMethod.POST, value="/login")
 	public @ResponseBody Player login(@RequestBody User user)
@@ -55,4 +71,16 @@ public class PlayerController {
 	{
 		return playerService.register(player);
 	}
+	
+	 @RequestMapping("/userinfo")
+	    public String userinfo(Model model, Principal principal) throws Exception {
+//	        Map<?, ?> userInfoResponse = oauth2RestTemplate.getForObject(resourceServerProperties.getUserInfoUri(),
+//	                Map.class);
+//	        model.addAttribute("username", principal.getName());
+//	        model.addAttribute("response",
+//	                objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(userInfoResponse));
+//	        model.addAttribute("token", oauth2RestTemplate.getOAuth2ClientContext().getAccessToken().getValue());
+//	        return "userinfo";
+		 return principal.getName();
+	    }
 }

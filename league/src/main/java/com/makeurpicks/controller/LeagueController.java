@@ -1,6 +1,5 @@
 package com.makeurpicks.controller;
 
-import java.util.List;
 import java.util.Set;
 
 import javax.ws.rs.core.MediaType;
@@ -17,10 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.makeurpicks.domain.League;
 import com.makeurpicks.domain.LeagueName;
 import com.makeurpicks.domain.PlayerLeague;
+import com.makeurpicks.domain.PlayerResponse;
+import com.makeurpicks.domain.PlayersInLeague;
 import com.makeurpicks.service.LeagueService;
 
 @RestController
-@RequestMapping(value="/league", produces = MediaType.APPLICATION_JSON)
+@RequestMapping(value="/leagues")
 public class LeagueController {
 
 	@Autowired
@@ -76,10 +77,18 @@ public class LeagueController {
 		return leagueService.getLeagueByName(name);
 	 }
 	
-	@RequestMapping(method=RequestMethod.DELETE, value="/league/player")
+	@RequestMapping(method=RequestMethod.DELETE, value="/player")
 	 public void removePlayerFromLeagye(@RequestBody PlayerLeague playerLeague)
 	 {
 		leagueService.removePlayerFromLeagye(playerLeague.getLeagueId(), playerLeague.getPlayerId());
 	 }
+	
+	@RequestMapping(method=RequestMethod.GET, value="/player/leagueid/{leagueid}")
+	 public @ResponseBody Set<PlayerResponse> getPlayersInLeague(@PathVariable String leagueid)
+	 {
+		return leagueService.getPlayersInLeague(leagueid);
+	 }
+	
+	
 
 }

@@ -11,6 +11,6 @@ import com.makeurpicks.domain.GameResponse;
 @FeignClient("game")
 public interface GameClient {
  
-	@RequestMapping(value = "/game/{id}", method=RequestMethod.GET ,produces = "application/json")
+	@RequestMapping(value = "/games/{id}", method=RequestMethod.GET ,produces = "application/json")
     public @ResponseBody GameResponse getGameById(@PathVariable("id") String id);
 }

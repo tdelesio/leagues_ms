@@ -39,12 +39,20 @@ public class PickService {
 	@Autowired
 	private DoublePickRepository doublePickRepository;
 	
-	public Pick defaultMakePick(Pick pick)
-	{
-		throw new PickValidationException(PickExceptions.GAME_SERVICE_IS_DOWN);		
-	}
 	
-	@HystrixCommand(fallbackMethod="defaultMakePick")
+	
+	public void setGameClient(GameClient gameClient) {
+		this.gameClient = gameClient;
+	}
+
+	
+	
+	public void setLeagueClient(LeagueClient leagueClient) {
+		this.leagueClient = leagueClient;
+	}
+
+
+
 	public Pick makePick(Pick pick)
 	{
 		//make sure all the parms are set
@@ -61,13 +69,8 @@ public class PickService {
 		
 		return pick;
 	}
-	
-	public Pick defaultupdatePick(Pick pick, String loggedInPlayerId)
-	{
-		throw new PickValidationException(PickExceptions.GAME_SERVICE_IS_DOWN);
-	}
-	
-	@HystrixCommand(fallbackMethod="defaultupdatePick")
+
+
 	public Pick updatePick(Pick pick, String loggedInPlayerId)
 	{
 		//make sure all the parms are set
@@ -92,6 +95,28 @@ public class PickService {
 	{ 
 		Iterable<String> ids = picksByLeagueWeekAndPlayerRepository.getPicksForLeagueWeekAndPlayer(leagueId, weekId, playerId);
 		return pickRepository.findAll(ids);
+	}
+	
+	private List<LeagueResponse> defaultGetLeaguesForPlayer(String playerId)
+	{
+		throw new PickValidationException(PickExceptions.LEAGUE_SERVICE_IS_DOWN);
+	}
+	
+	@HystrixCommand(fallbackMethod="defaultGetLeaguesForPlayer")
+	private List<LeagueResponse> getLeaguesForPlayer(String playerId) 
+	{
+		return leagueClient.getLeaguesForPlayer(playerId);
+	}
+	
+	private GameResponse defaultGetGameById(String gameId)
+	{
+		throw new PickValidationException(PickExceptions.GAME_SERVICE_IS_DOWN);
+	}
+	
+	@HystrixCommand(fallbackMethod="defaultGetGameById")
+	private GameResponse getGameById(String gameId)
+	{
+		return gameClient.getGameById(gameId);
 	}
 	
 	private void validatePick(Pick pick)
@@ -123,7 +148,7 @@ public class PickService {
 			codes.add(PickExceptions.PLAYER_IS_NUll);
 		
 		
-		GameResponse game = gameClient.getGameById(pick.getGameId());
+		GameResponse game = getGameById(pick.getGameId());
 //		Game game = dao.loadByPrimaryKey(Game.class, pick.getGame().getId());
 		if (game == null)
 			codes.add(PickExceptions.GAME_IS_NULL);
@@ -139,7 +164,7 @@ public class PickService {
 		
 		//need to make sure that the user is in that league
 //		leagueManager.verifyPlayerExistsInLeague(pick.getLeague().getId(), pick.getName().getId());
-		List<LeagueResponse> leagues = leagueClient.getLeaguesForPlayer(pick.getPlayerId());
+		List<LeagueResponse> leagues = getLeaguesForPlayer(pick.getPlayerId());
 		boolean playerExistsInLeague = false;
 		for (LeagueResponse league: leagues)
 		{
@@ -162,12 +187,12 @@ public class PickService {
 			throw new PickValidationException(codes.toArray(new PickExceptions[codes.size()]));
 	}
 	
-	public DoublePick defaultMakeDoublePick(String pickId, String loggedInPlayerId)
-	{
-		throw new PickValidationException(PickExceptions.GAME_SERVICE_IS_DOWN);
-	}
 	
-	@HystrixCommand(fallbackMethod="defaultMakeDoublePick")
+	public DoublePick getDoublePick(String leagueId, String weekId, String playerId)
+	{
+		return doublePickRepository.findOne(DoublePick.buildString(leagueId, weekId, playerId));
+	}
+
 	public DoublePick makeDoublePick(String pickId, String loggedInPlayerId)
 	{
 //		Picks pick = dao.loadByPrimaryKey(Picks.class, pickId);

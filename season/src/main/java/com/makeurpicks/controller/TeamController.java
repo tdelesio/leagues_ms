@@ -14,7 +14,7 @@ import com.makeurpicks.domain.LeagueType;
 import com.makeurpicks.domain.Team;
 import com.makeurpicks.service.TeamService;
 
-@RequestMapping(value="/team")
+@RequestMapping(value="/teams")
 @RestController
 public class TeamController {
 
@@ -38,9 +38,8 @@ public class TeamController {
 		return teamService.createTeam(team);
 	}
 	
-	@RequestMapping(method=RequestMethod.GET, value="/pickem")
-	public @ResponseBody boolean createPickemTeams() {
-		teamService.createTeams(LeagueType.PICKEM.toString());
-		return true;
+	@RequestMapping(method=RequestMethod.POST, value="/pickem")
+	public @ResponseBody Map<String, Team> createPickemTeams() {
+		return teamService.createTeams(LeagueType.PICKEM.toString());
 	}
 }

@@ -1,9 +1,5 @@
 package com.makeurpicks.controller;
 
-import java.util.List;
-
-import javax.ws.rs.PathParam;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,20 +13,20 @@ import com.makeurpicks.domain.Pick;
 import com.makeurpicks.service.PickService;
 
 @RestController
-@RequestMapping(value="/pick")
+@RequestMapping(value="/picks")
 public class PickController {
 
 	@Autowired
 	private PickService pickService;
 	
 	@RequestMapping(method=RequestMethod.GET, value="/leagueid/{leagueid}/weekid/{weekid}")
-	public @ResponseBody Iterable<Pick> getPicksByLeagueAndWeek(@PathVariable String leagueid, @PathVariable String weekid)
+	public @ResponseBody Iterable<Pick> getPicksBySeasonAndWeek(@PathVariable String leagueid, @PathVariable String weekid)
 	{
 		return pickService.getPicksByLeagueAndWeek(leagueid, weekid);
 	}
 
-	@RequestMapping(method=RequestMethod.GET, value="/leagueid/{leagueid}/weekid/{weekid}/player/{playerid}")
-	public @ResponseBody Iterable<Pick> getPicksByLeagueWeekAndPlayer(@PathVariable String leagueid, @PathVariable String weekid, @PathVariable String playerid)
+	@RequestMapping(method=RequestMethod.GET, value="/leagueid/{leagueid}/weekid/{weekid}/playerid/{playerid}")
+	public @ResponseBody Iterable<Pick> getPicksByLeaguenWeekAndPlayer(@PathVariable String leagueid, @PathVariable String weekid, @PathVariable String playerid)
 	{
 		return pickService.getPicksByLeagueWeekAndPlayer(leagueid, weekid, playerid);
 	}
@@ -53,5 +49,11 @@ public class PickController {
 	public @ResponseBody DoublePick makeDoublePick(@RequestBody DoublePick pick)
 	{
 		return pickService.makeDoublePick(pick.getPickId(), "");
+	}
+	
+	@RequestMapping(method=RequestMethod.GET, value="/double/leagueid/{leagueid}/weekid/{weekid}/playerid/{playerid}")
+	public @ResponseBody DoublePick getDoublePick(@PathVariable String leagueid, @PathVariable String weekid, @PathVariable String playerid)
+	{
+		return pickService.getDoublePick(leagueid, weekid, playerid);
 	}
 }

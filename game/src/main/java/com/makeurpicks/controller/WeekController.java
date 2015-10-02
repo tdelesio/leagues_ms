@@ -12,13 +12,13 @@ import com.makeurpicks.domain.Week;
 import com.makeurpicks.service.WeekService;
 
 @RestController
-@RequestMapping(value="/week")
+@RequestMapping(value="/weeks")
 public class WeekController {
 
 	@Autowired
 	private WeekService weekService;
 	
-	@RequestMapping(method=RequestMethod.GET, value="/seasonId/{id}")
+	@RequestMapping(method=RequestMethod.GET, value="/seasonid/{id}")
 	public @ResponseBody Iterable<Week> getWeeksBySeason(@PathVariable String id)
 	{
 		return weekService.getWeeksBySeason(id);

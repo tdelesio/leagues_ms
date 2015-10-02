@@ -16,9 +16,9 @@ public class RedisPicksByLeagueWeekRepository extends AbstractRedisSetCRUDReposi
 	
 	
 
-	public String buildKey(String leagueId, String weekId) {
+	public String buildKey(String seasonId, String weekId) {
 		StringBuilder build = new StringBuilder("picks_by_league_week+");
-		build.append(leagueId);
+		build.append(seasonId);
 		build.append("+");
 		build.append(weekId);
 		return build.toString();

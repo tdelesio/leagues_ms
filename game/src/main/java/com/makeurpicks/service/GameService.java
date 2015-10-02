@@ -32,6 +32,14 @@ public class GameService {
 		return gameRepository.save(game);
 	}
 	
+	public Game updateGameScore(Game game)
+	{
+		Game gameFromDS = gameRepository.findOne(game.getId());
+		gameFromDS.setFavScore(game.getFavScore());
+		gameFromDS.setDogScore(game.getDogScore());
+		return gameRepository.save(gameFromDS);
+	}
+	
 	public List<Game> getGamesByWeek(String weekId)
 	{
 		return gameRepository.findByWeekId(weekId);

@@ -3,15 +3,17 @@ package com.makeurpicks.service;
 import java.util.Calendar;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import com.makeurpicks.domain.League;
-import com.makeurpicks.domain.LeagueBuilder;
-import com.makeurpicks.domain.LeagueType;
-import com.makeurpicks.domain.Player;
-import com.makeurpicks.domain.PlayerBuilder;
-import com.makeurpicks.domain.Season;
-import com.makeurpicks.domain.SeasonBuilder;
+import com.makeurpicks.domain.LeagueView;
+import com.makeurpicks.domain.LeagueViewBuilder;
+import com.makeurpicks.domain.PlayerView;
+import com.makeurpicks.domain.PlayerViewBuilder;
+import com.makeurpicks.domain.SeasonView;
+import com.makeurpicks.domain.SeasonViewBuilder;
+import com.makeurpicks.domain.View;
 
+@Component
 public class SetupLeagueService {
 
 	@Autowired
@@ -23,42 +25,50 @@ public class SetupLeagueService {
 	@Autowired
 	private LeagueClient leagueClient;
 	
-
-	public void setupLeague()
+	public View setupLeague()
 	{
+		View view = new View();
 		
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(System.currentTimeMillis());
 	
-		Season season = new SeasonBuilder().withStartYear(calendar.get(Calendar.YEAR))
+		seasonClient.createTeams();
+		
+		SeasonView season = new SeasonViewBuilder().withStartYear(calendar.get(Calendar.YEAR))
 			.withEndYear(calendar.get(Calendar.YEAR)+1)
-			.withLeagueType(LeagueType.PICKEM)
+			.withLeagueType("PICKEM")
 			.build();
 	
 		//setup season
-		Season seasonResponse = seasonClient.createSeason(season);
+		SeasonView seasonView = seasonClient.createSeason(season);
 	
+		view.setSeasonView(seasonView);
 	
 		//create player
-		Player player = new PlayerBuilder()
+		PlayerView player = new PlayerViewBuilder()
 			.withEmail("tdelesio@gmail.com")
-			.withPassword("test123")
+			.withPassword("rage311")
 			.withUserName("tim")
 			.asAdmin()
 			.build();
 		
-		Player playerResponse = playerClient.register(player);
+		PlayerView playerView = playerClient.register(player);
+
+		view.setPlayerView(playerView);
 
 		//create league
-		League league = new LeagueBuilder("1")
-		.withAdminId(player.getId())
-		.withName("test")
-		.withPassword("pass")
-		.withSeasonId(season.getId())
+		LeagueView league = new LeagueViewBuilder()
+		.withAdminId(playerView.getId())
+		.withName("pickem 2015")
+		.withPassword("football")
+		.withSeasonId(seasonView.getId())
 		.build();
 		
-		League leagueResponse = leagueClient.createLeague(league);
+		LeagueView leagueView = leagueClient.createLeague(league);
 	
+		view.setLeagueView(leagueView);
+		
+		return view;
 //	assertTrue(leagueService.getCurrentSeasons().contains(season));
 //	assertEquals(league, leagueService.getLeagueById(league.getId()));
 //	assertEquals(league, leagueService.getLeagueByName(league.getLeagueName()));

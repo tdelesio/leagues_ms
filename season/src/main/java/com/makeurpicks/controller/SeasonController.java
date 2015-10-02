@@ -13,7 +13,7 @@ import com.makeurpicks.domain.LeagueType;
 import com.makeurpicks.domain.Season;
 import com.makeurpicks.service.SeasonService;
 
-@RequestMapping(value="/season")
+@RequestMapping(value="/seasons")
 @RestController
 public class SeasonController {
 

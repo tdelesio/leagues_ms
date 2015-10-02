@@ -134,31 +134,6 @@
 <!-- 			<artifactId>spring-boot-starter-remote-shell</artifactId> -->
 <!-- 		</dependency> -->
 
-		<dependency>
-			<groupId>com.makeurpicks</groupId>
-			<artifactId>game</artifactId>
-			<version>0.0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.makeurpicks</groupId>
-			<artifactId>league</artifactId>
-			<version>0.0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.makeurpicks</groupId>
-			<artifactId>picks</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.makeurpicks</groupId>
-			<artifactId>player</artifactId>
-			<version>0.0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.makeurpicks</groupId>
-			<artifactId>season</artifactId>
-			<version>0.0.1</version>
-		</dependency>
 	</dependencies>
 	
 	<build>

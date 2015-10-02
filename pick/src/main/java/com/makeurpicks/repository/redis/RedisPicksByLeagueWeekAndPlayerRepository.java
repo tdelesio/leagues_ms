@@ -10,7 +10,7 @@ public class RedisPicksByLeagueWeekAndPlayerRepository extends AbstractRedisSetC
 	public RedisPicksByLeagueWeekAndPlayerRepository(RedisTemplate<String, String> redisTemplate)
 	{
 		super(redisTemplate);
-	}
+	} 
 	
 	
 

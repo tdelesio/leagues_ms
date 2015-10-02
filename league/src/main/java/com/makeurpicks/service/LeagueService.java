@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import com.makeurpicks.domain.League;
 import com.makeurpicks.domain.LeagueName;
 import com.makeurpicks.domain.PlayerResponse;
+import com.makeurpicks.domain.PlayersInLeague;
 import com.makeurpicks.exception.LeagueServerException;
 import com.makeurpicks.exception.LeagueValidationException;
 import com.makeurpicks.exception.LeagueValidationException.LeagueExceptions;
@@ -69,6 +70,11 @@ public class LeagueService {
 
 	public Set<LeagueName> getLeaguesForPlayer(String playerId) throws LeagueValidationException {
 		return leaguesPlayerHasJoinedRepository.findOne(playerId).getLeauges();
+		
+	}
+	
+	public Set<PlayerResponse> getPlayersInLeague(String leagueid) throws LeagueValidationException {
+		return playersInLeagueRespository.findOne(leagueid).getPlayers();
 		
 	}
 	

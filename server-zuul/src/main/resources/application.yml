@@ -1,5 +1,23 @@
 info:
  component: Edge Server
+
+security:
+  basic:
+    enabled: false
+
+spring.oauth2:
+  client:
+    accessTokenUri: http://localhost:8080/uaa/oauth/token
+    userAuthorizationUri: http://localhost:8080/uaa/oauth/authorize
+    clientId: makeurpicks
+    clientSecret: secret
+    scope: openid
+  resource:
+    jwt.keyUri: http://localhost:8080/uaa/token_key
+    userInfoUri: http://localhost:8080/uaa/userinfo
+
+logging:
+  level: org.springframework.security=DEBUG
  
 endpoints:
   restart:
@@ -13,8 +31,32 @@ zuul:
   ignoredServices: '*'
   routes:
     league:
-      path: /league/**
+      path: /leagues/**
+      stripPrefix: false
     player:
-      path: /player/**
+      path: /players/**
+      stripPrefix: false
     pick:
-      path: /pick/**
+      path: /picks/**
+      stripPrefix: false
+    season:
+      path: /seasons/**
+      serviceId: season
+      stripPrefix: false
+    team:
+      path: /teams/**
+      serviceId: season
+      stripPrefix: false
+    week:
+      path: /weeks/**
+      stripPrefix: false
+      serviceId: game
+    game:
+      path: /games/**
+      stripPrefix: false
+    leader:
+      path: /leaders/**
+      stripPrefix: false
+    uaa:
+      path: /uaa/**
+      serviceId: player
