@@ -1,18 +1,42 @@
 package com.makeurpicks.domain;
 
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
 import javax.persistence.Entity;
+
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 @Entity
 public class Game extends AbstractModel{
 
+	
+//	"2015-10-25T20:18:47.031Z"
+//	"1970-01-01T18:00:00.000Z"
+	
+	
+	//game add attributes
 	private double spread = 0.5;
+	private String seasonId;
+	private String favId;
+	private String dogId;
+	private String weekId;
+	
 	private int favScore=0;
 	private int dogScore=0;
 	private boolean favHome=true;
-	private String favId;
-	private String dogId;
-	private long gameStart;
-	private String weekId;
+	
+	@DateTimeFormat(iso = ISO.DATE_TIME)
+//	@DateTimeFormat(pattern="YYYY-MM-DDTHH:mm:ss.sssZ")
+	private ZonedDateTime gameStart;
+	
+	//aggegrated data
+	private String favFullName;
+	private String dogFullName;
+	
+	
 	
 	public double getSpread() {
 		return spread;
@@ -50,10 +74,12 @@ public class Game extends AbstractModel{
 	public void setDogId(String dogId) {
 		this.dogId = dogId;
 	}
-	public long getGameStart() {
+
+	
+	public ZonedDateTime getGameStart() {
 		return gameStart;
 	}
-	public void setGameStart(long gameStart) {
+	public void setGameStart(ZonedDateTime gameStart) {
 		this.gameStart = gameStart;
 	}
 	public String getWeekId() {
@@ -62,6 +88,27 @@ public class Game extends AbstractModel{
 	public void setWeekId(String weekId) {
 		this.weekId = weekId;
 	}
+	public String getFavFullName() {
+		return favFullName;
+	}
+	public void setFavFullName(String favFullName) {
+		this.favFullName = favFullName;
+	}
+	public String getDogFullName() {
+		return dogFullName;
+	}
+	public void setDogFullName(String dogFullName) {
+		this.dogFullName = dogFullName;
+	}
+	public String getSeasonId() {
+		return seasonId;
+	}
+	public void setSeasonId(String seasonId) {
+		this.seasonId = seasonId;
+	}
 	
-	
+	public String getGameStartFormated()
+	{
+		return gameStart.format(DateTimeFormatter.ofPattern("EEE MM-dd-yyy hh:mm:ss a"));
+	}
 }

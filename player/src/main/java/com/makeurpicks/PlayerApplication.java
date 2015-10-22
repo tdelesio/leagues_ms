@@ -2,19 +2,19 @@ package com.makeurpicks;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.security.oauth2.sso.EnableOAuth2Sso;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
-import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 
 @SpringBootApplication
 //@RestController
@@ -23,7 +23,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
 @EnableCircuitBreaker
 @ComponentScan
 //@EnableResourceServer
-@EnableOAuth2Sso
+//@EnableOAuth2Sso
 public class PlayerApplication {
 
 	private static final Logger LOG = LoggerFactory.getLogger(PlayerApplication.class);
@@ -35,24 +35,20 @@ public class PlayerApplication {
         SpringApplication.run(PlayerApplication.class, args);
     }
     
-    @Bean
-    public ResourceServerConfigurer resourceServer(SecurityProperties securityProperties) {
-        return new ResourceServerConfigurerAdapter() {
+//    @Bean
+//    public ResourceServerConfigurer resourceServer(SecurityProperties securityProperties) {
+//        return new ResourceServerConfigurerAdapter() {
+//
 //            @Override
-//            public void configure(ResourceServerSecurityConfigurer resources) {
-//                resources.resourceId("order");
+//            public void configure(HttpSecurity http) throws Exception {
+//                if (securityProperties.isRequireSsl()) {
+//                    http.requiresChannel().anyRequest().requiresSecure();
+//                }
+//                http.authorizeRequests()
+//                        .antMatchers("/players/userinfo/**").access("#oauth2.hasScope('openid')");
 //            }
-
-            @Override
-            public void configure(HttpSecurity http) throws Exception {
-                if (securityProperties.isRequireSsl()) {
-                    http.requiresChannel().anyRequest().requiresSecure();
-                }
-                http.authorizeRequests()
-                        .antMatchers("/players/userinfo/**").access("#oauth2.hasScope('openid')");
-            }
-        };
-    }
+//        };
+//    }
     
 //    @Bean
 //    public OAuth2SsoConfigurerAdapter oAuth2SsoConfigurerAdapter(SecurityProperties securityProperties) {
@@ -73,28 +69,28 @@ public class PlayerApplication {
 //        };
 //    }
     
-//    @Configuration
-//    @EnableAuthorizationServer
-//    protected static class OAuth2Config extends AuthorizationServerConfigurerAdapter {
-//
-//      @Autowired
-//      private AuthenticationManager authenticationManager;
-//      
-//      @Override
-//      public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-//        endpoints.authenticationManager(authenticationManager);
-//      }
-//      
-//      @Override
-//      public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-//        clients.inMemory()
-//            .withClient("acme")
-//            .secret("acmesecret")
-//            .authorizedGrantTypes("authorization_code", "refresh_token",
-//                "password").scopes("openid");
-//      }
-//
-//  }
+    @Configuration
+    @EnableAuthorizationServer
+    protected static class OAuth2Config extends AuthorizationServerConfigurerAdapter {
+
+      @Autowired
+      private AuthenticationManager authenticationManager;
+      
+      @Override
+      public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+        endpoints.authenticationManager(authenticationManager);
+      }
+      
+      @Override
+      public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+        clients.inMemory()
+            .withClient("acme")
+            .secret("acmesecret")
+            .authorizedGrantTypes("authorization_code", "refresh_token",
+                "password").scopes("openid");
+      }
+
+  }
 //    
 //    @RequestMapping("/user")
 //	public Principal user(Principal user) {

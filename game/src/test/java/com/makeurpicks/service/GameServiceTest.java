@@ -7,6 +7,9 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.junit.Before;
@@ -77,7 +80,7 @@ public class GameServiceTest {
 			.withFavId(fav)
 			.withDogId(dog)
 			.withSpread(spread)
-			.withGameStartTime(start)
+			.withGameStartTime(ZonedDateTime.ofInstant(Instant.ofEpochMilli(start), ZoneId.systemDefault()))
 			.build();
 		
 		game = gameService.createGame(game);

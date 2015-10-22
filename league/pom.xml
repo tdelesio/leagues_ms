@@ -2,19 +2,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
-	<groupId>com.makeurpicks</groupId>
-	<version>0.0.1</version>
+	
 	<packaging>jar</packaging>
 	<artifactId>league</artifactId>
 	
 	<name>league</name>
 	
 	<parent>
-		<groupId>org.springframework.cloud</groupId>
-		<artifactId>spring-cloud-starter-parent</artifactId>
-		<version>1.0.2.RELEASE</version>
-		<relativePath /> <!-- lookup parent from repository -->
+		<groupId>com.makeurpicks</groupId>
+		<artifactId>build</artifactId>
+		<version>0.0.1</version>
 	</parent>
 
 	<properties>
@@ -25,10 +22,10 @@
 	<dependencies>
 	
 		<!-- turbine/hystix -->
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-bus-amqp</artifactId>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.springframework.cloud</groupId> -->
+<!-- 			<artifactId>spring-cloud-starter-bus-amqp</artifactId> -->
+<!-- 		</dependency> -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-hystrix</artifactId>
@@ -104,26 +101,28 @@
 		</dependency>
 		
 		<!-- session -->
-		<dependency>
-	        <groupId>org.springframework.session</groupId>
-    	    <artifactId>spring-session</artifactId>
-    	    <version>1.0.2.RELEASE</version>
-        </dependency>
+<!-- 		<dependency> -->
+<!-- 	        <groupId>org.springframework.session</groupId> -->
+<!--     	    <artifactId>spring-session</artifactId> -->
+<!--         </dependency> -->
 		
 		<!-- sercurity -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.springframework.security.oauth</groupId> -->
-<!-- 			<artifactId>spring-security-oauth2</artifactId> -->
-<!-- 		</dependency> -->
+		<dependency>
+			<groupId>org.springframework.security.oauth</groupId>
+			<artifactId>spring-security-oauth2</artifactId>
+		</dependency>
 <!-- 		<dependency> -->
 <!-- 			<groupId>org.springframework.cloud</groupId> -->
 <!-- 			<artifactId>spring-cloud-starter-security</artifactId> -->
-<!-- 			<version>1.0.1.RELEASE</version> -->
 <!-- 		</dependency> -->
 <!-- 		<dependency> -->
 <!-- 			<groupId>org.springframework.boot</groupId> -->
 <!-- 			<artifactId>spring-boot-starter-remote-shell</artifactId> -->
 <!-- 		</dependency> -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+		</dependency>
 	</dependencies>
 
 <!-- 	<dependencyManagement> -->

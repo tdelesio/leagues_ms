@@ -9,6 +9,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 
 @SpringBootApplication
 @Configuration
@@ -18,15 +19,18 @@ import org.springframework.context.annotation.Configuration;
 @EnableFeignClients
 @EnableDiscoveryClient
 @EnableCircuitBreaker
-//@EnableOAuth2Resource
-//@ConfigurationProperties("spring.cloud.config.server")
+@EnableResourceServer
 public class LeagueApplication {
 
 	
 	public static void main(String[] args) {
 		SpringApplication.run(LeagueApplication.class, args);
 	}
-
+ 
+//	 @Bean
+//	  HeaderHttpSessionStrategy sessionStrategy() {
+//	    return new HeaderHttpSessionStrategy();
+//	  }
 	
 //	@Bean
 //	public LeagueService leagueService()

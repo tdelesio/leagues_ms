@@ -1,0 +1,11 @@
+security:
+  sessions: NEVER
+  oauth2:
+#    client:
+#      accessTokenUri: http://localhost:8080/uaa/oauth/token
+#      userAuthorizationUri: http://localhost:8080/uaa/oauth/authorize
+#      clientId: admin_portal
+#      clientSecret: secret
+    resource:
+#      jwt.keyUri: http://localhost:8080/uaa/token_key
+      userInfoUri: http://localhost:8080/uaa/userinfo

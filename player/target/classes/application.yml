@@ -1,30 +1,38 @@
-#spring.profiles.active: google
+
 security:
-  basic:
-    enabled: false
+  user:
+    password: password
 
-spring.oauth2:
-  client:
-    accessTokenUri: http://localhost:8080/uaa/oauth/token
-    userAuthorizationUri: http://localhost:8080/uaa/oauth/authorize
-    clientId: player
-    clientSecret: secret
-  resource:
-    jwt.keyUri: http://localhost:8080/uaa/token_key
-    userInfoUri: http://localhost:8080/uaa/userinfo
-
----
-
-spring:
-  profiles: google      
-
-spring.oauth2:
-  client:
-    accessTokenUri: https://accounts.google.com/o/oauth2/token
-    userAuthorizationUri: https://accounts.google.com/o/oauth2/auth
-    clientId: 217904051035-7rr1vdi0t42ltbka1r8g90nrk88jiki5.apps.googleusercontent.com
-    clientSecret: crnzxFjCBuK3F-EFvOq4Gnaj
-    scope: openid
-  resource:
-    jwt.keyUri: 
-    userInfoUri: https://www.googleapis.com/oauth2/v3/userinfo
+server:
+  context-path: /uaa
+  
+#spring.profiles.active: google
+#security:
+#  basic:
+#    enabled: false
+#
+#spring.oauth2:
+#  client:
+#    accessTokenUri: http://localhost:8080/uaa/oauth/token
+#    userAuthorizationUri: http://localhost:8080/uaa/oauth/authorize
+#    clientId: player
+#    clientSecret: secret
+#  resource:
+#    jwt.keyUri: http://localhost:8080/uaa/token_key
+#    userInfoUri: http://localhost:8080/uaa/userinfo
+#
+#---
+#
+#spring:
+#  profiles: google      
+#
+#spring.oauth2:
+#  client:
+#    accessTokenUri: https://accounts.google.com/o/oauth2/token
+#    userAuthorizationUri: https://accounts.google.com/o/oauth2/auth
+#    clientId: 217904051035-7rr1vdi0t42ltbka1r8g90nrk88jiki5.apps.googleusercontent.com
+#    clientSecret: crnzxFjCBuK3F-EFvOq4Gnaj
+#    scope: openid
+#  resource:
+#    jwt.keyUri: 
+#    userInfoUri: https://www.googleapis.com/oauth2/v3/userinfo

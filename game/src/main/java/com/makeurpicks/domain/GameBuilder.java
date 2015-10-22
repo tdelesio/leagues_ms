@@ -1,5 +1,6 @@
 package com.makeurpicks.domain;
 
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 public class GameBuilder {
@@ -11,7 +12,7 @@ public class GameBuilder {
 	private boolean favHome=true;
 	private String favId;
 	private String dogId;
-	private long gameStart;
+	private ZonedDateTime gameStart;
 	private String weekId;
 	
 	public GameBuilder()
@@ -19,7 +20,7 @@ public class GameBuilder {
 		UUID uuid = UUID.randomUUID();
 		this.id = String.valueOf(uuid.getMostSignificantBits())+String.valueOf(uuid.getLeastSignificantBits());
 		
-		gameStart = System.currentTimeMillis();
+		gameStart = ZonedDateTime.now();
 	}
 	
 	public Game build()
@@ -73,7 +74,7 @@ public class GameBuilder {
 		return this;
 	}
 	
-	public GameBuilder withGameStartTime(long gs)
+	public GameBuilder withGameStartTime(ZonedDateTime gs)
 	{
 		this.gameStart = gs;
 		return this;

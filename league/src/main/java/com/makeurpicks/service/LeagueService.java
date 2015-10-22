@@ -28,8 +28,8 @@ public class LeagueService {
 	@Autowired
 	private LeagueRepository leagueRepository;
 
-	@Autowired
-	private RestTemplate restTemplate;
+//	@Autowired
+//	private RestTemplate restTemplate;
 
 	@Autowired
 	private RedisPlayersInLeagueRespository playersInLeagueRespository;

@@ -1,10 +1,8 @@
 package com.makeurpicks.controller;
 
 import java.security.Principal;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.security.oauth2.resource.ResourceServerProperties;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,8 +24,8 @@ public class PlayerController {
 	@Autowired
 	private PlayerService playerService;
 	
-	@Autowired
-    private ResourceServerProperties resourceServerProperties;
+//	@Autowired
+//    private ResourceServerProperties resourceServerProperties;
 
     @Autowired
     private OAuth2RestTemplate oauth2RestTemplate;

@@ -6,11 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.makeurpicks.domain.Game;
-import com.makeurpicks.domain.Week;
+import com.makeurpicks.domain.Team;
 import com.makeurpicks.exception.GameValidationException;
 import com.makeurpicks.exception.GameValidationException.GameExceptions;
 import com.makeurpicks.repository.GameRepository;
-import com.makeurpicks.repository.WeekRepository;
 
 @Component
 public class GameService {
@@ -18,9 +17,19 @@ public class GameService {
 	@Autowired
 	private GameRepository gameRepository;
 	
+	@Autowired
+	private TeamService teamService;
+	
 	public Game createGame(Game game)
 	{
 		validateGame(game);
+		
+		game.generateId();
+		
+		Team fav = teamService.getTeam(game.getFavId());
+		Team dog = teamService.getTeam(game.getDogId());
+		game.setFavFullName(fav.getFullTeamName());
+		game.setDogFullName(dog.getFullTeamName());
 		
 		return gameRepository.save(game);
 	}
@@ -29,7 +38,15 @@ public class GameService {
 	{
 		validateGame(game);
 		
-		return gameRepository.save(game);
+		//allow only certain fields to be updated
+		Game gameFromDS = gameRepository.findOne(game.getId());
+		gameFromDS.setGameStart(game.getGameStart());
+		gameFromDS.setSpread(game.getSpread());
+		gameFromDS.setFavHome(game.isFavHome());
+		gameFromDS.setFavScore(game.getFavScore());
+		gameFromDS.setDogScore(game.getDogScore());
+		
+		return gameRepository.save(gameFromDS);
 	}
 	
 	public Game updateGameScore(Game game)
@@ -47,7 +64,8 @@ public class GameService {
 	
 	public Game getGameById(String gameId)
 	{
-		return gameRepository.findOne(gameId);
+		Game game = gameRepository.findOne(gameId);
+		return game;
 	}
 	
 	private void validateGame(Game game)
@@ -60,7 +78,7 @@ public class GameService {
 			throw new GameValidationException(GameExceptions.DOG_IS_NULL);
 		if ("".equals(game.getWeekId()))
 			throw new GameValidationException(GameExceptions.WEEK_IS_NULL);
-		if (game.getGameStart() == 0)
+		if (game.getGameStart() == null)
 			throw new GameValidationException(GameExceptions.GAMESTART_IS_NULL);
 		
 		if (game.getFavId().equals(game.getDogId()))

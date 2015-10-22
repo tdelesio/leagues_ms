@@ -1,6 +1,7 @@
 package com.makeurpicks.domain;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
@@ -42,6 +43,12 @@ public class AbstractModel implements Serializable {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+	
+	public void generateId()
+	{
+		UUID uuid = UUID.randomUUID();
+		this.id = String.valueOf(uuid.getMostSignificantBits())+String.valueOf(uuid.getLeastSignificantBits());
 	}
 	
 	

@@ -1,6 +1,9 @@
 package com.makeurpicks.controller;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.ws.rs.core.MediaType;
 
@@ -27,8 +30,16 @@ public class LeagueController {
 	@Autowired
 	private LeagueService leagueService;
 	
-	 @Value("${greeting}")
-	 private String greeting;
+//	 @Value("${greeting}")
+//	 private String greeting;
+	 
+	 @RequestMapping("/resource")
+	  public Map<String,Object> home() {
+	    Map<String,Object> model = new HashMap<String,Object>();
+	    model.put("id", UUID.randomUUID().toString());
+	    model.put("content", "Hello World");
+	    return model;
+	  }
 	 
 	 @RequestMapping(method=RequestMethod.GET, value="/")
 		public @ResponseBody Iterable<League> getAllLeague() {

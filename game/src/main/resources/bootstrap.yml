@@ -1,5 +1,5 @@
 server:
-  port: 0
+  port: 8085
 spring:
   application:
    name: game
@@ -14,12 +14,7 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
-  instance:
-    hostname: localhost
-    nonSecurePort: 8080
-    leaseRenewalIntervalInSeconds: 10
-    metadataMap:
-      instanceId: league
+
 ---
 spring:
   profiles: cloud
