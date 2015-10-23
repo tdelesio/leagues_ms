@@ -11,7 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 //import org.springframework.security.web.savedrequest.NullRequestCache;
 
 //@EnableWebSecurity
-@Configuration
+//@Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override

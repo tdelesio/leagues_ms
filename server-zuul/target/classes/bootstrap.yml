@@ -2,7 +2,7 @@ server:
   port: 8081
 spring:
   application:
-   name: zuul-server
+   name: UI
   profiles:
     active: local, cloud
 
@@ -25,7 +25,7 @@ eureka:
     serviceUrl:
       defaultZone: http://eureka-leagues.cfapps.io/eureka/
   instance:
-    hostname: zuul-leagues.cfapps.io
+    hostname: ui-leagues.cfapps.io
     nonSecurePort: 80
     leaseRenewalIntervalInSeconds: 10
     metadataMap:

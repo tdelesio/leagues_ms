@@ -1,11 +1,14 @@
 security:
   sessions: NEVER
-  oauth2:
+#  oauth2:
 #    client:
 #      accessTokenUri: http://localhost:8080/uaa/oauth/token
 #      userAuthorizationUri: http://localhost:8080/uaa/oauth/authorize
-#      clientId: admin_portal
+#      clientId: league
 #      clientSecret: secret
-    resource:
-#      jwt.keyUri: http://localhost:8080/uaa/token_key
-      userInfoUri: http://localhost:8080/uaa/userinfo
+#    resource:
+#      userInfoUri: http://localhost:8080/uaa/user
+#      
+#logging:
+#  level:
+#    org.springframework.security: DEBUG
