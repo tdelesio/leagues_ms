@@ -1,0 +1,62 @@
+<div ng-show="showEdit">
+<h2>Update Game</h2>
+<form name="editGame" ng-submit="setupCtrl.editGame(edit_game_model)" class="form-horizontal">
+	<fieldset>
+		<div class="form-group">
+			<label for="favorite-select" class="col-lg-2 control-label">Favorite</label>
+			<div class="col-lg-10">
+				<select ng-model="edit_game_model.favId" required id="favorite-select" class="form-control">
+					<option ng-repeat="team in teams" value="{{team.id}}">
+						 {{team.city}}&nbsp;{{team.teamName}}
+					</option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="favscore-input" class="col-lg-2 control-label">Favorite Score</label>
+			<div class="col-lg-10">
+				<input type="number" min="0" max="60" required="required" ng-model="edit_game_model.favScore" id="favscore-input" class="form-control"/>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="dog-select" class="col-lg-2 control-label">Dog</label>
+			<div class="col-lg-10">
+				<select ng-model="edit_game_model.dogId" required id="dog-select" class="form-control">
+					<option ng-repeat="team in teams" value="{{team.id}}">
+						 {{team.city}}&nbsp;{{team.teamName}}
+					</option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="dogscore-input" class="col-lg-2 control-label">Dog Score</label>
+			<div class="col-lg-10">
+				<input type="number" min="0" max="60" required="required" ng-model="edit_game_model.dogScore" id="dogscore-input" class="form-control"/>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="spread-input" class="col-lg-2 control-label">Spread</label>
+			<div class="col-lg-10">
+				<input ng-model="edit_game_model.spread" type="number" smartFloat min="0.5" max="20.5" required id="spread-input" class="form-control"/>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="home-check" class="col-lg-2 control-label">Favorite Home?</label>
+			<div class="col-lg-10">
+				<input type="checkbox" ng-model="edit_game_model.favHome" id="home-check"/>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="gamestart-input" class="col-lg-2 control-label">Game Start</label>
+			<div class="col-lg-10">
+				<input id="gamestart-input" class="form-control" ng-model="edit_game_model.gameStart" type="datetime-local" placeholder="yyyy-MM-ddTHH:mm:ss" required/>
+			</div>
+		</div>
+		<div class="form-group">
+      		<div class="col-lg-10 col-lg-offset-2">
+      			<button class="btn btn-primary">update game</button>
+      		</div>
+      	</div>	
+	</fieldset>		
+</form>
+</div>

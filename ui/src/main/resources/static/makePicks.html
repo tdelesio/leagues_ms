@@ -1,0 +1,10 @@
+<div ng-controller="MakePicksController as makePicksCtrl">
+	<div ng-repeat="game in games">
+	
+		<div class="gametime">{{game.gameStartFormatted}}</div>
+		
+		<make-picks ng-show="game.pickmade"></make-picks>
+		
+		<view-picks ng-hide="game.pickmade"></view-picks>
+	</div>
+</div>

@@ -1,0 +1,12 @@
+---
+applications:
+- name: game
+  memory: 512M 
+  instances: 1
+  host: game
+  path: ./target/game-0.0.1.jar
+  services:
+  - mysql-leagues
+  - amqp-myp
+  env:
+   JAVA_OPTS: -Djava.security.egd=file:///dev/urandom

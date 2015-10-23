@@ -1,0 +1,22 @@
+<div id="settings-panel">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="subnav" id="season-view">
+					<div class="season-select">
+						<select ng-model="league.seasonId" id="season">
+							<option ng-repeat="league in leagues" value="{{league.seasonId}}">
+						 		{{league.leagueName}}
+							</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div id="logout">
+					<a href="#" onclick="logout()">logout</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

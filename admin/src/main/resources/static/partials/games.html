@@ -1,0 +1,13 @@
+
+<h2>Games:</h2>
+<table class="table table-striped table-hover ">
+
+<tr id="game" ng-repeat="game in games">
+<!-- <%if (games.gameStarted && (games.favScore !=0 || games.dogScore != 0)) {%>background-color: teal;<%}%> -->
+	<td><a href="" ng-click="setupCtrl.showEditGame(game)">Edit</a></td> 
+	<td class="gameStart">{{game.gameStartFormated}}</td>
+	<td><span class="home" ng-show="game.favHome">@</span><span class="fav">{{game.favFullName}}</span><span class="fav_score">({{game.favScore}})</span></td>
+	<td><span class="spread">{{game.spread}}</span>
+	<td><span class="home" ng-hide="game.favHome">@</span><span class="dog">{{game.dogFullName}}</span><span class="dog_score">({{game.dogScore}})</span></td>		
+</tr>
+</table>

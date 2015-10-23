@@ -1,0 +1,39 @@
+server:
+  port: 8082
+spring:
+  application:
+   name: admin
+---
+spring:
+  profiles: local
+  cloud:
+    config:
+       uri: ${vcap.services.springbox-config-service.credentials.uri:http://localhost:8888}
+       discovery:
+         enabled: true
+         serviceId: config-server
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+---
+spring:
+  profiles: cloud
+  cloud:
+    config:
+       uri: http://config-leagues.cfapps.io
+       discovery:
+         enabled: true
+         serviceId: config-server
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka-leagues.cfapps.io/eureka/
+  instance:
+    hostname: leagues-admin.cfapps.io
+    nonSecurePort: 80
+    leaseRenewalIntervalInSeconds: 10
+    metadataMap:
+      instanceId: admin
+    
