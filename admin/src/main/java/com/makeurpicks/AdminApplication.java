@@ -65,7 +65,7 @@ public class AdminApplication {
 				.httpBasic()
 			.and()
 				.authorizeRequests()
-					.antMatchers("/index.html", "/unauthenticated.html", "/").permitAll()
+					.antMatchers("/unauthenticated.html", "/").permitAll()
 					.anyRequest().hasRole("ADMIN")
 			.and()
 				.csrf().disable();

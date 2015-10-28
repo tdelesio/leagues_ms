@@ -36,6 +36,13 @@
 		};
 	});
 	
+	app.directive('makePicks', function() {
+		return {
+			restrict: 'E',
+			templateUrl: 'partials/makePicks.html'
+		};
+	});
+	
 	app.factory('leagueService', function ($http, $log) {
 		$log.debug('leagueService');
 			var service =  {
@@ -45,16 +52,20 @@
 				       });
 				},
 			
-				getGames: function(seasonId) {
-				return $http.get('/games/weekid/'+seasonId).success(function(result) {
-			           return result.data;
-			       });
+				getGames: function(weekId) {
+				
+					$log.debug("leagueService:getGames weekId="+weekId);
+					return $http.get('/games/weekid/'+weekId).success(function(result) {
+				           return result.data;
+				       });
 				}
+				
+				
 			}
 			return service;
 	});
 	
-	app.controller('NavigationController', function ($scope, $http, $window, $log, leagueService) {
+	app.controller('NavigationController', function ($scope, $rootScope, $http, $window, $log, leagueService) {
 		
 		$scope.league = {};
 		$scope.week = {};
@@ -78,7 +89,11 @@
 				$log.debug('SettingsController:Weeks='+JSON.stringify(data))
 				$scope.weeks = data;
 				$scope.week.weekId = data[0].id;
+			
+				$rootScope.$broadcast('weekLoaded');
 			});
+			
+			
 		});
 		
 		this.settings = function getSettings() {
@@ -98,9 +113,44 @@
 		}
 	});
 
-	app.controller('MakePicksController', function ($scope, $http, $window, $log) { 
+	app.controller('MakePicksController', function ($scope, $http, $window, $log, leagueService) { 
 		
 		
+		$scope.pickMap = {};
+		$scope.gameMetaMap = {};
+		$scope.showGS = true;
+		
+		//get the games for the week and league
+		
+		$scope.$on('weekLoaded', function (event) {
+			$log.debug(event);
+			$log.debug('MakePickController week='+JSON.stringify($scope.week));
+			
+			leagueService.getGames($scope.week.weekId).then(function(data) {
+				$log.debug('MakePickController:games='+JSON.stringify(data.data))
+				$scope.games = data.data;
+				
+				
+			});
+		
+		this.makePick = function(game) {
+			if ($scope.previousGameStart != game.gameStart)
+				$scope.showGS = false;
+			
+			$scope.previousGameStart = game.gameStart;
+			
+		};	
+	});
+		
+		
+		
+		//get the picks for the week/player
+//		$http.get('/picks/leagueid/'+$scope.league.id+'/weekid/'+$scope.week.id+'/playerid/'+$scope.username).success(function(data) {
+//			 angular.forEach(data, function (value) {
+//				 $scope.pickMap[value.gameId] = value;
+//			 });
+//		});
+	
 //		var pickmap = {};
 //		var points = 0;
 //		var gt = ""

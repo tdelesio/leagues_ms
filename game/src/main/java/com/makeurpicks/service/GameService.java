@@ -3,10 +3,14 @@ package com.makeurpicks.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import com.makeurpicks.domain.Game;
+import com.makeurpicks.domain.NFLWeek;
 import com.makeurpicks.domain.Team;
+import com.makeurpicks.domain.Week;
 import com.makeurpicks.exception.GameValidationException;
 import com.makeurpicks.exception.GameValidationException.GameExceptions;
 import com.makeurpicks.repository.GameRepository;
@@ -20,6 +24,9 @@ public class GameService {
 	@Autowired
 	private TeamService teamService;
 	
+	@Autowired
+	private WeekService weekService;
+		
 	public Game createGame(Game game)
 	{
 		validateGame(game);
@@ -28,6 +35,8 @@ public class GameService {
 		
 		Team fav = teamService.getTeam(game.getFavId());
 		Team dog = teamService.getTeam(game.getDogId());
+		game.setDogShortName(dog.getShortName());
+		game.setFavShortName(fav.getShortName());
 		game.setFavFullName(fav.getFullTeamName());
 		game.setDogFullName(dog.getFullTeamName());
 		
@@ -59,7 +68,8 @@ public class GameService {
 	
 	public List<Game> getGamesByWeek(String weekId)
 	{
-		return gameRepository.findByWeekId(weekId);
+//		return gameRepository.findByWeekId(weekId);
+		return gameRepository.findByWeekIdOrderByGameStart(weekId);
 	}
 	
 	public Game getGameById(String gameId)
@@ -84,6 +94,21 @@ public class GameService {
 		if (game.getFavId().equals(game.getDogId()))
 			throw new GameValidationException(GameExceptions.TEAM_CANNOT_PLAY_ITSELF);
 		
+		
+	}
+	
+	
+	public NFLWeek loadFromNFL()
+	{
+		RestTemplate restTemplate = new RestTemplate();
+		restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
+		return restTemplate.getForObject("http://www.nfl.com/liveupdate/scorestrip/ss.json", NFLWeek.class);
+	}
+	
+	public void autoSetupWeek(String leagueId, Week week)
+	{
+		week = weekService.createWeek(week);
+		NFLWeek nflWeek = loadFromNFL();
 		
 	}
 }
