@@ -1,13 +1,6 @@
 package com.makeurpicks.controller;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.makeurpicks.domain.Game;
+import com.makeurpicks.domain.NFLWeek;
 import com.makeurpicks.service.GameService;
 
 @RestController
@@ -75,5 +69,11 @@ public class GameController {
 	{
 		Game game =  gameService.getGameById(id);
 		return game;
+	}
+	
+	@RequestMapping(method=RequestMethod.GET, value="/autosetup")
+	public @ResponseBody NFLWeek callNFLandSetupWeek()
+	{
+		return gameService.loadFromNFL();
 	}
 }

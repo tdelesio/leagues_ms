@@ -26,12 +26,16 @@
 
 <body ng-app="app">
 	
-	<navigation></navigation>
+	<div ng-controller="NavigationController as navCtrl">
 	
-	<div id="results" class="container">
-		<div class="loader" id="loader-page" ui-view></div>
+		<settings></settings>
+		
+		<navigation></navigation>
+		
+		<div id="results" class="container" ui-view>
+		</div>
+		
 	</div>
-
 	<script src="js/angular-bootstrap.js" type="text/javascript"></script>
 	<script src="js/angular-ui.js" type="text/javascript"></script>
 	<script src="js/app.js"></script>	

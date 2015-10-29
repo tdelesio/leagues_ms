@@ -35,6 +35,8 @@ public class Game extends AbstractModel{
 	//aggegrated data
 	private String favFullName;
 	private String dogFullName;
+	private String dogShortName;
+	private String favShortName;
 	
 	
 	
@@ -111,4 +113,35 @@ public class Game extends AbstractModel{
 	{
 		return gameStart.format(DateTimeFormatter.ofPattern("EEE MM-dd-yyy hh:mm:ss a"));
 	}
+	public String getDogShortName() {
+		return dogShortName;
+	}
+	public void setDogShortName(String dogShortName) {
+		this.dogShortName = dogShortName;
+	}
+	public String getFavShortName() {
+		return favShortName;
+	}
+	public void setFavShortName(String favShortName) {
+		this.favShortName = favShortName;
+	}
+	
+	public boolean hasScoresEntered()
+	{
+		if (favScore==0&&dogScore==0)
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+	
+	public boolean getHasGameStarted()
+	{
+		return gameStart.isBefore(ZonedDateTime.now());
+	}
+	
+	
 }

@@ -11,5 +11,5 @@ import com.makeurpicks.domain.Game;
 public interface GameRepository extends CrudRepository<Game, String>{
 
 	public List<Game> findByWeekId(String weekId);
-
+	public List<Game> findByWeekIdOrderByGameStart(String weekId);
 }

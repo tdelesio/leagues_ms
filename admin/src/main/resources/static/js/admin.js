@@ -1,3 +1,4 @@
+//http://www.nfl.com/liveupdate/scorestrip/ss.xml
 (function () {
 	var app = angular.module('admin', ['ui.router']);
 	
