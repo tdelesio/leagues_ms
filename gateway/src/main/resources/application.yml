@@ -4,6 +4,8 @@ logging:
     org.springframework.security: DEBUG
 security:
   sessions: ALWAYS
+  user:
+    password: password
 zuul:
   routes:
     ui:

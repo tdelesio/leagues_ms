@@ -4,51 +4,17 @@ angular.module('gateway', []).config(function($httpProvider) {
 
 }).controller('navigation',
 
-function($scope, $http) {
+function($scope, $http, $window) {
 
-	var authenticate = function(credentials, callback) {
-
-		var headers = credentials ? {
-			authorization : "Basic "
-					+ btoa(credentials.username + ":"
-							+ credentials.password)
-		} : {};
-
-		$scope.user = ''
-		$http.get('user', {
-			headers : headers
-		}).success(function(data) {
-			if (data.name) {
-				$scope.authenticated = true;
-				$scope.user = data.name
-			} else {
-				$scope.authenticated = false;
-			}
-			callback && callback(true);
-		}).error(function() {
-			$scope.authenticated = false;
-			callback && callback(false);
-		});
-
-	}
-
-	authenticate();
-
-	$scope.credentials = {};
-	$scope.login = function() {
-		authenticate($scope.credentials, function(authenticated) {
-			$scope.authenticated = authenticated;
-			$scope.error = !authenticated;
-		})
-	};
-
-	$scope.logout = function() {
-		$http.post('logout', {}).success(function() {
-			$scope.authenticated = false;
-		}).error(function(data) {
-			console.log("Logout failed")
-			$scope.authenticated = false;
-		});
-	}
+	$http.get('user').success(function(data) {
+		if (data.name) {
+			$window.location.href = '/ui/index.html';
+		} else {
+			$window.location.href = '/login.html';
+		}
+		
+	}).error(function() {
+		$window.location.href = '/login.html';
+	});
 
 });

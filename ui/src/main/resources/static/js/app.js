@@ -59,7 +59,7 @@
 		$scope.league = {};
 		$scope.week = {};
 		
-		$http.get('user').success(function(data) {
+		$http.get('/user').success(function(data) {
 			$scope.username = data.name;
 		});
 

@@ -72,7 +72,11 @@
 		return service;
 	});
 	
-	
+	app.controller('ChromeController', function ($http, $scope) {
+		$http.get('/user').success(function(data) {
+			$scope.user = data.name;
+		});
+	});
 	
 	app.controller('SetupWeekController', function ($scope, $http, $log, leagueService) {
 		$log.debug('SetupWeekController');
