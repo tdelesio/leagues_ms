@@ -10,13 +10,21 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class GameValidationException extends RuntimeException {
 
 	public enum GameExceptions {
-		GAME_IS_NULL, FAVORITE_IS_NULL, DOG_IS_NULL, WEEK_IS_NULL, GAMESTART_IS_NULL, TEAM_CANNOT_PLAY_ITSELF
+		GAME_IS_NULL, FAVORITE_IS_NULL, DOG_IS_NULL, WEEK_IS_NULL, GAMESTART_IS_NULL, TEAM_CANNOT_PLAY_ITSELF,
+		TEAM_SHORT_TEAM_NOT_FOUND, SEASON_ID_IS_NULL
 	}
 	
 	private Iterable<GameExceptions> exceptions;
+	private String extraData;
 	
 	public GameValidationException(GameExceptions... gameExceptions)
 	{
+		exceptions = new ArrayList<GameExceptions>(Arrays.asList(gameExceptions));
+	}
+	
+	public GameValidationException(String extraData, GameExceptions... gameExceptions)
+	{
+		this.extraData = extraData;
 		exceptions = new ArrayList<GameExceptions>(Arrays.asList(gameExceptions));
 	}
 	
@@ -30,7 +38,7 @@ public class GameValidationException extends RuntimeException {
 
 	@Override
 	public String getMessage() {
-		return exceptions.toString();
+		return extraData+" - "+exceptions.toString();
 	}
 	
 }

@@ -1,16 +1,24 @@
 package com.makeurpicks.service;
 
+import java.time.DateTimeException;
+import java.time.ZonedDateTime;
+import java.time.temporal.TemporalField;
 import java.util.List;
+import java.util.StringTokenizer;
 
+import org.hibernate.id.enhanced.LegacyHiLoAlgorithmOptimizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import com.makeurpicks.domain.Game;
+import com.makeurpicks.domain.GameBuilder;
+import com.makeurpicks.domain.NFLGame;
 import com.makeurpicks.domain.NFLWeek;
 import com.makeurpicks.domain.Team;
 import com.makeurpicks.domain.Week;
+import com.makeurpicks.domain.WeekBuilder;
 import com.makeurpicks.exception.GameValidationException;
 import com.makeurpicks.exception.GameValidationException.GameExceptions;
 import com.makeurpicks.repository.GameRepository;
@@ -105,10 +113,72 @@ public class GameService {
 		return restTemplate.getForObject("http://www.nfl.com/liveupdate/scorestrip/ss.json", NFLWeek.class);
 	}
 	
-	public void autoSetupWeek(String leagueId, Week week)
+	public void autoSetupWeek(String seasonId)
 	{
-		week = weekService.createWeek(week);
+		if (seasonId == null || "".equals(seasonId))
+			throw new GameValidationException(GameExceptions.SEASON_ID_IS_NULL);
+		List<Week> weeks = weekService.getWeeksBySeason(seasonId);
+		
 		NFLWeek nflWeek = loadFromNFL();
+		int weekNumber = nflWeek.getW();
+		String foundWeekId = null;
+		
+		for (Week week: weeks)
+		{
+			if (week.getWeekNumber() == weekNumber)
+				foundWeekId = week.getId();
+		}
+		
+		if (foundWeekId == null)
+		{
+			//week not found so we need to create one
+			Week newWeek = new WeekBuilder().withWeekNumber(weekNumber).withSeasonId(seasonId).build();
+			Week week = weekService.createWeek(newWeek);
+			
+			//now that we have a week setup, let's create the games
+			for (NFLGame nflGame:nflWeek.getGms())
+			{
+				Team home = teamService.getTeamByShortName("pickem", nflGame.getH());
+				Team away = teamService.getTeamByShortName("pickem", nflGame.getV());
+				String day = nflGame.getD();
+				String time = nflGame.getT();
+				ZonedDateTime gameStart = ZonedDateTime.now();
+				StringTokenizer stringTokenizer = new StringTokenizer(time, ":");
+				String hour = stringTokenizer.nextToken();
+				String min = stringTokenizer.nextToken();
+				gameStart = gameStart.withHour(Integer.parseInt(hour)+12).withMinute(Integer.parseInt(min)).withSecond(0);
+				
+				//based on running on wed
+				int dayOffSet = 0;
+				if (day.equals("Thu"))
+					dayOffSet++;
+				else if (day.equals("Sat"))
+					dayOffSet+=3;
+				else if (day.equals("Sun"))
+					dayOffSet+=4;
+				else if (day.equals("Mon"))
+					dayOffSet+=5;
+				
+				//monday is 1, tues is 2, wed is 3, thur is 4
+				int currentDay = gameStart.getDayOfWeek().getValue();
+				if (currentDay == 2)
+					dayOffSet++;
+				else if (currentDay == 4)
+					dayOffSet--;
+				else if (currentDay == 5)
+					dayOffSet-=2;
+				
+				gameStart = gameStart.plusDays(dayOffSet);
+				Game game = new GameBuilder()
+						.withFavId(home.getId())
+						.withDogId(away.getId())
+						.withWeekId(week.getId())
+						.withGameStartTime(gameStart)
+						.build();
+				
+				createGame(game);
+			}
+		}
 		
 	}
 }

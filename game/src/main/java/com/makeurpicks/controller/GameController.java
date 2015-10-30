@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.makeurpicks.domain.Game;
 import com.makeurpicks.domain.NFLWeek;
+import com.makeurpicks.domain.Week;
 import com.makeurpicks.service.GameService;
 
 @RestController
@@ -71,9 +72,11 @@ public class GameController {
 		return game;
 	}
 	
-	@RequestMapping(method=RequestMethod.GET, value="/autosetup")
-	public @ResponseBody NFLWeek callNFLandSetupWeek()
+	@RequestMapping(method=RequestMethod.POST, value="/autosetup")
+	public void callNFLandSetupWeek(@RequestBody Week week)
 	{
-		return gameService.loadFromNFL();
+		gameService.autoSetupWeek(week.getSeasonId());
 	}
+	
+	
 }

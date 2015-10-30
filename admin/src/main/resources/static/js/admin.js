@@ -241,6 +241,25 @@
 			$scope.week.seasonId = data[0].seasonId;
 		});
 		
+		this.autoWeek = function(week) {
+			$log.debug('autoWeek: week='+JSON.stringify(week));
+			$http({
+				method : "POST",
+//				beforeSend: function (request) {
+//			        request.setRequestHeader(header, token);
+//			     },
+				url : '/games/autosetup',
+				contentType : "application/json",
+				dataType : "json",
+				//data : $('form').serializeObject(),
+				data : JSON.stringify(week)
+			}).success(function(res) { 
+				$window.location.href = 'index.html';
+			}).error(function(res) {
+				alert('fail');
+			});
+		}
+		
 		this.addWeek = function(week) {
 
 			$http({

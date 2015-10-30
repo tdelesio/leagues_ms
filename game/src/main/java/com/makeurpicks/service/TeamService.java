@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 
 import com.makeurpicks.domain.Team;
 import com.makeurpicks.domain.TeamBuilder;
+import com.makeurpicks.exception.GameValidationException;
+import com.makeurpicks.exception.GameValidationException.GameExceptions;
 import com.makeurpicks.repository.TeamRepository;
 
 @Component
@@ -50,6 +52,18 @@ public class TeamService {
 		
 	}
 	
+	public Team getTeamByShortName(String leagueType, String sn)
+	{
+		List<Team> teams = getTeams(leagueType);
+		for (Team team:teams)
+		{ 
+			if (team.getShortName().equals(sn))
+				return team;
+		}
+		
+		throw new GameValidationException(sn, GameExceptions.TEAM_SHORT_TEAM_NOT_FOUND);
+	}
+	
 	protected void createAllTeams()
 	{
 		createTeams("pickem");
@@ -58,7 +72,7 @@ public class TeamService {
 	public List<Team> createTeams(String leagueType) {
 		
 		
-			Team team = new TeamBuilder().withCity("Arizona").withShortName("ARZ")
+			Team team = new TeamBuilder().withCity("Arizona").withShortName("ARI")
 					.withTeamName("Cardinals").build();
 			createTeam(team);
 	
@@ -168,7 +182,7 @@ public class TeamService {
 			
 			createTeam(team);
 	
-			team = new TeamBuilder().withCity("Atlanta").withShortName("ALT")
+			team = new TeamBuilder().withCity("Atlanta").withShortName("ATL")
 					.withTeamName("Falcons").build();
 			
 			createTeam(team);
