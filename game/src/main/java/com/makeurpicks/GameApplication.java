@@ -24,16 +24,16 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 @EnableCircuitBreaker
 @EnableJpaRepositories
 @EnableRedisHttpSession
-public class GameApplication extends WebSecurityConfigurerAdapter {
+public class GameApplication {//extends WebSecurityConfigurerAdapter {
 
     public static void main(String[] args) {
         SpringApplication.run(GameApplication.class, args);
     }
     
-    @Override
-	protected void configure(HttpSecurity http) throws Exception {
-		// We need this to prevent the browser from popping up a dialog on a 401
-		http.httpBasic().disable();
-		http.authorizeRequests().antMatchers(HttpMethod.POST, "/**").hasRole("WRITER").anyRequest().authenticated();
-	}
+//    @Override
+//	protected void configure(HttpSecurity http) throws Exception {
+//		// We need this to prevent the browser from popping up a dialog on a 401
+//		http.httpBasic().disable();
+//		http.authorizeRequests().antMatchers(HttpMethod.POST, "/**").hasRole("WRITER").anyRequest().authenticated();
+//	}
 }

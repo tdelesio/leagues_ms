@@ -8,9 +8,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.makeurpicks.domain.PlayerResponse;
 
-@FeignClient("player")
+@FeignClient("gateway")
 public interface PlayerClient {
 
-	@RequestMapping(value = "/players/{id}", method=RequestMethod.GET ,produces="application/json", consumes="application/json")
+	@RequestMapping(value = "/user", method=RequestMethod.GET ,produces="application/json", consumes="application/json")
+    public @ResponseBody PlayerResponse getPlayer();
+	
+	@RequestMapping(value = "/user/{id}", method=RequestMethod.GET ,produces="application/json", consumes="application/json")
     public @ResponseBody PlayerResponse getPlayerById(@PathVariable("id") String id);
+	
+
 }

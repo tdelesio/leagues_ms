@@ -1,22 +1,27 @@
 package com.makeurpicks.repository.redis;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import com.makeurpicks.domain.PlayerResponse;
 import com.makeurpicks.domain.PlayersInLeague;
 import com.makeurpicks.repository.PlayersInLeagueRepository;
 
-public class RedisPlayersInLeagueRespository extends AbstractRedisCRUDRepository<PlayersInLeague> implements PlayersInLeagueRepository {
+public class RedisPlayersInLeagueRespository implements PlayersInLeagueRepository {
 
+	protected final HashOperations<String, String, PlayersInLeague> hashOps;
+	
 	public RedisPlayersInLeagueRespository(RedisTemplate<String, PlayersInLeague> redisTemplate)
 	{
-		super(redisTemplate);
+		this.hashOps = redisTemplate.opsForHash();
 	}
 	
-	@Override
-	public String getKey() {
-		return "players_in_leagues";
-	}
+	public String KEY = "players_in_leagues";
+
 
 	@Override
 	public void addPlayerToLeague(PlayerResponse player, String leagueId) {
@@ -42,4 +47,66 @@ public class RedisPlayersInLeagueRespository extends AbstractRedisCRUDRepository
 		save(playersInLeague);
 	}
 	
+	public long count() {
+		return hashOps.keys(KEY).size();
+	}
+
+	public void delete(String id) {
+		hashOps.delete(KEY, id);
+	}
+
+	public void delete(PlayersInLeague league) {
+		hashOps.delete(KEY, league.getId());
+	}
+
+	public void delete(Iterable<? extends PlayersInLeague> leagues) {
+		for (PlayersInLeague league : leagues) {
+			delete(league);
+		}
+	}
+
+	public void deleteAll() {
+		Set<String> ids = hashOps.keys(KEY);
+		for (String id : ids) {
+			delete(id);
+		}
+	}
+
+	public boolean exists(String id) {
+		return hashOps.hasKey(KEY, id);
+	}
+
+	public Iterable<PlayersInLeague> findAll() {
+		return hashOps.values(KEY);
+	}
+
+	public Iterable<PlayersInLeague> findAll(Iterable<String> ids) {
+		return hashOps.multiGet(KEY, convertIterableToList(ids));
+	}
+
+	public PlayersInLeague findOne(String id) {
+		return hashOps.get(KEY, id);
+	}
+
+	public <S extends PlayersInLeague> S save(S league) {
+		hashOps.put(KEY, league.getId(), league);
+		return league;
+	}
+
+	public <S extends PlayersInLeague> Iterable<S> save(Iterable<S> leagues) {
+		List<S> result = new ArrayList<S>();
+		for (S entity : leagues) {
+			save(entity);
+			result.add(entity);
+		}
+		return result;
+	}
+
+	private <PlayersInLeague> List<PlayersInLeague> convertIterableToList(Iterable<PlayersInLeague> iterable) {
+		List<PlayersInLeague> list = new ArrayList<PlayersInLeague>();
+		for (PlayersInLeague object : iterable) {
+			list.add(object);
+		}
+		return list;
+	}
 }

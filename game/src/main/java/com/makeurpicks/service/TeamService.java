@@ -31,8 +31,8 @@ public class TeamService {
 	}
 
 	public Team createTeam(Team team) {
-		UUID uuid = UUID.randomUUID();
-		String id = String.valueOf(uuid.getMostSignificantBits())+String.valueOf(uuid.getLeastSignificantBits());
+		
+		String id = UUID.randomUUID().toString();
 		team.setId(id);
 		teamRepository.save(team);
 		
@@ -116,7 +116,7 @@ public class TeamService {
 					.withTeamName("Colts").build();
 			createTeam(team);
 	
-			team = new TeamBuilder().withCity("Jacksinville").withShortName("JAK")
+			team = new TeamBuilder().withCity("Jacksinville").withShortName("JAC")
 					.withTeamName("Jaguars").build();
 			createTeam(team);
 	

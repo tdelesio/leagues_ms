@@ -4,6 +4,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import com.makeurpicks.domain.Season;
 import com.makeurpicks.repository.SeasonRepository;
@@ -17,27 +19,29 @@ public class RedisConfig {
 			RedisConnectionFactory redisConnectionFactory) {
 		RedisTemplate<String, Season> template = new RedisTemplate<String, Season>();
 		template.setConnectionFactory(redisConnectionFactory);
-		
+		template.setHashKeySerializer(stringRedisSerializer());
+		template.setKeySerializer(stringRedisSerializer());
+		template.setHashValueSerializer(userJsonRedisSerializer());
+//		template.setDefaultSerializer(new StringRedisSerializer());
 		return template;
 	}
 	
-//	@Bean
-//	public RedisTemplate<String, Team> teamRedisTemplate(
-//			RedisConnectionFactory redisConnectionFactory) {
-//		RedisTemplate<String, Team> template = new RedisTemplate<String, Team>();
-//		template.setConnectionFactory(redisConnectionFactory);
-//		
-//		return template;
-//	}
+//		@Bean
+//	    public RedisConnectionFactory redisConnectionFactory() {
+//	        return new JedisConnectionFactory();
+//	    }
 	
+	@Bean
+	public StringRedisSerializer stringRedisSerializer()
+	{
+		return new StringRedisSerializer();
+	}
 	
-	
-//	@Bean
-//	public TeamRepository leagueRepository(RedisConnectionFactory redisConnectionFactory)
-//	{
-//		TeamRepository teamRepository = new RedisTeamRepository(teamRedisTemplate(redisConnectionFactory));
-//		return teamRepository;
-//	}
+	@Bean
+	public Jackson2JsonRedisSerializer<Season> userJsonRedisSerializer()
+	{
+		return new Jackson2JsonRedisSerializer<>(Season.class);
+	}
 	
 	@Bean
 	public SeasonRepository seasonRespository(RedisConnectionFactory redisConnectionFactory)

@@ -17,6 +17,10 @@
 		      url: "/create",
 		      templateUrl: "createWeek.html"
 		    })
+		    .state('leagues', {
+		      url: "/leagues",
+		      templateUrl: "createLeague.html"
+		    })
 		});
 	
 	app.directive('chrome', function() {
@@ -40,10 +44,31 @@
 		};
 	});
 	
+	app.directive('createLeague', function() {
+		return {
+			restrict: 'E',
+			templateUrl: 'partials/createLeague.html'
+		};
+	});
+	
+	app.directive('createSeason', function() {
+		return {
+			restrict: 'E',
+			templateUrl: 'partials/createSeason.html'
+		};
+	});
+	
 	app.directive('games', function() {
 		return {
 			restrict: 'E',
 			templateUrl: 'partials/games.html'
+		};
+	});
+	
+	app.directive('leagues', function() {
+		return {
+			restrict: 'E',
+			templateUrl: 'partials/leagues.html'
 		};
 	});
 	
@@ -232,6 +257,78 @@
 //			$scope.team = data;
 //		});
 	})
+	
+	
+	
+	app.controller('CreateLeagueController', function ($scope, $http, $window, $log, leagueService) {
+	
+		$scope.league = {};
+		$scope.season = {};
+		
+		leagueService.getLeagues().then(function(data) {
+			$scope.leagues = data;
+		});
+		
+		$http.get('/seasons/current').success(function(data) {
+			$scope.seasons = data;
+			$scope.league.seasonId = data[0].id;
+		});
+		
+		$scope.season.startYear = 2015;
+		$scope.season.endYear = 2016;
+		$scope.season.leagueType = "pickem";
+		
+		this.addSeason = function() {
+
+			$log.debug("CreateLeagueController:addSeason");
+			
+			$http({
+				method : "POST",
+//				beforeSend: function (request) {
+//			        request.setRequestHeader(header, token);
+//			     },
+				url : '/seasons/',
+				contentType : "application/json",
+				dataType : "json",
+				//data : $('form').serializeObject(),
+				data : JSON.stringify($scope.season)
+			}).success(function(res) { 
+				
+				$http.get('/seasons/current').success(function(data) {
+					$scope.seasons = data;
+				});
+				
+			}).error(function(res) {
+				alert('fail');
+			});
+		}
+		
+		this.addLeague = function() {
+
+			$log.debug("CreateLeagueController:addLeague");
+			
+			$http({
+				method : "POST",
+//				beforeSend: function (request) {
+//			        request.setRequestHeader(header, token);
+//			     },
+				url : '/leagues/',
+				contentType : "application/json",
+				dataType : "json",
+				//data : $('form').serializeObject(),
+				data : JSON.stringify($scope.league)
+			}).success(function(res) { 
+				
+				leagueService.getLeagues().then(function(data) {
+					$scope.leagues = data;
+				});
+				
+			}).error(function(res) {
+				alert('fail');
+			});
+		}
+		
+	});
 	
 	app.controller('CreateWeekController', function ($scope, $http, $window, $log, leagueService) {
 		$scope.week = {};

@@ -12,8 +12,8 @@ public class TeamBuilder {
 	
 	public TeamBuilder()
 	{
-		UUID uuid = UUID.randomUUID();
-		this.id = String.valueOf(uuid.getMostSignificantBits())+String.valueOf(uuid.getLeastSignificantBits());
+		
+		this.id = UUID.randomUUID().toString();
 	}
 	
 	public Team build()

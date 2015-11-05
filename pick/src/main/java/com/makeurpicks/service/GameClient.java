@@ -11,6 +11,9 @@ import com.makeurpicks.domain.GameResponse;
 @FeignClient("game")
 public interface GameClient {
  
-	@RequestMapping(value = "/games/{id}", method=RequestMethod.GET ,produces = "application/json")
+	@RequestMapping(method=RequestMethod.GET, value = "/games/{id}", produces="application/json", consumes="application/json")
     public @ResponseBody GameResponse getGameById(@PathVariable("id") String id);
+	
+//	@RequestMapping(method=RequestMethod.GET, value="/weekid/{id}", produces = "application/json")
+//	public @ResponseBody Iterable<GameResponse> getGamesByWeek(@PathVariable String id);
 }

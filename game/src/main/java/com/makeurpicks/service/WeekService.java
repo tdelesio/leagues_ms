@@ -22,8 +22,8 @@ public class WeekService {
 	
 	public Week createWeek(Week week)
 	{
-		UUID uuid = UUID.randomUUID();
-		String id = String.valueOf(uuid.getMostSignificantBits())+String.valueOf(uuid.getLeastSignificantBits());
+		
+		String id = UUID.randomUUID().toString();
 		
 		week.setId(id);
 		return weekRepository.save(week);

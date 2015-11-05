@@ -1,5 +1,7 @@
 package com.makeurpicks.config;
 
+import java.util.Map;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -9,10 +11,10 @@ import com.makeurpicks.domain.DoublePick;
 import com.makeurpicks.domain.Pick;
 import com.makeurpicks.repository.DoublePickRepository;
 import com.makeurpicks.repository.PickRepository;
+import com.makeurpicks.repository.PicksByWeekRepository;
 import com.makeurpicks.repository.redis.RedisDoublePlckRepository;
 import com.makeurpicks.repository.redis.RedisPickRepository;
-import com.makeurpicks.repository.redis.RedisPicksByLeagueWeekAndPlayerRepository;
-import com.makeurpicks.repository.redis.RedisPicksByLeagueWeekRepository;
+import com.makeurpicks.repository.redis.RedisPicksByWeekRepository;
 
 @Configuration
 public class RedisConfig {
@@ -44,6 +46,14 @@ public class RedisConfig {
 		return template;
 	}
 	
+	@Bean
+	public RedisTemplate<String, Map<String, Map<String, String>>> picksByWeekRedisTemplate(RedisConnectionFactory redisConnectionFactory)
+	{
+		RedisTemplate<String, Map<String, Map<String, String>>> template = new RedisTemplate<>();
+		template.setConnectionFactory(redisConnectionFactory);
+		return template;
+	}
+	
 	
 	
 	@Bean
@@ -60,15 +70,22 @@ public class RedisConfig {
 		return doublePickRepository;
 	}
 	
-	@Bean 
-	public RedisPicksByLeagueWeekRepository redisPicksByLeagueWeekRepository(RedisConnectionFactory redisConnectionFactory)
+	@Bean
+	public PicksByWeekRepository picksByWeekRepository(RedisConnectionFactory redisConnectionFactory)
 	{
-		return new RedisPicksByLeagueWeekRepository(stringRedisTemplte(redisConnectionFactory));
+		PicksByWeekRepository picksByWeekRepository = new RedisPicksByWeekRepository(picksByWeekRedisTemplate(redisConnectionFactory));
+		return picksByWeekRepository;
 	}
 	
-	@Bean 
-	public RedisPicksByLeagueWeekAndPlayerRepository redisPicksByLeagueWeekRepositoryAndPlayer(RedisConnectionFactory redisConnectionFactory)
-	{
-		return new RedisPicksByLeagueWeekAndPlayerRepository(stringRedisTemplte(redisConnectionFactory));
-	}
+//	@Bean 
+//	public RedisPicksByLeagueWeekRepository redisPicksByLeagueWeekRepository(RedisConnectionFactory redisConnectionFactory)
+//	{
+//		return new RedisPicksByLeagueWeekRepository(stringRedisTemplte(redisConnectionFactory));
+//	}
+//	
+//	@Bean 
+//	public RedisPicksByLeagueWeekAndPlayerRepository redisPicksByLeagueWeekRepositoryAndPlayer(RedisConnectionFactory redisConnectionFactory)
+//	{
+//		return new RedisPicksByLeagueWeekAndPlayerRepository(stringRedisTemplte(redisConnectionFactory));
+//	}
 }

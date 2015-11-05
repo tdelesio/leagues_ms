@@ -41,8 +41,8 @@ public class SeasonService {
 	
 	public Season createSeason(Season season)
 	{
-		UUID uuid = UUID.randomUUID();
-		String id = String.valueOf(uuid.getMostSignificantBits())+String.valueOf(uuid.getLeastSignificantBits());
+	
+		String id = UUID.randomUUID().toString();
 		
 		season.setId(id);
 		

@@ -83,7 +83,7 @@ public class LeagueServiceTest {
 	{
 		MockitoAnnotations.initMocks(this);
 		
-		leagueService.setPlayerClient(playerClientMock);
+//		leagueService.setPlayerClient(playerClientMock);
 		
 		leagueRepository.deleteAll();
 		

@@ -1,5 +1,6 @@
 package com.makeurpicks.controller;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -29,17 +30,6 @@ public class LeagueController {
 
 	@Autowired
 	private LeagueService leagueService;
-	
-//	 @Value("${greeting}")
-//	 private String greeting;
-	 
-	 @RequestMapping("/resource")
-	  public Map<String,Object> home() {
-	    Map<String,Object> model = new HashMap<String,Object>();
-	    model.put("id", UUID.randomUUID().toString());
-	    model.put("content", "Hello World");
-	    return model;
-	  }
 	 
 	 @RequestMapping(method=RequestMethod.GET, value="/")
 		public @ResponseBody Iterable<League> getAllLeague() {
@@ -55,8 +45,9 @@ public class LeagueController {
 	 }
 	 
 	@RequestMapping(method=RequestMethod.POST, value="/")
-	public @ResponseBody League createLeague(@RequestBody League league) {
+	public @ResponseBody League createLeague(Principal user, @RequestBody League league) {
 
+		league.setAdminId(user.getName());
 			return leagueService.createLeague(league);
 	
 	}

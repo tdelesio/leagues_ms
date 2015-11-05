@@ -14,8 +14,7 @@ public class LeagueBuilder {
 	
 	public LeagueBuilder()
 	{
-		UUID uuid = UUID.randomUUID();
-		this.id = String.valueOf(uuid.getMostSignificantBits())+String.valueOf(uuid.getLeastSignificantBits());
+		this.id = UUID.randomUUID().toString();
 	}
 	
 	public LeagueBuilder(String id)

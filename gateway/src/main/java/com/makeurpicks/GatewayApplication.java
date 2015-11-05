@@ -29,10 +29,14 @@ import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.security.web.session.SessionManagementFilter;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.WebUtils;
+
+import com.makeurpicks.domain.Player;
 
 @EnableRedisHttpSession
 @EnableZuulProxy
@@ -42,9 +46,20 @@ import org.springframework.web.util.WebUtils;
 public class GatewayApplication {
 
 
-	@RequestMapping("/user")
-	public Principal user(Principal user) {
-		return user;
+	@RequestMapping(method=RequestMethod.GET, value="/user")
+	public Player user(Principal user) {
+		Player player = new Player();
+		player.setId(user.getName());
+		player.setEmail(user.getName()+"@gmail.com");
+		return player;
+	}
+	
+	@RequestMapping(method=RequestMethod.GET, value="/user/{id}")
+	public Player user(Principal user, @PathVariable String id) {
+		Player player = new Player();
+		player.setId(id);
+		player.setEmail(id+"@gmail.com");
+		return player;
 	}
 
 	public static void main(String[] args) {

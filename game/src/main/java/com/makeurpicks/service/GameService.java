@@ -3,6 +3,7 @@ package com.makeurpicks.service;
 import java.time.DateTimeException;
 import java.time.ZonedDateTime;
 import java.time.temporal.TemporalField;
+import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -76,10 +77,13 @@ public class GameService {
 	
 	public List<Game> getGamesByWeek(String weekId)
 	{
-//		return gameRepository.findByWeekId(weekId);
-		return gameRepository.findByWeekIdOrderByGameStart(weekId);
+		List<Game> games = gameRepository.findByWeekId(weekId);
+		
+		Collections.sort(games, (g1, g2)-> g1.getGameStart().compareTo(g2.getGameStart()));
+		return games;
+//		return gameRepository.findByWeekIdOrderByGameStart(weekId);
 	}
-	
+	 
 	public Game getGameById(String gameId)
 	{
 		Game game = gameRepository.findOne(gameId);
@@ -146,7 +150,11 @@ public class GameService {
 				StringTokenizer stringTokenizer = new StringTokenizer(time, ":");
 				String hour = stringTokenizer.nextToken();
 				String min = stringTokenizer.nextToken();
-				gameStart = gameStart.withHour(Integer.parseInt(hour)+12).withMinute(Integer.parseInt(min)).withSecond(0);
+				gameStart = gameStart
+						.withHour(Integer.parseInt(hour)+12)
+						.withMinute(Integer.parseInt(min))
+						.withSecond(0)
+						.withNano(0);
 				
 				//based on running on wed
 				int dayOffSet = 0;

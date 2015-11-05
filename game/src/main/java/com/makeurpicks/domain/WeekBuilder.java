@@ -10,8 +10,8 @@ public class WeekBuilder {
 	
 	public WeekBuilder()
 	{
-		UUID uuid = UUID.randomUUID();
-		this.id = String.valueOf(uuid.getMostSignificantBits())+String.valueOf(uuid.getLeastSignificantBits());
+		
+		this.id = UUID.randomUUID().toString();
 	}
 	
 	public Week build()

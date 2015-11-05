@@ -47,8 +47,7 @@ public class AbstractModel implements Serializable {
 	
 	public void generateId()
 	{
-		UUID uuid = UUID.randomUUID();
-		this.id = String.valueOf(uuid.getMostSignificantBits())+String.valueOf(uuid.getLeastSignificantBits());
+		this.id = UUID.randomUUID().toString();
 	}
 	
 	

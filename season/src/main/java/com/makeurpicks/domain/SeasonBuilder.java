@@ -11,8 +11,8 @@ public class SeasonBuilder {
 	
 	public SeasonBuilder()
 	{
-		UUID uuid = UUID.randomUUID();
-		this.id = String.valueOf(uuid.getMostSignificantBits())+String.valueOf(uuid.getLeastSignificantBits());
+		
+		this.id = UUID.randomUUID().toString();
 	}
 	
 	public SeasonBuilder(String id)

@@ -43,14 +43,17 @@ public class LeagueService {
 //	@Autowired
 //	private LoadBalancerClient loadBalancer;
 
+//	@Autowired
+//	private PlayerClient playerClient;
+	
 	@Autowired
-	private PlayerClient playerClient;
+	private PlayerIntegrationService playerIntegrationService;
 	
 	public League createLeague(League league) throws LeagueValidationException {
 		validateLeague(league);
 
-		UUID uuid = UUID.randomUUID();
-		String id = String.valueOf(uuid.getMostSignificantBits())+String.valueOf(uuid.getLeastSignificantBits());
+		
+		String id = UUID.randomUUID().toString();
 		
 		league.setId(id);
 		leagueRepository.save(league);
@@ -160,16 +163,16 @@ public class LeagueService {
 	}
 
 	
-	@HystrixCommand(fallbackMethod="defaultGetPlayer")
+//	@HystrixCommand(fallbackMethod="defaultGetPlayer")
 	protected PlayerResponse getPlayer(String playerId)
 	{
-		return playerClient.getPlayerById(playerId);
+		return playerIntegrationService.getPlayer(playerId);
 	}
 	
-	protected PlayerResponse defaultGetPlayer(String playerId)
-	{
-		throw new LeagueValidationException(LeagueExceptions.PLAYER_NOT_FOUND);
-	}
+//	protected PlayerResponse defaultGetPlayer(String playerId)
+//	{
+//		throw new LeagueValidationException(LeagueExceptions.PLAYER_NOT_FOUND);
+//	}
 	
 	protected boolean isValidPlayer(String playerId) {
 		// InstanceInfo instance =
@@ -192,11 +195,11 @@ public class LeagueService {
 //		PlayerResponse response = restTemplate.getForObject(uri,
 //				PlayerResponse.class);
 
-		PlayerResponse response = getPlayer(playerId);
-		if (response != null && response.getId() != null)
+//		PlayerResponse response = getPlayer(playerId);
+//		if (response != null && response.getId() != null)
 			return true;
-		else
-			return false;
+//		else
+//			return false;
 
 	}
 
@@ -212,8 +215,8 @@ public class LeagueService {
 		return leagueRepository.findAll();
 	}
 
-	public void setPlayerClient(PlayerClient playerClient) {
-		this.playerClient = playerClient;
-	}
+//	public void setPlayerClient(PlayerClient playerClient) {
+//		this.playerClient = playerClient;
+//	}
 
 }

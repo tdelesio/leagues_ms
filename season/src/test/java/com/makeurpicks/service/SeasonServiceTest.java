@@ -34,7 +34,7 @@ public class SeasonServiceTest {
 	@Before
 	public void setup()
 	{
-		seasonRepository.deleteAll();
+		//seasonRepository.deleteAll();
 		
 	}
 	
@@ -48,12 +48,24 @@ public class SeasonServiceTest {
 		Season season = new SeasonBuilder()
 			.withStartYear(currentYear)
 			.withEndYear(currentYear+1)
-			.withLeagueType(LeagueType.PICKEM)
+			.withLeagueType(LeagueType.pickem)
 			.build();
 		
 		season = seasonService.createSeason(season);
 		
 		Assert.assertTrue(seasonService.getCurrentSeasons().contains(season));
+		
+//		Assert.assertEquals(season, seasonRepository.findOne(season.getId()));
+//		
+//		Iterable<Season> seasons = seasonRepository.findAll();
+//		boolean found = false;
+//		for (Season s:seasons)
+//		{
+//			if (season.equals(s))
+//				found = true;
+//		}
+//		
+//		Assert.assertTrue(found);
 	}
 	
 }

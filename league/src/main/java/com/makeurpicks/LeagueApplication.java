@@ -9,7 +9,6 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
@@ -32,25 +31,20 @@ public class LeagueApplication extends WebSecurityConfigurerAdapter {
 		SpringApplication.run(LeagueApplication.class, args);
 	}
 	
+//	@Bean
+//    HeaderHttpSessionStrategy sessionStrategy() {
+//      return new HeaderHttpSessionStrategy();
+//    }
+	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// We need this to prevent the browser from popping up a dialog on a 401
 		http.httpBasic().disable();
-		http.authorizeRequests().antMatchers(HttpMethod.POST, "/**").hasRole("WRITER").anyRequest().authenticated();
+		http.authorizeRequests().anyRequest().authenticated();		
+
+//		http.authorizeRequests().antMatchers(HttpMethod.POST, "/**").hasRole("WRITER").anyRequest().authenticated();
 	}
  
-//	 @Bean
-//	  HeaderHttpSessionStrategy sessionStrategy() {
-//	    return new HeaderHttpSessionStrategy();
-//	  }
-	
-//	@Bean
-//	public LeagueService leagueService()
-//	{
-//		LeagueService leagueService = new LeagueService();
-//		return leagueService;
-//	}
-	
 	
 	
 	

@@ -1,6 +1,6 @@
 security:
-  user:
-    role: USER,ADMIN
+#  user:
+#    role: USER,ADMIN
   sessions: NEVER
 
       

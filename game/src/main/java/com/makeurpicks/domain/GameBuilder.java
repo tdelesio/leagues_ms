@@ -17,8 +17,8 @@ public class GameBuilder {
 	
 	public GameBuilder()
 	{
-		UUID uuid = UUID.randomUUID();
-		this.id = String.valueOf(uuid.getMostSignificantBits())+String.valueOf(uuid.getLeastSignificantBits());
+		
+		this.id = UUID.randomUUID().toString();
 		
 		gameStart = ZonedDateTime.now();
 	}
