@@ -1,6 +1,16 @@
+server:
+  port: 8082
+
 security:
-  sessions: NEVER
-  
+  oauth2:
+    resource:
+      userInfoUri: http://localhost:9999/uaa/user
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    log4j.logger.org.hibernate.SQL: DEBUG
+    
 spring:
   jpa:
     show-sql: true
@@ -15,7 +25,4 @@ spring:
     password: rage311
     driver-class-name: com.mysql.jdbc.Driver
 
-logging:
-  level:
-    log4j.logger.org.hibernate.SQL: DEBUG
   

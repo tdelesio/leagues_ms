@@ -23,10 +23,6 @@
 	<dependencies>
 	
 		<!-- turbine/hystix -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.springframework.cloud</groupId> -->
-<!-- 			<artifactId>spring-cloud-starter-bus-amqp</artifactId> -->
-<!-- 		</dependency> -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-hystrix</artifactId>
@@ -37,10 +33,6 @@
 		</dependency>
 		
 		<!-- eureka/feign -->
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-feign</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-eureka</artifactId>
@@ -103,27 +95,25 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter</artifactId>
 		</dependency>
-		
-		<!-- session -->
-		<dependency>
-	        <groupId>org.springframework.session</groupId>
-    	    <artifactId>spring-session</artifactId>
-        </dependency>
-		
+	
 		<!-- sercurity -->
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security.oauth</groupId>
+			<artifactId>spring-security-oauth2</artifactId>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.datatype</groupId>
-			<artifactId>jackson-datatype-jsr310</artifactId>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.fasterxml.jackson.datatype</groupId> -->
+<!-- 			<artifactId>jackson-datatype-jsr310</artifactId> -->
+<!-- 		</dependency> -->
 	</dependencies>
 
 	

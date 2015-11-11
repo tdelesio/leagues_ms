@@ -1,6 +1,10 @@
 package com.makeurpicks.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,10 +17,21 @@ import com.makeurpicks.service.WeekService;
 
 @RestController
 @RequestMapping(value="/weeks")
-public class WeekController {
+@EnableResourceServer
+public class WeekController extends ResourceServerConfigurerAdapter {
 
 	@Autowired
 	private WeekService weekService;
+	
+	@Override
+    public void configure(HttpSecurity http) throws Exception {
+        http
+        	.authorizeRequests()
+            	.antMatchers(HttpMethod.POST, "/**").hasRole("ADMIN")	
+            	.and()
+            .authorizeRequests()
+                .anyRequest().permitAll();
+    }
 	
 	@RequestMapping(method=RequestMethod.GET, value="/seasonid/{id}")
 	public @ResponseBody Iterable<Week> getWeeksBySeason(@PathVariable String id)

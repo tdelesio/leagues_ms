@@ -23,6 +23,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,11 +43,20 @@ import com.makeurpicks.service.PickService;
 import com.netflix.discovery.DiscoveryClient;
 
 @RestController
+@EnableResourceServer
 @RequestMapping(value="/picks")
-public class PickController {
+public class PickController extends ResourceServerConfigurerAdapter {
 
 	@Autowired
 	private PickService pickService;
+	
+	@Override
+	public void configure(HttpSecurity http) throws Exception {
+	        http
+	        	.authorizeRequests()
+	            	.antMatchers("/**").authenticated();
+	            	
+	 }
 	
 	@RequestMapping(method=RequestMethod.GET, value="/weekid/{weekid}")
 	public @ResponseBody Map<String, Map<String, Pick>> getPicksByWeek(@PathVariable String weekid)

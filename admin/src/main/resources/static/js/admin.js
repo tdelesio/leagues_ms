@@ -100,11 +100,11 @@
 	
 	app.controller('ChromeController', function ($http, $scope) {
 		$http.get('/user').success(function(data) {
-			$scope.user = data.name;
+			$scope.user = data.username;
 		});
 	});
 	
-	app.controller('SetupWeekController', function ($scope, $http, $log, leagueService) {
+	app.controller('SetupWeekController', function ($scope, $http, $log, $window, leagueService) {
 		$log.debug('SetupWeekController');
 		$scope.add_game_model = {};
 		$scope.weeksSetup = false;
@@ -135,6 +135,9 @@
 //			$http.get('leagues/').success(function(data) {
 			$scope.leagues = data;
 				
+			if (data[0] === undefined)
+				$window.location.href = '/#/leagues';
+				
 				$scope.add_game_model.seasonId = data[0].seasonId;
 				
 				$http.get('/weeks/seasonid/'+$scope.add_game_model.seasonId).success(function(data) {
@@ -153,6 +156,10 @@
 							$scope.games = data.data;
 						
 						});
+					}
+					else
+					{
+						$window.location.href = '/#/create';
 					}
 				});
 		});
@@ -264,6 +271,7 @@
 	
 		$scope.league = {};
 		$scope.season = {};
+		$scope.showgames=true;
 		
 		leagueService.getLeagues().then(function(data) {
 			$scope.leagues = data;
@@ -271,6 +279,8 @@
 		
 		$http.get('/seasons/current').success(function(data) {
 			$scope.seasons = data;
+			if (data[0] === undefined)
+				$scope.showgames=false;
 			$scope.league.seasonId = data[0].id;
 		});
 		
@@ -294,6 +304,7 @@
 				data : JSON.stringify($scope.season)
 			}).success(function(res) { 
 				
+				$scope.showgames = true;
 				$http.get('/seasons/current').success(function(data) {
 					$scope.seasons = data;
 				});
@@ -342,10 +353,12 @@
 			$log.debug('autoWeek: week='+JSON.stringify(week));
 			$http({
 				method : "POST",
+//				method : "GET",
 //				beforeSend: function (request) {
 //			        request.setRequestHeader(header, token);
 //			     },
 				url : '/games/autosetup',
+//				url : '/games/role',
 				contentType : "application/json",
 				dataType : "json",
 				//data : $('form').serializeObject(),

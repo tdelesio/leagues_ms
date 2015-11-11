@@ -78,6 +78,7 @@
 //				headers : headers,
 				method : "POST",
 				url : '/login',
+//				url : 'http://localhost:9999/uaa/login',	
 				data: $.param($scope.credentials),
 			    headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
 //				contentType : "application/json",

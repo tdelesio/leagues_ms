@@ -1,0 +1,44 @@
+
+<div id="standingsview"></div>
+<div id="winnersbyweekview"></div>
+
+<script type="text/template" id="standings">
+<div class="row header">
+		<div class="col-md-3 col-xs-3 place"> Place </div>
+		<div class="col-md-6 col-xs-6 username">player</div>
+		<div class="col-md-3 col-xs-3 wins">Wins</div>
+		<div style="clear:both;"></div>
+	</div>
+
+<% _.each(players,function(data){ %>
+
+	
+	<div class="row">
+		<div class="col-md-3 col-xs-3 place"> <%=data.place%> </div>
+		<div class="col-md-6 col-xs-6 username"><%=data.player.username%></div>
+		<div class="col-md-3 col-xs-3 wins"><%=data.numberOfWins%></div>
+		<div style="clear:both;"></div>
+	</div>
+		
+<% }); %>
+
+</script>
+<br/>
+<br/>
+<br/>
+<br/>
+<script type="text/template" id="winnerbyweek">
+<div class="row header">
+		<div class="col-md-6 col-xs-6 place">Week</div>
+		<div class="col-md-6 col-xs-6 place">Week Winners</div>
+		<div style="clear:both;"></div>
+	</div>
+
+<% _.each(weeks,function(data,i){ %>
+	<div class="row">
+		<div class="col-md-6 col-xs-6 place">Week&nbsp;<%=i%></div>
+		<div class="col-md-6 col-xs-6 place"><%=data%></div>
+<div style="clear:both;"></div>
+	</div>
+<% }); %>
+</script>

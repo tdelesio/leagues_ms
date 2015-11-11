@@ -1,6 +1,9 @@
 package com.makeurpicks.controller;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,44 +12,46 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.makeurpicks.domain.Game;
-import com.makeurpicks.domain.NFLWeek;
 import com.makeurpicks.domain.Week;
 import com.makeurpicks.service.GameService;
 
 @RestController
+//@EnableResourceServer
 @RequestMapping(value="/games")
 public class GameController {
+//extends ResourceServerConfigurerAdapter {
 
 	@Autowired
 	private GameService gameService;
-	
-//	spread":3.5,"date":"2015-10-18T23:49:07.978Z","time":"1970-01-01T18:00:00.000Z","
-//			+ ""favId":"-7994476373137338968-5749449990071436219","
-//					+ ""dogid":"-8180369574573424501-5773632938726789358","
-//							+ ""seasonId":"-4276273245322657635-7137201729840442652","
-//									+ ""weekId":"2329348844980554530-5161211727328479683","
-//											+ ""dogId":"-8180369574573424501-5773632938726789358"
-	
-//	@InitBinder
-//	private void dateBinder(WebDataBinder binder) {
-//	            //The date format to parse or output your dates
-////		2015-10-25T20:18:47.031Z
-//	    SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DDTHH:mm:ss.sssZ");
-//	            //Create a new CustomDateEditor
-//	    CustomDateEditor editor = new CustomDateEditor(dateFormat, true);
-//	            //Register it as custom editor for the Date type
-//	    binder.registerCustomEditor(LocalDateTime.class, editor);
-//	}
-	
-	
+//	
+//	@Override
+//    public void configure(HttpSecurity http) throws Exception {
+//        http
+//        	.authorizeRequests()
+//            	.antMatchers(HttpMethod.POST, "/**").hasAuthority("ROLE_ADMIN")   	
+//            	.and()
+//            .authorizeRequests()
+//        		.antMatchers(HttpMethod.PUT, "/games/score").authenticated()
+//        		.and()
+//            .authorizeRequests()
+//            	.antMatchers(HttpMethod.PUT, "/**").hasRole("ADMIN")
+//            	.and()
+//            .authorizeRequests()
+//            	.antMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN")
+//            	.and()
+//            .authorizeRequests()
+//                .anyRequest().permitAll();
+//    }
 	
 	@RequestMapping(method=RequestMethod.POST, value="/")
+	@PreAuthorize("hasRole('ADMIN')")
 	public @ResponseBody Game createGame(@RequestBody Game game)
 	{
 		return gameService.createGame(game);
 	}
 	
 	@RequestMapping(method=RequestMethod.PUT, value="/")
+	@PreAuthorize("hasRole('ADMIN')")
 	public @ResponseBody Game updateGame(@RequestBody Game game)
 	{
 		return gameService.updateGame(game);
@@ -73,10 +78,13 @@ public class GameController {
 	}
 	
 	@RequestMapping(method=RequestMethod.POST, value="/autosetup")
+	@PreAuthorize("hasRole('ADMIN')")
 	public void callNFLandSetupWeek(@RequestBody Week week)
 	{
 		gameService.autoSetupWeek(week.getSeasonId());
 	}
+	
+	
 	
 	
 }

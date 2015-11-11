@@ -3,9 +3,9 @@
 	<div class=jumbotron> 
 		<div class=container ng-controller="CreateLeagueController as createLeagueCtrl"> 
 			
-			<create-league></create-league>
+			<create-league ng-show="showgames"></create-league>
 		
-			<leagues></leagues>
+			<leagues ng-show="showgames"></leagues>
 			
 			<create-season></create-season>
 		</div> 

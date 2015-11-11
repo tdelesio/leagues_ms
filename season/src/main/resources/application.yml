@@ -1,2 +1,11 @@
+server:
+  port: 8084
+
 security:
-  sessions: NEVER
+  oauth2:
+    resource:
+      userInfoUri: http://localhost:9999/uaa/user
+
+logging:
+  level:
+    org.springframework.security: DEBUG

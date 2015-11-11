@@ -22,10 +22,6 @@
 	<dependencies>
 	
 		<!-- turbine/hystix -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.springframework.cloud</groupId> -->
-<!-- 			<artifactId>spring-cloud-starter-bus-amqp</artifactId> -->
-<!-- 		</dependency> -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-hystrix</artifactId>
@@ -36,10 +32,6 @@
 		</dependency>
 		
 		<!-- eureka/feign -->
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-feign</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-eureka</artifactId>
@@ -60,15 +52,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-rest</artifactId>
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.springframework.boot</groupId> -->
-<!-- 			<artifactId>spring-boot-starter-data-jpa</artifactId> -->
-<!-- 		</dependency> -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>mysql</groupId> -->
-<!-- 			<artifactId>mysql-connector-java</artifactId> -->
-<!-- 			<version>5.1.6</version> -->
-<!-- 		</dependency> -->
+
 		<!-- test -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -108,8 +92,12 @@
 		
 		<!-- sercurity -->
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security.oauth</groupId>
+			<artifactId>spring-security-oauth2</artifactId>
 		</dependency>
 		
 		<dependency>

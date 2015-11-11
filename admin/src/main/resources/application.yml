@@ -1,9 +1,53 @@
-security:
-#  user:
-#    role: USER,ADMIN
-  sessions: NEVER
+server:
+  port: 9000
+  
+security: 
+  user:
+    password: password
+    role: USER,ADMIN
+  oauth2:
+    sso:
+#      home:
+#        secure: false
+#        path: /,/**/*.html
+    client:
+      accessTokenUri: http://localhost:9999/uaa/oauth/token
+      userAuthorizationUri: http://localhost:9999/uaa/oauth/authorize
+      clientId: acme
+      clientSecret: acmesecret
+    resource:
+      userInfoUri: http://localhost:9999/uaa/user
 
-      
+#    
+#  sessions: NEVER
+
+zuul:
+  routes:
+    league:
+      path: /leagues/**
+      stripPrefix: false
+    pick:
+      path: /picks/**
+      stripPrefix: false
+    season:
+      path: /seasons/**
+      serviceId: season
+      stripPrefix: false
+    team:
+      path: /teams/**
+      serviceId: game
+      stripPrefix: false
+    week:
+      path: /weeks/**
+      stripPrefix: false
+      serviceId: game
+    game:
+      path: /games/**
+      stripPrefix: false
+    user:
+      path: /user/**
+      url: http://localhost:9999/uaa/user
+            
 logging:
   level:
     org.springframework.security: DEBUG

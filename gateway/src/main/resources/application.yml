@@ -1,19 +1,30 @@
-
+server:
+  port: 8080
+  
 logging:
   level:
-    org.springframework.security: DEBUG
+    org.springframework.security: INFO
+    org.springframework.cloud.netflix: INFO
+    com.netflix.zuul: INFO
+    io.springbox.apigateway: DEBUG
 security:
-  sessions: ALWAYS
+#  sessions: ALWAYS
   user:
     password: password
+  oauth2:
+    sso:
+      home:
+        secure: false
+        path: /,/**/*.html
+    client:
+      accessTokenUri: http://localhost:9999/uaa/oauth/token
+      userAuthorizationUri: http://localhost:9999/uaa/oauth/authorize
+      clientId: acme
+      clientSecret: acmesecret
+    resource:
+      userInfoUri: http://localhost:9999/uaa/user
 zuul:
   routes:
-    ui:
-      path: /ui/**
-#      url: http://localhost:8081
-    admin:
-      path: /admin/**
-#      url: http://localhost:8082
     league:
       path: /leagues/**
       stripPrefix: false
@@ -42,3 +53,9 @@ zuul:
     leader:
       path: /leaders/**
       stripPrefix: false
+    user:
+      path: /user/**
+      url: http://localhost:9999/uaa/user
+#    login:
+#      path: /login/**
+#      url: http://localhost:9999/uaa/login
