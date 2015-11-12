@@ -4,7 +4,8 @@ server:
 security:
   oauth2:
     resource:
-      userInfoUri: http://localhost:9999/uaa/user
+      jwt:
+        key-uri: "http://localhost:9999/auth/oauth/token_key"
 
 logging:
   level:

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
@@ -19,26 +20,11 @@ import com.makeurpicks.service.SeasonService;
 
 @RequestMapping(value="/seasons")
 @RestController
-@EnableResourceServer
-public class SeasonController extends ResourceServerConfigurerAdapter {
+public class SeasonController {
 
 	@Autowired
 	private SeasonService seasonService;
-	
-	@Override
-	public void configure(HttpSecurity http) throws Exception {
-	        http
-	        	.authorizeRequests()
-	            	.antMatchers(HttpMethod.POST, "/**").authenticated()
-	            	.and()
-	            .authorizeRequests()
-	            	.antMatchers(HttpMethod.PUT, "/**").authenticated()
-	            	.and()
-	            .authorizeRequests()
-	                .anyRequest().permitAll();
-	 }
-	
-	
+		
 	@RequestMapping(method=RequestMethod.GET, value="/current")
 	public @ResponseBody List<Season> getCurrentSeasons()
 	{
@@ -48,12 +34,14 @@ public class SeasonController extends ResourceServerConfigurerAdapter {
 	
 	@RequestMapping(method=RequestMethod.POST, value="/")
 //	@PreAuthorize("#userName == authentication.name")
+	@PreAuthorize("hasRole('ADMIN')")
 	public @ResponseBody Season createSeason(@RequestBody Season season)
 	{
 		return seasonService.createSeason(season);
 	}
 	
 	@RequestMapping(method=RequestMethod.PUT, value="/")
+	@PreAuthorize("hasRole('ADMIN')")
 	public @ResponseBody Season updateSeason(@RequestBody Season season)
 	{
 		return seasonService.updateSeason(season);

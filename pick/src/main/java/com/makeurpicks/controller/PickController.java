@@ -43,20 +43,12 @@ import com.makeurpicks.service.PickService;
 import com.netflix.discovery.DiscoveryClient;
 
 @RestController
-@EnableResourceServer
 @RequestMapping(value="/picks")
-public class PickController extends ResourceServerConfigurerAdapter {
+public class PickController  {
 
 	@Autowired
 	private PickService pickService;
 	
-	@Override
-	public void configure(HttpSecurity http) throws Exception {
-	        http
-	        	.authorizeRequests()
-	            	.antMatchers("/**").authenticated();
-	            	
-	 }
 	
 	@RequestMapping(method=RequestMethod.GET, value="/weekid/{weekid}")
 	public @ResponseBody Map<String, Map<String, Pick>> getPicksByWeek(@PathVariable String weekid)

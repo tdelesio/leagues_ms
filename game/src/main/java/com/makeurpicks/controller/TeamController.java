@@ -19,21 +19,10 @@ import com.makeurpicks.service.TeamService;
 
 @RequestMapping(value="/teams")
 @RestController
-@EnableResourceServer
-public class TeamController extends ResourceServerConfigurerAdapter {
+public class TeamController {
 
 	@Autowired
 	private TeamService teamService;
-	
-	@Override
-    public void configure(HttpSecurity http) throws Exception {
-        http
-        	.authorizeRequests()
-            	.antMatchers(HttpMethod.POST, "/**").hasRole("ADMIN")   	
-            	.and()
-            .authorizeRequests()
-                .anyRequest().permitAll();
-    }
 	
 	@RequestMapping(method=RequestMethod.GET, value="/leaguetype/{leagueType}")
 	public @ResponseBody List<Team> getTeams(@PathVariable String leagueType)

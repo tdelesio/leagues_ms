@@ -1,7 +1,5 @@
 package com.makeurpicks.controller;
 
-import java.security.Principal;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,33 +14,11 @@ import com.makeurpicks.domain.Week;
 import com.makeurpicks.service.GameService;
 
 @RestController
-//@EnableResourceServer
 @RequestMapping(value="/games")
 public class GameController {
-//extends ResourceServerConfigurerAdapter {
-
 	@Autowired
 	private GameService gameService;
-//	
-//	@Override
-//    public void configure(HttpSecurity http) throws Exception {
-//        http
-//        	.authorizeRequests()
-//            	.antMatchers(HttpMethod.POST, "/**").hasAuthority("ROLE_ADMIN")   	
-//            	.and()
-//            .authorizeRequests()
-//        		.antMatchers(HttpMethod.PUT, "/games/score").authenticated()
-//        		.and()
-//            .authorizeRequests()
-//            	.antMatchers(HttpMethod.PUT, "/**").hasRole("ADMIN")
-//            	.and()
-//            .authorizeRequests()
-//            	.antMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN")
-//            	.and()
-//            .authorizeRequests()
-//                .anyRequest().permitAll();
-//    }
-	
+
 	@RequestMapping(method=RequestMethod.POST, value="/")
 	@PreAuthorize("hasRole('ADMIN')")
 	public @ResponseBody Game createGame(@RequestBody Game game)
