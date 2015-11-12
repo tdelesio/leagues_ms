@@ -130,7 +130,10 @@ public class GameService {
 		for (Week week: weeks)
 		{
 			if (week.getWeekNumber() == weekNumber)
+			{
 				foundWeekId = week.getId();
+				break;
+			}
 		}
 		
 		if (foundWeekId == null)

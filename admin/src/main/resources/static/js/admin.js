@@ -90,7 +90,7 @@
 			},
 		
 			getGames: function(seasonId) {
-			return $http.get('/games/weekid/'+seasonId).success(function(result) {
+			return $http.get('/admin/games/weekid/'+seasonId).success(function(result) {
 		           return result.data;
 		       });
 			}
@@ -159,7 +159,7 @@
 					}
 					else
 					{
-						$window.location.href = '/#/create';
+						$window.location.href = '/admin/#/create';
 					}
 				});
 		});

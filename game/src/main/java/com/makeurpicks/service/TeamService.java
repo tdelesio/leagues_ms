@@ -152,7 +152,7 @@ public class TeamService {
 			
 			createTeam(team);
 	
-			team = new TeamBuilder().withCity("Philladelpha").withShortName("PHL")
+			team = new TeamBuilder().withCity("Philladelpha").withShortName("PHI")
 					.withTeamName("Eagles").build();
 			
 			createTeam(team);
