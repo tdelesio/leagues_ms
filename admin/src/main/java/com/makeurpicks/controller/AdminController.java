@@ -12,17 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AdminController {
 
-//	@RequestMapping("/user")
-//	@ResponseBody
-//	public Principal user(Principal user) {
-//		return user;
-//	}
-	
-	@Autowired
-    private OAuth2RestOperations restTemplate;
-
-    @Value("${config.oauth2.resourceURI}")
-    private String resourceURI;
+//	@Autowired
+//    private OAuth2RestOperations restTemplate;
+//
+//    @Value("${config.oauth2.resourceURI}")
+//    private String resourceURI;
 	
 	@RequestMapping("/user")
     public Object home(Principal principal) {
@@ -30,11 +24,6 @@ public class AdminController {
 		return principal;
     }
 	
-	@RequestMapping("/resource")
-    public Object resource() {
-        return restTemplate.getForObject(resourceURI, Object.class);
-//		return principal;
-    }
 
 }
 

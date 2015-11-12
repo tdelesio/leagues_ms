@@ -18,36 +18,12 @@ security:
             /myh1zM6m8cbL5cYFPyP099thbVxzJkjHWqywvQih/qOOjliomKbM9pxG8Z1dB26
             hL9dSAZuA8xExjlPmQIDAQAB
             -----END PUBLIC KEY-----
-#        key-uri: "http://localhost:9999/auth/oauth/token_key"
 
 
 config:
   oauth2:
-#        clientID: confidential
-#        clientSecret: secret
-#        accessTokenUri: http://localhost:8081/oauth/token
-#        userAuthorizationUri: http://localhost:8081/oauth/authorize
     resourceURI: http://localhost:8081/leagues/user
-                
-#security: 
-#  user:
-#    password: password
-#    role: USER,ADMIN
-#  oauth2:
-#    sso:
-#      home:
-#        secure: false
-#        path: /,/**/*.html
-#    client:
-#      accessTokenUri: http://localhost:9999/uaa/oauth/token
-#      userAuthorizationUri: http://localhost:9999/uaa/oauth/authorize
-#      clientId: acme
-#      clientSecret: acmesecret
-#    resource:
-#      userInfoUri: http://localhost:9999/uaa/user
 
-#    
-#  sessions: NEVER
 
 zuul:
   routes:
@@ -72,9 +48,7 @@ zuul:
     game:
       path: /games/**
       stripPrefix: false
-#    user:
-#      path: /user/**
-#      url: http://localhost:9999/uaa/user
+
             
 logging:
   level:

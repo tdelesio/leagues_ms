@@ -42,83 +42,21 @@ import org.springframework.web.util.WebUtils;
 public class AdminApplication {
 
 	public static void main(String[] args) {
-//    	new SpringApplicationBuilder(AdminApplication.class).web(true).run(args);
     	SpringApplication.run(AdminApplication.class, args);
     }
-	
-//	@Value("${config.oauth2.accessTokenUri}")
-//    private String accessTokenUri;
-//
-//    @Value("${config.oauth2.userAuthorizationUri}")
-//    private String userAuthorizationUri;
-//
-//    @Value("${config.oauth2.clientID}")
-//    private String clientID;
-//
-//    @Value("${config.oauth2.clientSecret}")
-//    private String clientSecret;
-    
-//    @Bean
-//    public OAuth2RestOperations restTemplate(OAuth2ClientContext oauth2ClientContext) {
-//        return new OAuth2RestTemplate(resource(), oauth2ClientContext);
-//    }
-//    
-//	@Bean
-//	public OAuth2ProtectedResourceDetails resource() {
-//        AuthorizationCodeResourceDetails resource = new AuthorizationCodeResourceDetails();
-//        resource.setClientId(clientID);
-//        resource.setClientSecret(clientSecret);
-//        resource.setAccessTokenUri(accessTokenUri);
-//        resource.setUserAuthorizationUri(userAuthorizationUri);
-//        resource.setScope(Arrays.asList("read"));
-//
-//        return resource;
-//    }
-	
-//	@RequestMapping(method=RequestMethod.GET, value="/role")
-//	public @ResponseBody Object getGame(Principal user)
-//	{
-//		
-//		;
-////		System.out.println(user);
-//		
-////		 OAuth2Authentication authentication = (OAuth2Authentication) user;
-////		 System.out.println(authentication.getUserAuthentication().getDetails());
-////		return authentication.getUserAuthentication().getDetails();
-//	}
 	
 	@Configuration
 	@EnableOAuth2Sso 
     protected static class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-//        @Override
-//        public void match(OAuth2SsoConfigurer.RequestMatchers matchers) {
-//            matchers.anyRequest();
-//        }
-		
-		
-		
-
-		
         @Override
         public void configure(HttpSecurity http) throws Exception {
             http
             	.logout().and()
-//            	.httpBasic().disable()
-            	
-//            	.antMatcher("/**")
             	.authorizeRequests()
                     .antMatchers("/login", "/beans", "/user").permitAll()
-//                    .antMatchers(HttpMethod.GET, "/recommendations/**","/reviews/**","/people/**","/movie/**","/catalog/**","/likes/**").permitAll()
-//                    .anyRequest().authenticated().and()
-//                    .antMatchers("/**").hasRole("ADMIN")
-                    .anyRequest().authenticated().and()
-//                .formLogin()
-//	                .loginPage("/login")
-//	                .loginProcessingUrl("http://localhost:9999/uaa/login")
-////	                .successHandler(successHandler())
-//	                .permitAll()
-//	                .and()
+                    .anyRequest().hasRole("ADMIN").and()
+
                 .csrf()
                     .csrfTokenRepository(csrfTokenRepository()).and()
                     .addFilterBefore(new RequestContextFilter(), HeaderWriterFilter.class)

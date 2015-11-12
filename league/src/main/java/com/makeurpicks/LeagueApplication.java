@@ -17,8 +17,6 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 @EnableResourceServer
 @EnableCircuitBreaker
 public class LeagueApplication {
-
-
 	
 	public static void main(String[] args) {
 		SpringApplication.run(LeagueApplication.class, args);
