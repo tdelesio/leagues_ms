@@ -7,22 +7,24 @@ logging:
     org.springframework.cloud.netflix: INFO
     com.netflix.zuul: INFO
     io.springbox.apigateway: DEBUG
+
 security:
-#  sessions: ALWAYS
-  user:
-    password: password
   oauth2:
-    sso:
-      home:
-        secure: false
-        path: /,/**/*.html
     client:
-      accessTokenUri: http://localhost:9999/uaa/oauth/token
-      userAuthorizationUri: http://localhost:9999/uaa/oauth/authorize
-      clientId: acme
-      clientSecret: acmesecret
+      access-token-uri: http://localhost:9999/auth/oauth/token
+      user-authorization-uri: http://localhost:9999/auth/oauth/authorize
+      client-id: ui
+      client-secret: secret
     resource:
-      userInfoUri: http://localhost:9999/uaa/user
+      jwt:
+        key-value: |
+            -----BEGIN PUBLIC KEY-----
+            MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDNQZKqTlO/+2b4ZdhqGJzGBDlt
+            b5PZmBz1ALN2YLvt341pH6i5mO1V9cX5Ty1LM70fKfnIoYUP4KCE33dPnC7LkUwE
+            /myh1zM6m8cbL5cYFPyP099thbVxzJkjHWqywvQih/qOOjliomKbM9pxG8Z1dB26
+            hL9dSAZuA8xExjlPmQIDAQAB
+            -----END PUBLIC KEY-----
+
 zuul:
   routes:
     league:
@@ -53,9 +55,4 @@ zuul:
     leader:
       path: /leaders/**
       stripPrefix: false
-    user:
-      path: /user/**
-      url: http://localhost:9999/uaa/user
-#    login:
-#      path: /login/**
-#      url: http://localhost:9999/uaa/login
+

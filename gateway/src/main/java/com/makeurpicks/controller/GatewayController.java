@@ -38,6 +38,11 @@ public class GatewayController {
 
 	MakePicks picks;
 	
+	@RequestMapping("/user")
+    public Object home(Principal principal) {
+		return principal;
+    }
+	
 	@RequestMapping("/makepicks/{weekid}")
 	// public DeferredResult<MakePicks> movieDetails(@PathVariable String
 	// weekId, Principal principal)

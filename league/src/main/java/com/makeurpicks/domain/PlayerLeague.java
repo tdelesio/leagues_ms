@@ -3,6 +3,7 @@ package com.makeurpicks.domain;
 public class PlayerLeague extends AbstractModel {
 
 	private String leagueId;
+	private String leagueName;
 	private String playerId;
 	private String password;
 	
@@ -23,6 +24,12 @@ public class PlayerLeague extends AbstractModel {
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public String getLeagueName() {
+		return leagueName;
+	}
+	public void setLeagueName(String leagueName) {
+		this.leagueName = leagueName;
 	}
 	
 	

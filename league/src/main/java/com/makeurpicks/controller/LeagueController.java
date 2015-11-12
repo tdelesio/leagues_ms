@@ -69,9 +69,10 @@ public class LeagueController {
 	
 	
 	@RequestMapping(method=RequestMethod.POST, value="/player")
-	public void addPlayerToLeague(@RequestBody PlayerLeague playerLeague)
+	public void addPlayerToLeague(@RequestBody PlayerLeague playerLeague, Principal principal)
 	{
-		leagueService.joinLeague(playerLeague.getLeagueId(), playerLeague.getPlayerId(), playerLeague.getPassword());
+		playerLeague.setPlayerId(principal.getName());
+		leagueService.joinLeague(playerLeague);
 	
 	}
 	

@@ -3,71 +3,31 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="viewport" content="width=device-width; initial-scale = 1.0; maximum-scale=1.0; user-scalable=no" />
-<link rel="stylesheet" href="_/css/myp.css" />
-<script src="_/js/jquery-1.7.1.min.js" type="text/javascript"></script>
-<script src="_/js/util.js" type="text/javascript"></script>
-<script type="text/javascript">
+<link rel="stylesheet" href="css/myp.css" />
 
-//var server = "http://localhost:8080/ws/rest";
-
-function getPage() {
-	//var url = server + '/seasons/current';
-	var league = getURLParameter('league');
-	if (league)
-		
-	$('input[name=leagueName]').attr('value', league);
-	var password = getURLParameter('password');
-	if (password)
-	$('input[name=password]').attr('value', password);
-}
-
-function joinLeague() {
-	//var url = server + "/league";
-	var url = getUrl('/league/join');
-	$.ajax({
-		type : "POST",
-		url : url,
-		contentType : "application/json",
-		dataType : "json",
-		data : $('form').serializeObject(),
-		success : function(res) {
-			window.location.replace('index.html');
-		},
-		error : function(res) {
-			$('#result').text(JSON.stringify(res));
-		}
-	});
-}
-
-
-$(document).ready(function(){
-	getPage();
-});
-</script>
 
 
 <title>Make Your Picks Mobile</title>
 </head>
 
-<body>
+<body ng-app="joinleague">
 <div style="width:300px; margin:20px auto;">
-<img src="_/img/myp.svg" style="width:300px; height:auto; text-align:center;" />
-<div class="login shadow">
+<img src="img/myp.svg" style="width:300px; height:auto; text-align:center;" />
+<div class="login shadow" ng-controller="JoinLeagueController as joinCltr">
 
 
 
-<form id="createleague">
-
-<p style="text-align:center; color:#fff; font-weight:bold;">League:&nbsp;&nbsp;&nbsp;&nbsp; <input type="text" name="leagueName"></input></p>
-<p style="text-align:center; color:#fff; font-weight:bold;">Password: <input type="text" name="password"></input></p>
+<form id="createleague" ng-submit="joinCltr.joinLeague()">
+<p style="text-align:center; color:#fff; font-weight:bold;">Username: {{user}}</p>
+<p style="text-align:center; color:#fff; font-weight:bold;">League:&nbsp;&nbsp;&nbsp;&nbsp; <input type="text" name="leagueName" ng-model="playerleague.leagueName"></input></p>
+<p style="text-align:center; color:#fff; font-weight:bold;">Password: <input type="text" name="password" ng-model="playerleague.password"></input></p>
 <br/><br/>
-<input type="button" value="Join League" onclick="joinLeague()"/>
+<button > Join League</button>
 </form>
 
-
-
 </div>
 </div>
-
+	<script src="js/angular-bootstrap.js" type="text/javascript"></script>
+	<script src="js/joinLeague.js"></script>	
 </body>
 </html>

@@ -11,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.makeurpicks.domain.League;
 import com.makeurpicks.domain.LeagueName;
+import com.makeurpicks.domain.PlayerLeague;
 import com.makeurpicks.domain.PlayerResponse;
 import com.makeurpicks.domain.PlayersInLeague;
 import com.makeurpicks.exception.LeagueServerException;
@@ -80,9 +81,28 @@ public class LeagueService {
 		return playersInLeagueRespository.findOne(leagueid).getPlayers();
 		
 	}
-	
 
-	public void joinLeague(String leagueId, String playerId, String password) throws LeagueValidationException {
+	public void joinLeague(PlayerLeague playerLeague)
+	{
+		if (playerLeague.getLeagueId() == null)
+		{
+			if (playerLeague.getLeagueName()==null)
+			{
+				throw new LeagueValidationException(LeagueExceptions.LEAGUE_NOT_FOUND);
+			}
+			else
+			{
+				League league = getLeagueByName(playerLeague.getLeagueName());
+				if (league == null)
+					throw new LeagueValidationException(LeagueExceptions.LEAGUE_NOT_FOUND);
+				playerLeague.setLeagueId(league.getId());
+			}
+		}
+		
+		joinLeague(playerLeague.getLeagueId(), playerLeague.getPlayerId(), playerLeague.getPassword());
+	}
+
+	protected void joinLeague(String leagueId, String playerId, String password) throws LeagueValidationException {
 		
 		if (!isValidPlayer(playerId))
 			throw new LeagueValidationException(LeagueExceptions.PLAYER_NOT_FOUND);
@@ -91,7 +111,7 @@ public class LeagueService {
 		if (league == null)
 			throw new LeagueValidationException(LeagueExceptions.LEAGUE_NOT_FOUND);
 		
-		if (!league.getPassword().equals(password))
+		if (league.getPassword()!=null&&!"".equals(league.getPassword())&& !league.getPassword().equals(password))
 			throw new LeagueValidationException(LeagueExceptions.INVALID_LEAGUE_PASSWORD);
 		
 		addPlayerToLeague(league, playerId);

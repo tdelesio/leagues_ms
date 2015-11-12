@@ -140,6 +140,13 @@ public class AuthServerApplication extends WebMvcConfigurerAdapter {
                     .redirectUris("http://localhost:9000/admin").autoApprove(true)
 
                     .and()
+                    
+                    .withClient("ui").secret("secret")
+                    .authorizedGrantTypes("client_credentials", "authorization_code", "refresh_token")
+                    .scopes("read", "write")
+                    .redirectUris("http://localhost:8080/").autoApprove(true)
+
+                    .and()
 
                             // Public client where client secret is vulnerable (e.g. mobile apps, browsers)
                     .withClient("public") // No secret!
