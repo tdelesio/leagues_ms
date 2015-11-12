@@ -1,7 +1,7 @@
 package com.makeurpicks;
 
 import java.io.IOException;
-import java.security.Principal;
+import java.util.Arrays;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -10,28 +10,27 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.oauth2.client.OAuth2ClientContext;
+import org.springframework.security.oauth2.client.OAuth2RestOperations;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
+import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.security.web.header.HeaderWriterFilter;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.filter.RequestContextFilter;
 import org.springframework.web.util.WebUtils;
@@ -39,14 +38,42 @@ import org.springframework.web.util.WebUtils;
 @SpringBootApplication
 @EnableEurekaClient
 @EnableCircuitBreaker
-@EnableZuulProxy 
-@RestController
+@EnableZuulProxy
 public class AdminApplication {
 
 	public static void main(String[] args) {
 //    	new SpringApplicationBuilder(AdminApplication.class).web(true).run(args);
     	SpringApplication.run(AdminApplication.class, args);
     }
+	
+//	@Value("${config.oauth2.accessTokenUri}")
+//    private String accessTokenUri;
+//
+//    @Value("${config.oauth2.userAuthorizationUri}")
+//    private String userAuthorizationUri;
+//
+//    @Value("${config.oauth2.clientID}")
+//    private String clientID;
+//
+//    @Value("${config.oauth2.clientSecret}")
+//    private String clientSecret;
+    
+//    @Bean
+//    public OAuth2RestOperations restTemplate(OAuth2ClientContext oauth2ClientContext) {
+//        return new OAuth2RestTemplate(resource(), oauth2ClientContext);
+//    }
+//    
+//	@Bean
+//	public OAuth2ProtectedResourceDetails resource() {
+//        AuthorizationCodeResourceDetails resource = new AuthorizationCodeResourceDetails();
+//        resource.setClientId(clientID);
+//        resource.setClientSecret(clientSecret);
+//        resource.setAccessTokenUri(accessTokenUri);
+//        resource.setUserAuthorizationUri(userAuthorizationUri);
+//        resource.setScope(Arrays.asList("read"));
+//
+//        return resource;
+//    }
 	
 //	@RequestMapping(method=RequestMethod.GET, value="/role")
 //	public @ResponseBody Object getGame(Principal user)
@@ -68,6 +95,9 @@ public class AdminApplication {
 //        public void match(OAuth2SsoConfigurer.RequestMatchers matchers) {
 //            matchers.anyRequest();
 //        }
+		
+		
+		
 
 		
         @Override

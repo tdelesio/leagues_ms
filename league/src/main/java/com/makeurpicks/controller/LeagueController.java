@@ -6,10 +6,7 @@ import java.util.Set;
 import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,28 +21,17 @@ import com.makeurpicks.domain.PlayerResponse;
 import com.makeurpicks.service.LeagueService;
 
 @RestController
-@EnableResourceServer
 @RequestMapping(value="/leagues")
-public class LeagueController extends ResourceServerConfigurerAdapter {
+public class LeagueController {
 
 	@Autowired
 	private LeagueService leagueService;
 	 
-	@Override
-	public void configure(HttpSecurity http) throws Exception {
-	        http
-	        	.authorizeRequests()
-	            	.antMatchers(HttpMethod.POST, "/**").authenticated()
-	            	.and()
-	            .authorizeRequests()
-	            	.antMatchers(HttpMethod.PUT, "/**").authenticated()
-	            	.and()
-	            .authorizeRequests()
-	            	.antMatchers(HttpMethod.DELETE, "/**").authenticated()
-	            	.and()
-	            .authorizeRequests()
-	                .anyRequest().permitAll();
-	 }
+	@RequestMapping("/user")
+	@PreAuthorize("hasRole('ADMIN')")
+    public Principal resource(Principal principal) {
+        return principal;
+    }
 	 
 	 @RequestMapping(method=RequestMethod.GET, value="/")
 		public @ResponseBody Iterable<League> getAllLeague() {

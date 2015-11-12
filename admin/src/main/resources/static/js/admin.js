@@ -84,7 +84,7 @@
 	$log.debug('leagueService');
 		var service =  {
 			getLeagues: function() {
-				return $http.get('/leagues/').then(function(result) {
+				return $http.get('/admin/leagues/').then(function(result) {
 			           return result.data;
 			       });
 			},
@@ -99,8 +99,8 @@
 	});
 	
 	app.controller('ChromeController', function ($http, $scope) {
-		$http.get('/user').success(function(data) {
-			$scope.user = data.username;
+		$http.get('/admin/user').success(function(data) {
+			$scope.user = data.name;
 		});
 	});
 	
