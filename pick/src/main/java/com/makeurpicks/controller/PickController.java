@@ -37,8 +37,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.makeurpicks.domain.DoublePick;
-import com.makeurpicks.domain.LeagueResponse;
 import com.makeurpicks.domain.Pick;
+import com.makeurpicks.league.LeagueResponse;
 import com.makeurpicks.service.PickService;
 import com.netflix.discovery.DiscoveryClient;
 

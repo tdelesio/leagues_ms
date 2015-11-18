@@ -1,7 +1,6 @@
 package com.makeurpicks.service;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -12,15 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.makeurpicks.domain.DoublePick;
-import com.makeurpicks.domain.GameResponse;
-import com.makeurpicks.domain.LeagueResponse;
 import com.makeurpicks.domain.Pick;
 import com.makeurpicks.exception.PickValidationException;
 import com.makeurpicks.exception.PickValidationException.PickExceptions;
+import com.makeurpicks.game.GameIntegrationService;
+import com.makeurpicks.game.GameResponse;
+import com.makeurpicks.league.LeagueIntegrationService;
+import com.makeurpicks.league.LeagueResponse;
 import com.makeurpicks.repository.DoublePickRepository;
 import com.makeurpicks.repository.PickRepository;
 import com.makeurpicks.repository.PicksByWeekRepository;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
 @Component
 public class PickService {
@@ -29,33 +29,29 @@ public class PickService {
 	private PickRepository pickRepository;
 	
 	@Autowired
-	private GameClient gameClient;
+	private GameIntegrationService gameIntegrationService;
 	
 	@Autowired 
-	private LeagueClient leagueClient;
-	
-//	@Autowired
-//	private PicksByLeagueWeekRepository picksByLeagueWeekRepository;
-//	
-//	@Autowired
-//	private PicksByLeagueWeekAndPlayerRepository picksByLeagueWeekAndPlayerRepository;
+	private LeagueIntegrationService leagueIntegrationService;
 	
 	@Autowired
 	private DoublePickRepository doublePickRepository;
 	
 	@Autowired
 	private PicksByWeekRepository picksByWeekRepository;
-	
-	
-	
-	public void setGameClient(GameClient gameClient) {
-		this.gameClient = gameClient;
-	}
 
 	
-	
-	public void setLeagueClient(LeagueClient leagueClient) {
-		this.leagueClient = leagueClient;
+
+
+
+	public void setLeagueIntegrationService(LeagueIntegrationService leagueIntegrationService) {
+		this.leagueIntegrationService = leagueIntegrationService;
+	}
+
+
+
+	public void setGameIntegrationService(GameIntegrationService gameIntegrationService) {
+		this.gameIntegrationService = gameIntegrationService;
 	}
 
 
@@ -164,26 +160,17 @@ public class PickService {
 //		return pickRepository.findAll(ids);
 //	}
 	
-	private List<LeagueResponse> defaultGetLeaguesForPlayer(String playerId)
-	{
-		throw new PickValidationException(PickExceptions.LEAGUE_SERVICE_IS_DOWN);
-	}
 	
-	@HystrixCommand(fallbackMethod="defaultGetLeaguesForPlayer")
+	
 	private List<LeagueResponse> getLeaguesForPlayer(String playerId) 
 	{
-		return leagueClient.getLeaguesForPlayer(playerId);
+		return leagueIntegrationService.getLeaguesForPlayer(playerId);
 	}
 	
-	private GameResponse defaultGetGameById(String gameId)
-	{
-		throw new PickValidationException(PickExceptions.GAME_SERVICE_IS_DOWN);
-	}
 	
-	@HystrixCommand(fallbackMethod="defaultGetGameById")
 	private GameResponse getGameById(String gameId)
 	{
-		return gameClient.getGameById(gameId);
+		return gameIntegrationService.getGameById(gameId);
 	}
 	
 	private void validatePick(Pick pick)
@@ -266,7 +253,7 @@ public class PickService {
 		if (pick==null)
 			throw new PickValidationException(PickExceptions.PICK_IS_NULL);
 		
-		GameResponse game = gameClient.getGameById(pick.getGameId());
+		GameResponse game = gameIntegrationService.getGameById(pick.getGameId());
 		//check to see if the newly selected double has started
 		if (game.getHasGameStarted())
 		{
@@ -285,7 +272,7 @@ public class PickService {
 		{
 			String orginalPickId = orginialDoublePick.getPickId();
 			Pick orginalPick = pickRepository.findOne(orginalPickId);
-			GameResponse orginalGame = gameClient.getGameById(orginalPick.getGameId());
+			GameResponse orginalGame = gameIntegrationService.getGameById(orginalPick.getGameId());
 			if (orginalGame.getHasGameStarted())
 			{
 				throw new PickValidationException(PickExceptions.GAME_HAS_ALREADY_STARTED);

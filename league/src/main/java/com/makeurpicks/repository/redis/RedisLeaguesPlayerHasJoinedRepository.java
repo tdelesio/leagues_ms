@@ -36,6 +36,7 @@ public class RedisLeaguesPlayerHasJoinedRepository implements LeaguesAPlayHasJoi
 		
 		LeagueName leagueName = new LeagueName();
 		leagueName.setLeagueId(leauge.getId());
+		leagueName.setSeasonId(leauge.getSeasonId());
 		leagueName.setLeagueName(leauge.getLeagueName());
 		leaguesPlayerJoined.addLeagueName(leagueName);
 		
@@ -51,6 +52,7 @@ public class RedisLeaguesPlayerHasJoinedRepository implements LeaguesAPlayHasJoi
 		LeagueName leagueName = new LeagueName();
 		leagueName.setLeagueId(league.getId());
 		leagueName.setLeagueName(league.getLeagueName());
+		leagueName.setSeasonId(league.getSeasonId());
 		leaguesPlayerJoined.removeLeagueName(leagueName);
 		
 		save(leaguesPlayerJoined);

@@ -10,15 +10,17 @@ public class NavigationView {
 	private String username;
 	private List<LeagueView> leagues;
 	private List<WeekView> weeks;
-	private String selectedLeagueId;
+	private String selectedSeasonId;
 	private String selectedWeekId;
 	
-	public String getSelectedLeagueId() {
-		return selectedLeagueId;
+
+
+	public String getSelectedSeasonId() {
+		return selectedSeasonId;
 	}
 
-	public void setSelectedLeagueId(String selectedLeagueId) {
-		this.selectedLeagueId = selectedLeagueId;
+	public void setSelectedSeasonId(String selectedSeasonId) {
+		this.selectedSeasonId = selectedSeasonId;
 	}
 
 	public String getSelectedWeekId() {

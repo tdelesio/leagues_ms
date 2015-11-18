@@ -31,12 +31,14 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.makeurpicks.PicksApplication;
 import com.makeurpicks.domain.DoublePick;
-import com.makeurpicks.domain.GameResponse;
-import com.makeurpicks.domain.LeagueResponse;
 import com.makeurpicks.domain.Pick;
 import com.makeurpicks.domain.PickBuilder;
 import com.makeurpicks.exception.PickValidationException;
 import com.makeurpicks.exception.PickValidationException.PickExceptions;
+import com.makeurpicks.game.GameIntegrationService;
+import com.makeurpicks.game.GameResponse;
+import com.makeurpicks.league.LeagueIntegrationService;
+import com.makeurpicks.league.LeagueResponse;
 import com.makeurpicks.repository.DoublePickRepository;
 import com.makeurpicks.repository.PickRepository;
 import com.makeurpicks.repository.PicksByWeekRepository;
@@ -52,10 +54,10 @@ private static ConfigurableApplicationContext server;
 	private static int configPort = 8888;
 	
 	@Mock
-	private LeagueClient leagueClientMock;
+	private LeagueIntegrationService leagueClientMock;
 	
 	@Mock
-	private GameClient gameClientMock;
+	private GameIntegrationService gameClientMock;
 	
 	@InjectMocks
 	@Autowired
@@ -110,9 +112,9 @@ private static ConfigurableApplicationContext server;
 		
 //		stringRedisTemplate.getConnectionFactory().getConnection().flushDb();
 		
-		pickService.setGameClient(gameClientMock);
+		pickService.setGameIntegrationService(gameClientMock);
 		
-		pickService.setLeagueClient(leagueClientMock);
+		pickService.setLeagueIntegrationService(leagueClientMock);
 		
 		
 		

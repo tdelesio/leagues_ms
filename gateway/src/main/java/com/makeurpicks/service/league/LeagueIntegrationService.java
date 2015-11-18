@@ -32,8 +32,8 @@ public class LeagueIntegrationService {
     @LoadBalanced
     private OAuth2RestOperations secureRestTemplate;
 	
-	@HystrixCommand(fallbackMethod = "stubLeagues",
-            commandProperties = {
+	@HystrixCommand(fallbackMethod = "stubLeagues"
+			,commandProperties = {
                     @HystrixProperty(name = "execution.isolation.strategy", value = "SEMAPHORE")
             }
     )
@@ -47,7 +47,7 @@ public class LeagueIntegrationService {
 //            	HttpEntity<?> entity = new HttpEntity<>(headers);
             	
             	ParameterizedTypeReference<List<LeagueView>> responseType = new ParameterizedTypeReference<List<LeagueView>>() {};
-                List<LeagueView> leagueViews = secureRestTemplate.exchange("http://league/player/{id}", HttpMethod.GET, null, responseType, id).getBody();
+                List<LeagueView> leagueViews = secureRestTemplate.exchange("http://league/leagues/player/{id}", HttpMethod.GET, null, responseType, id).getBody();
                 log.debug(leagueViews);
                 return leagueViews;
                                 

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.oauth2.client.OAuth2RestOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -30,6 +31,10 @@ private Log log = LogFactory.getLog(WeekIntegrationService.class);
     @LoadBalanced
     RestTemplate restTemplate;
 	
+	@Autowired
+    @LoadBalanced
+    private OAuth2RestOperations secureRestTemplate;
+	
 	@HystrixCommand(fallbackMethod = "stubWeeks",
             commandProperties = {
                     @HystrixProperty(name = "execution.isolation.strategy", value = "SEMAPHORE")
@@ -43,9 +48,9 @@ private Log log = LogFactory.getLog(WeekIntegrationService.class);
 //            	headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 //            	
 //            	HttpEntity<?> entity = new HttpEntity<>(headers);
-            	
             	ParameterizedTypeReference<List<WeekView>> responseType = new ParameterizedTypeReference<List<WeekView>>() {};
-                return restTemplate.exchange("http://weeks/seasonid/{id}", HttpMethod.GET, null, responseType, id).getBody();
+            	List<WeekView> weeks = secureRestTemplate.exchange("http://game/weeks/seasonid/{id}", HttpMethod.GET, null, responseType, id).getBody();
+            	return weeks;
                                 
 //            }
 //        };

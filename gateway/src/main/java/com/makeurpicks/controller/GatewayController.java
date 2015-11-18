@@ -124,17 +124,15 @@ public class GatewayController {
 		List<LeagueView> leagues = leagueIntegrationService.getLeaguesForPlayer(userId);
 		if (leagues!=null)
 		{
-			navigationView.setSelectedLeagueId(leagues.get(0).getLeagueId());
+			navigationView.setSelectedSeasonId(leagues.get(0).getSeasonId());
 			navigationView.setLeagues(leagues);
-			List<WeekView> weeks = weekIntegrationService.getWeeksForSeason(navigationView.getLeagues().get(0).getLeagueId());
+			List<WeekView> weeks = weekIntegrationService.getWeeksForSeason(navigationView.getLeagues().get(0).getSeasonId());
 			if (weeks!=null)
 			{
 				navigationView.setWeeks(weeks);
 				navigationView.setSelectedWeekId(weeks.get(0).getWeekId());
 			}
 		}
-		
-		
 		
 		return navigationView;
 

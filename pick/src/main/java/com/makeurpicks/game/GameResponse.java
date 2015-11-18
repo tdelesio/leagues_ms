@@ -1,9 +1,11 @@
-package com.makeurpicks.domain;
+package com.makeurpicks.game;
 
 import java.time.ZonedDateTime;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
+
+import com.makeurpicks.domain.AbstractModel;
 
 public class GameResponse extends AbstractModel {
 
@@ -26,6 +28,11 @@ public class GameResponse extends AbstractModel {
 	private String dogFullName;
 	private String dogShortName;
 	private String favShortName;
+	
+	public GameResponse()
+	{
+		
+	}
 	
 	public GameResponse(String id, ZonedDateTime gameStartTime, String favId, String dogId, String weekId)
 	{
