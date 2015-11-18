@@ -43,21 +43,22 @@ public class GatewayController {
 		return principal;
     }
 	
-	@RequestMapping("/makepicks/{weekid}")
-	// public DeferredResult<MakePicks> movieDetails(@PathVariable String
-	// weekId, Principal principal)
-	public DeferredResult<MakePicks> makePicksByWeek(@PathVariable String weekId, Principal principal) {
-		return toDeferredResult(buildMakePicks(principal.getName(), weekId));
-	}
+//	@RequestMapping("/makepicks/{weekid}")
+//	// public DeferredResult<MakePicks> movieDetails(@PathVariable String
+//	// weekId, Principal principal)
+//	public DeferredResult<MakePicks> makePicksByWeek(@PathVariable String weekId, Principal principal) {
+//		return toDeferredResult(buildMakePicks(principal.getName(), weekId));
+//	}
 
 	@RequestMapping("/makepicks2")
 	// public DeferredResult<MakePicks> movieDetails(@PathVariable String
 	// weekId, Principal principal)
-	public MakePicks makePicks2(Principal principal) {
+	public DeferredResult<NavigationView> makePicks2(Principal principal) {
 
-		MakePicks makePicksView = new MakePicks();
-		makePicksView.setNav(buildNavigation(principal.getName()));
-		return makePicksView;
+		return buildNavigation(principal.getName());
+//		MakePicks makePicksView = new MakePicks();
+//		makePicksView.setNav(buildNavigation(principal.getName()));
+//		return makePicksView;
 //		buildMakePicks(principal.getName(), null).subscribe(new Observer<MakePicks>() {
 //			@Override
 //			public void onCompleted() {
@@ -77,12 +78,12 @@ public class GatewayController {
 	}
 	
 	
-	@RequestMapping("/makepicks")
-	// public DeferredResult<MakePicks> movieDetails(@PathVariable String
-	// weekId, Principal principal)
-	public DeferredResult<MakePicks> makePicks(Principal principal) {
-		return toDeferredResult(buildMakePicks(principal.getName(), null));
-	}
+//	@RequestMapping("/makepicks")
+//	// public DeferredResult<MakePicks> movieDetails(@PathVariable String
+//	// weekId, Principal principal)
+//	public DeferredResult<MakePicks> makePicks(Principal principal) {
+//		return toDeferredResult(buildMakePicks(principal.getName(), null));
+//	}
 
 	public DeferredResult<MakePicks> toDeferredResult(Observable<MakePicks> details) {
 		DeferredResult<MakePicks> result = new DeferredResult<>();
@@ -103,38 +104,67 @@ public class GatewayController {
 		return result;
 	}
 
-	private Observable<MakePicks> buildMakePicks(String userId, String weekId) {
-		NavigationView navigationView = buildNavigation(userId);
-		if (weekId == null)
-			weekId = navigationView.getWeeks().get(0).getWeekId();
+//	private Observable<MakePicks> buildMakePicks(String userId, String weekId) {
+//		NavigationView navigationView = buildNavigation(userId);
+//		if (weekId == null)
+//			weekId = navigationView.getWeeks().get(0).getWeekId();
+//
+//		return Observable.zip(gameIntegrationService.getGamesForWeek(weekId),
+//				pickIntegrationService.getPicksForPlayerForWeek(weekId), (games, picks) -> {
+//					MakePicks makePicksView = new MakePicks();
+//					makePicksView.setGames(games);
+//					makePicksView.setPicks(picks);
+//					makePicksView.setNav(navigationView);
+//					return makePicksView;
+//				});
+//	}
 
-		return Observable.zip(gameIntegrationService.getGamesForWeek(weekId),
-				pickIntegrationService.getPicksForPlayerForWeek(weekId), (games, picks) -> {
-					MakePicks makePicksView = new MakePicks();
-					makePicksView.setGames(games);
-					makePicksView.setPicks(picks);
-					makePicksView.setNav(navigationView);
-					return makePicksView;
-				});
-	}
-
-	private NavigationView buildNavigation(String userId) {
-		NavigationView navigationView = new NavigationView();
-		navigationView.setUsername(userId);
-		List<LeagueView> leagues = leagueIntegrationService.getLeaguesForPlayer(userId);
-		if (leagues!=null)
-		{
-			navigationView.setSelectedSeasonId(leagues.get(0).getSeasonId());
-			navigationView.setLeagues(leagues);
-			List<WeekView> weeks = weekIntegrationService.getWeeksForSeason(navigationView.getLeagues().get(0).getSeasonId());
-			if (weeks!=null)
-			{
-				navigationView.setWeeks(weeks);
-				navigationView.setSelectedWeekId(weeks.get(0).getWeekId());
-			}
-		}
+//	private Observable<NavigationView> buildNavigation(String userId) {
+	private DeferredResult<NavigationView> buildNavigation(String userId) {
 		
-		return navigationView;
+		Observable<List<LeagueView>> details = leagueIntegrationService.getLeaguesForPlayer(userId);
+		
+		DeferredResult<NavigationView> result = new DeferredResult<>();
+		details.subscribe(new Observer<List<LeagueView>>() {
+			@Override
+			public void onCompleted() {
+				System.out.println("completed");
+			}
+
+			@Override
+			public void onError(Throwable throwable) {
+			}
+
+			@Override
+			public void onNext(List<LeagueView> leagues) {
+				System.out.println("onNext");
+				
+				NavigationView navigationView = new NavigationView();
+				navigationView.setUsername(userId);
+				if (leagues!=null)
+				{
+					navigationView.setSelectedSeasonId(leagues.get(0).getSeasonId());
+					navigationView.setLeagues(leagues);
+				}
+				result.setResult(navigationView);
+			}
+		});
+		
+		
+		
+		
+	
+		
+			
+//			List<WeekView> weeks = weekIntegrationService.getWeeksForSeason(navigationView.getLeagues().get(0).getSeasonId());
+//			if (weeks!=null)
+//			{
+//				navigationView.setWeeks(weeks);
+//				navigationView.setSelectedWeekId(weeks.get(0).getWeekId());
+//			}
+	
+		
+		return result;
 
 	}
 }

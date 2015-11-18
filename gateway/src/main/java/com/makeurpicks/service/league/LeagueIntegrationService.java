@@ -16,6 +16,9 @@ import org.springframework.web.client.RestTemplate;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
+import com.netflix.hystrix.contrib.javanica.command.ObservableResult;
+
+import rx.Observable;
 
 @Service
 public class LeagueIntegrationService {
@@ -32,15 +35,16 @@ public class LeagueIntegrationService {
     @LoadBalanced
     private OAuth2RestOperations secureRestTemplate;
 	
-	@HystrixCommand(fallbackMethod = "stubLeagues"
+	@HystrixCommand(fallbackMethod = "defaultGetLeaguesForPlayer"
 			,commandProperties = {
                     @HystrixProperty(name = "execution.isolation.strategy", value = "SEMAPHORE")
             }
     )
-    public List<LeagueView> getLeaguesForPlayer(String id) {
-//        return new ObservableResult<List<LeagueView>>() {
-//            @Override
-//            public List<LeagueView> invoke() {
+//	@HystrixCommand(fallbackMethod="defaultGetLeaguesForPlayer")
+    public Observable<List<LeagueView>> getLeaguesForPlayer(String id) {
+        return new ObservableResult<List<LeagueView>>() {
+            @Override
+            public List<LeagueView> invoke() {
 //            	HttpHeaders headers = new HttpHeaders();
 //            	headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 //            	
@@ -48,15 +52,16 @@ public class LeagueIntegrationService {
             	
             	ParameterizedTypeReference<List<LeagueView>> responseType = new ParameterizedTypeReference<List<LeagueView>>() {};
                 List<LeagueView> leagueViews = secureRestTemplate.exchange("http://league/leagues/player/{id}", HttpMethod.GET, null, responseType, id).getBody();
-                log.debug(leagueViews);
                 return leagueViews;
                                 
-//            }
-//        };
+            }
+        };
     }
 
     @SuppressWarnings("unused")
-    private List<LeagueView> stubLeagues(String weekId) {
+//    private List<LeagueView> stubLeagues(String weekId) {
+    public List<LeagueView> defaultGetLeaguesForPlayer(String id) {
+    	System.out.println("stubbed");
     	LeagueView stub = new LeagueView();
     	stub.setLeagueId("0");
     	stub.setLeagueName("None");

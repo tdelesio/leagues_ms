@@ -136,7 +136,7 @@
 			$scope.leagues = data;
 				
 			if (data[0] === undefined)
-				$window.location.href = '/#/leagues';
+				$window.location.href = '/admin/#/leagues';
 				
 				$scope.add_game_model.seasonId = data[0].seasonId;
 				
