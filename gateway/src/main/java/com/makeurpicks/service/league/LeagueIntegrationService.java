@@ -35,34 +35,36 @@ public class LeagueIntegrationService {
     @LoadBalanced
     private OAuth2RestOperations secureRestTemplate;
 	
-//	@HystrixCommand(fallbackMethod = "defaultGetLeaguesForPlayer"
-//			,commandProperties = {
-//                    @HystrixProperty(name = "execution.isolation.strategy", value = "SEMAPHORE")
-//            }
-//    )
+	@HystrixCommand(fallbackMethod = "defaultGetLeaguesForPlayer"
+			,commandProperties = {
+                    @HystrixProperty(name = "execution.isolation.strategy", value = "SEMAPHORE")
+//                    @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "1000")
+            }
+    )
 //	@HystrixCommand(fallbackMethod="defaultGetLeaguesForPlayer")
     public Observable<List<LeagueView>> getLeaguesForPlayer(String id) {
 
-		ParameterizedTypeReference<List<LeagueView>> responseType = new ParameterizedTypeReference<List<LeagueView>>() {};
-		List<LeagueView> leagueViews = secureRestTemplate.exchange("http://league/leagues/player/{id}", HttpMethod.GET, null, responseType, id).getBody();
-
-		return Observable.just(leagueViews);
+//		ParameterizedTypeReference<List<LeagueView>> responseType = new ParameterizedTypeReference<List<LeagueView>>() {};
+//		List<LeagueView> leagueViews = secureRestTemplate.exchange("http://league/leagues/player/{id}", HttpMethod.GET, null, responseType, id).getBody();
+//
+//		return Observable.just(leagueViews);
 		
-//		return new ObservableResult<List<LeagueView>>() {
-//            @Override
-//            public List<LeagueView> invoke() {
+		return new ObservableResult<List<LeagueView>>() {
+            @Override
+            public List<LeagueView> invoke() {
 //            	
-//            	ParameterizedTypeReference<List<LeagueView>> responseType = new ParameterizedTypeReference<List<LeagueView>>() {};
-//                List<LeagueView> leagueViews = secureRestTemplate.exchange("http://league/leagues/player/{id}", HttpMethod.GET, null, responseType, id).getBody();
-//                return leagueViews;
+            	ParameterizedTypeReference<List<LeagueView>> responseType = new ParameterizedTypeReference<List<LeagueView>>() {};
+                List<LeagueView> leagueViews = secureRestTemplate.exchange("http://league/leagues/player/{id}", HttpMethod.GET, null, responseType, id).getBody();
+                return leagueViews;
 //                                
-//            }
-//        };
+            }
+        };
     }
 
     @SuppressWarnings("unused")
 //    private List<LeagueView> stubLeagues(String weekId) {
     public List<LeagueView> defaultGetLeaguesForPlayer(String id) {
+//    	System.out.println(getExecutionEvents());
     	System.out.println("stubbed");
     	LeagueView stub = new LeagueView();
     	stub.setLeagueId("0");

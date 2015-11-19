@@ -35,32 +35,31 @@ private Log log = LogFactory.getLog(WeekIntegrationService.class);
     @LoadBalanced
     private OAuth2RestOperations secureRestTemplate;
 	
-//	@HystrixCommand(fallbackMethod = "stubWeeks",
-//            commandProperties = {
-//                    @HystrixProperty(name = "execution.isolation.strategy", value = "SEMAPHORE")
-//            }
-//    )
+	@HystrixCommand(fallbackMethod = "stubWeeks",
+            commandProperties = {
+                    @HystrixProperty(name = "execution.isolation.strategy", value = "SEMAPHORE")
+//                    @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "1000")
+            }
+    )
     public Observable<List<WeekView>> getWeeksForSeason(String id) {
-//        return new ObservableResult<List<WeekView>>() {
-//            @Override
-//            public List<WeekView> invoke() {
-//            	HttpHeaders headers = new HttpHeaders();
-//            	headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
-//            	
-//            	HttpEntity<?> entity = new HttpEntity<>(headers);
+        return new ObservableResult<List<WeekView>>() {
+            @Override
+            public List<WeekView> invoke() {
+
             	ParameterizedTypeReference<List<WeekView>> responseType = new ParameterizedTypeReference<List<WeekView>>() {};
             	List<WeekView> weeks = secureRestTemplate.exchange("http://game/weeks/seasonid/{id}", HttpMethod.GET, null, responseType, id).getBody();
-            	return Observable.just(weeks);
+            	return weeks;
+//            	return Observable.just(weeks);
                                 
-//            }
-//        };
+            }
+        };
     }
 
     @SuppressWarnings("unused")
     private List<WeekView> stubWeeks(final String weekId) {
     	WeekView stub = new WeekView();
     	stub.setWeekNumber(0);
-    	stub.setWeekId("0");
+    	stub.setId(weekId);
         return Arrays.asList(stub);
     }
 }

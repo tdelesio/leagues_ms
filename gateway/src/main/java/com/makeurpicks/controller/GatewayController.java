@@ -141,7 +141,7 @@ public class GatewayController {
 			
 			weekIntegrationService.getWeeksForSeason(navigationView.getSelectedSeasonId())
 				.filter(weeks -> weeks != null && !weeks.isEmpty())
-				.doOnNext(weeks -> navigationView.setSelectedWeekId(weeks.get(0).getWeekId()))
+				.doOnNext(weeks -> navigationView.setSelectedWeekId(weeks.get(0).getId()))
 				.subscribe(weeks -> navigationView.setWeeks(weeks))
 			;
 				
