@@ -20,6 +20,8 @@ import com.makeurpicks.service.week.WeekView;
 
 import rx.Observable;
 import rx.Observer;
+import rx.functions.Action1;
+import rx.observers.Observers;
 
 @RestController
 public class GatewayController {
@@ -55,7 +57,12 @@ public class GatewayController {
 	// weekId, Principal principal)
 	public DeferredResult<NavigationView> makePicks2(Principal principal) {
 
-		return buildNavigation(principal.getName());
+		DeferredResult<NavigationView> result = new DeferredResult<>();
+		emmitNavigation(principal.getName())
+			.subscribe(n -> result.setResult(n));
+		
+		return result;
+//		return buildNavigation(principal.getName());
 //		MakePicks makePicksView = new MakePicks();
 //		makePicksView.setNav(buildNavigation(principal.getName()));
 //		return makePicksView;
@@ -119,6 +126,27 @@ public class GatewayController {
 //				});
 //	}
 
+	
+	private Observable<NavigationView> emmitNavigation(String userId)
+	{
+		NavigationView navigationView = new NavigationView();
+		navigationView.setUsername(userId);
+		
+	
+			leagueIntegrationService.getLeaguesForPlayer(userId)
+				.filter(leagues -> leagues != null)
+				.doOnNext(leagues -> navigationView.setSelectedSeasonId(leagues.get(0).getSeasonId()))
+				.subscribe(leagues -> navigationView.setLeagues(leagues))			
+			;
+			
+			weekIntegrationService.getWeeksForSeason(navigationView.getSelectedSeasonId())
+				.filter(weeks -> weeks != null && !weeks.isEmpty())
+				.doOnNext(weeks -> navigationView.setSelectedWeekId(weeks.get(0).getWeekId()))
+				.subscribe(weeks -> navigationView.setWeeks(weeks))
+			;
+				
+		return Observable.just(navigationView);	
+	}
 //	private Observable<NavigationView> buildNavigation(String userId) {
 	private DeferredResult<NavigationView> buildNavigation(String userId) {
 		

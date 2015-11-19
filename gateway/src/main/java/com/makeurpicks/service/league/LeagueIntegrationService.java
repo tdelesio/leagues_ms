@@ -35,27 +35,29 @@ public class LeagueIntegrationService {
     @LoadBalanced
     private OAuth2RestOperations secureRestTemplate;
 	
-	@HystrixCommand(fallbackMethod = "defaultGetLeaguesForPlayer"
-			,commandProperties = {
-                    @HystrixProperty(name = "execution.isolation.strategy", value = "SEMAPHORE")
-            }
-    )
+//	@HystrixCommand(fallbackMethod = "defaultGetLeaguesForPlayer"
+//			,commandProperties = {
+//                    @HystrixProperty(name = "execution.isolation.strategy", value = "SEMAPHORE")
+//            }
+//    )
 //	@HystrixCommand(fallbackMethod="defaultGetLeaguesForPlayer")
     public Observable<List<LeagueView>> getLeaguesForPlayer(String id) {
-        return new ObservableResult<List<LeagueView>>() {
-            @Override
-            public List<LeagueView> invoke() {
-//            	HttpHeaders headers = new HttpHeaders();
-//            	headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+		ParameterizedTypeReference<List<LeagueView>> responseType = new ParameterizedTypeReference<List<LeagueView>>() {};
+		List<LeagueView> leagueViews = secureRestTemplate.exchange("http://league/leagues/player/{id}", HttpMethod.GET, null, responseType, id).getBody();
+
+		return Observable.just(leagueViews);
+		
+//		return new ObservableResult<List<LeagueView>>() {
+//            @Override
+//            public List<LeagueView> invoke() {
 //            	
-//            	HttpEntity<?> entity = new HttpEntity<>(headers);
-            	
-            	ParameterizedTypeReference<List<LeagueView>> responseType = new ParameterizedTypeReference<List<LeagueView>>() {};
-                List<LeagueView> leagueViews = secureRestTemplate.exchange("http://league/leagues/player/{id}", HttpMethod.GET, null, responseType, id).getBody();
-                return leagueViews;
-                                
-            }
-        };
+//            	ParameterizedTypeReference<List<LeagueView>> responseType = new ParameterizedTypeReference<List<LeagueView>>() {};
+//                List<LeagueView> leagueViews = secureRestTemplate.exchange("http://league/leagues/player/{id}", HttpMethod.GET, null, responseType, id).getBody();
+//                return leagueViews;
+//                                
+//            }
+//        };
     }
 
     @SuppressWarnings("unused")

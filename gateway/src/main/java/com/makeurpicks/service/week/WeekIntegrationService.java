@@ -35,12 +35,12 @@ private Log log = LogFactory.getLog(WeekIntegrationService.class);
     @LoadBalanced
     private OAuth2RestOperations secureRestTemplate;
 	
-	@HystrixCommand(fallbackMethod = "stubWeeks",
-            commandProperties = {
-                    @HystrixProperty(name = "execution.isolation.strategy", value = "SEMAPHORE")
-            }
-    )
-    public List<WeekView> getWeeksForSeason(String id) {
+//	@HystrixCommand(fallbackMethod = "stubWeeks",
+//            commandProperties = {
+//                    @HystrixProperty(name = "execution.isolation.strategy", value = "SEMAPHORE")
+//            }
+//    )
+    public Observable<List<WeekView>> getWeeksForSeason(String id) {
 //        return new ObservableResult<List<WeekView>>() {
 //            @Override
 //            public List<WeekView> invoke() {
@@ -50,7 +50,7 @@ private Log log = LogFactory.getLog(WeekIntegrationService.class);
 //            	HttpEntity<?> entity = new HttpEntity<>(headers);
             	ParameterizedTypeReference<List<WeekView>> responseType = new ParameterizedTypeReference<List<WeekView>>() {};
             	List<WeekView> weeks = secureRestTemplate.exchange("http://game/weeks/seasonid/{id}", HttpMethod.GET, null, responseType, id).getBody();
-            	return weeks;
+            	return Observable.just(weeks);
                                 
 //            }
 //        };

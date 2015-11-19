@@ -24,7 +24,13 @@ public class NavigationView {
 	}
 
 	public String getSelectedWeekId() {
-		return selectedWeekId;
+//		if (selectedWeekId == null)
+//			if (weeks != null && !weeks.isEmpty())
+//				return weeks.get(0).getWeekId();
+//			else
+//				return null;
+//		else
+			return selectedWeekId;
 	}
 
 	public void setSelectedWeekId(String selectedWeekId) {
