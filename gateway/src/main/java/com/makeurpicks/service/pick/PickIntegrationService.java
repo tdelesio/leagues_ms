@@ -1,6 +1,7 @@
 package com.makeurpicks.service.pick;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -42,24 +43,18 @@ private Log log = LogFactory.getLog(PickIntegrationService.class);
         return new ObservableResult<Map<String, PickView>>() {
             @Override
             public Map<String, PickView> invoke() {
-//            	HttpHeaders headers = new HttpHeaders();
-//            	headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
-//            	
-//            	HttpEntity<?> entity = new HttpEntity<>(headers);
             	
-            	ParameterizedTypeReference<Map<String, PickView>> responseType = new ParameterizedTypeReference<Map<String, PickView>>() {};
-                return restTemplate.exchange("http://picks/self/weekid/{weekid}", HttpMethod.GET, null, responseType, weekid).getBody();
-                                
+//            	ParameterizedTypeReference<Map<String, PickView>> responseType = new ParameterizedTypeReference<Map<String, PickView>>() {};
+//                return restTemplate.exchange("http://picks/self/weekid/{weekid}", HttpMethod.GET, null, responseType, weekid).getBody();
+            	return Collections.emptyMap();                
             }
         };
     }
 
     @SuppressWarnings("unused")
-    private List<LeagueView> stubPicks(final String weekId) {
-    	LeagueView stub = new LeagueView();
-    	stub.setLeagueId("0");
-    	stub.setLeagueName("None");
-        return Arrays.asList(stub);
+    private Map<String, PickView> stubPicks(final String weekId) {
+    	
+        return Collections.emptyMap();
     }
 }
 

@@ -10,10 +10,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.oauth2.client.OAuth2RestOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.makeurpicks.service.league.LeagueView;
+import com.makeurpicks.service.week.WeekView;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.netflix.hystrix.contrib.javanica.command.ObservableResult;
@@ -30,6 +32,10 @@ public class GameIntegrationService {
     @LoadBalanced
     RestTemplate restTemplate;
 	
+	@Autowired
+    @LoadBalanced
+    private OAuth2RestOperations secureRestTemplate;
+	
 	@HystrixCommand(fallbackMethod = "stubGames",
             commandProperties = {
                     @HystrixProperty(name = "execution.isolation.strategy", value = "SEMAPHORE")
@@ -41,7 +47,7 @@ public class GameIntegrationService {
             public List<GameView> invoke() {
                 
                 ParameterizedTypeReference<List<GameView>> responseType = new ParameterizedTypeReference<List<GameView>>() {};
-                return restTemplate.exchange("http://games/weekid/{id}", HttpMethod.GET, null, responseType, id).getBody();
+                return secureRestTemplate.exchange("http://game/games/weekid/{id}", HttpMethod.GET, null, responseType, id).getBody();         
             }
         };
     }

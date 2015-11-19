@@ -55,11 +55,10 @@ public class GatewayController {
 	@RequestMapping("/makepicks2")
 	// public DeferredResult<MakePicks> movieDetails(@PathVariable String
 	// weekId, Principal principal)
-	public DeferredResult<NavigationView> makePicks2(Principal principal) {
+	public DeferredResult<MakePicks> makePicks2(Principal principal) {
 
-		DeferredResult<NavigationView> result = new DeferredResult<>();
-		emmitNavigation(principal.getName())
-			.subscribe(n -> result.setResult(n));
+		DeferredResult<MakePicks> result = new DeferredResult<>();
+		buildMakePicks(principal.getName()).subscribe(n -> result.setResult(n));
 		
 		return result;
 //		return buildNavigation(principal.getName());
@@ -111,20 +110,23 @@ public class GatewayController {
 		return result;
 	}
 
-//	private Observable<MakePicks> buildMakePicks(String userId, String weekId) {
-//		NavigationView navigationView = buildNavigation(userId);
-//		if (weekId == null)
-//			weekId = navigationView.getWeeks().get(0).getWeekId();
-//
-//		return Observable.zip(gameIntegrationService.getGamesForWeek(weekId),
-//				pickIntegrationService.getPicksForPlayerForWeek(weekId), (games, picks) -> {
-//					MakePicks makePicksView = new MakePicks();
-//					makePicksView.setGames(games);
-//					makePicksView.setPicks(picks);
-//					makePicksView.setNav(navigationView);
-//					return makePicksView;
-//				});
-//	}
+	private Observable<MakePicks> buildMakePicks(String userId) {
+	
+		MakePicks makePicksView = new MakePicks();
+		
+		emmitNavigation(userId)
+			.subscribe(nav -> makePicksView.setNav(nav))
+		;
+
+		
+		return Observable.zip(gameIntegrationService.getGamesForWeek(makePicksView.getNav().getSelectedWeekId()),
+				pickIntegrationService.getPicksForPlayerForWeek(makePicksView.getNav().getSelectedWeekId()), (games, picks) -> {
+					
+					makePicksView.setGames(games);
+					makePicksView.setPicks(picks);
+					return makePicksView;
+				});
+	}
 
 	
 	private Observable<NavigationView> emmitNavigation(String userId)
@@ -148,35 +150,35 @@ public class GatewayController {
 		return Observable.just(navigationView);	
 	}
 //	private Observable<NavigationView> buildNavigation(String userId) {
-	private DeferredResult<NavigationView> buildNavigation(String userId) {
-		
-		Observable<List<LeagueView>> details = leagueIntegrationService.getLeaguesForPlayer(userId);
-		
-		DeferredResult<NavigationView> result = new DeferredResult<>();
-		details.subscribe(new Observer<List<LeagueView>>() {
-			@Override
-			public void onCompleted() {
-				System.out.println("completed");
-			}
-
-			@Override
-			public void onError(Throwable throwable) {
-			}
-
-			@Override
-			public void onNext(List<LeagueView> leagues) {
-				System.out.println("onNext");
-				
-				NavigationView navigationView = new NavigationView();
-				navigationView.setUsername(userId);
-				if (leagues!=null)
-				{
-					navigationView.setSelectedSeasonId(leagues.get(0).getSeasonId());
-					navigationView.setLeagues(leagues);
-				}
-				result.setResult(navigationView);
-			}
-		});
+//	private DeferredResult<NavigationView> buildNavigation(String userId) {
+//		
+//		Observable<List<LeagueView>> details = leagueIntegrationService.getLeaguesForPlayer(userId);
+//		
+//		DeferredResult<NavigationView> result = new DeferredResult<>();
+//		details.subscribe(new Observer<List<LeagueView>>() {
+//			@Override
+//			public void onCompleted() {
+//				System.out.println("completed");
+//			}
+//
+//			@Override
+//			public void onError(Throwable throwable) {
+//			}
+//
+//			@Override
+//			public void onNext(List<LeagueView> leagues) {
+//				System.out.println("onNext");
+//				
+//				NavigationView navigationView = new NavigationView();
+//				navigationView.setUsername(userId);
+//				if (leagues!=null)
+//				{
+//					navigationView.setSelectedSeasonId(leagues.get(0).getSeasonId());
+//					navigationView.setLeagues(leagues);
+//				}
+//				result.setResult(navigationView);
+//			}
+//		});
 		
 		
 		
@@ -192,7 +194,7 @@ public class GatewayController {
 //			}
 	
 		
-		return result;
+//		return result;
 
-	}
+//	}
 }
