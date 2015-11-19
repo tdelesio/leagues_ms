@@ -1,10 +1,14 @@
 package com.makeurpicks.service.game;
 
 import java.io.Serializable;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
+
+import scala.annotation.meta.setter;
 
 public class GameView implements Serializable {
 
@@ -106,5 +110,25 @@ public class GameView implements Serializable {
 		this.favShortName = favShortName;
 	}
 	
+	public String getGameStartFormated()
+	{
+		return gameStart.withZoneSameInstant(ZoneId.of("-5")).format(DateTimeFormatter.ofPattern("EEE MM-dd-yyy hh:mm:ss a"));
+	}
 	
+	public boolean hasScoresEntered()
+	{
+		if (favScore==0&&dogScore==0)
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+	
+	public boolean getHasGameStarted()
+	{
+		return gameStart.isBefore(ZonedDateTime.now());
+	}
 }

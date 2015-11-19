@@ -1,8 +1,9 @@
 (function () {
 	var app = angular.module('makepicks', ['leagueservice']);
 	
-	app.controller('MakePicksController', function ($scope, $http, $window, $log, leagueService) { 
+	app.controller('MakePicksController', function ($scope, $rootScope, $http, $window, $log, leagueService) { 
 		
+		$scope.page = {};
 		
 //		$scope.pickMap = {};
 //		$scope.gameMetaMap = {};
@@ -30,6 +31,14 @@
 		
 			
 //		});
+		
+		leagueService.loadMakePicks().then(function(data) {
+			$log.debug('MakePickController:loadMakePicks='+JSON.stringify(data.data))
+			$scope.page = data.data;
+			$rootScope.nav = data.data.nav;
+			$rootScope.$broadcast('pageLoaded');
+			
+		});
 		
 		$scope.makePick = function(gameid, teamid, pickid) {
 		

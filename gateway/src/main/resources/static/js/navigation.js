@@ -3,21 +3,28 @@
 
 	app.controller('NavigationController', function ($scope, $rootScope, $http, $window, $log, leagueService) {
 		
-		$scope.league = {};
+		$scope.nav = {};
 		$scope.week = {};
 		
-		$http.get('/makepicks').success(function(data) {
-			$scope.username = data.nav.username;
-			$scope.leagues = data.nav.leagues;
-			$scope.league.seasonId = data.nav.selectedLeagueId;
-			$scope.weeks = data.nav.weeks;
-			$scope.week.weekId = data.nav.selectedWeekId;
-			
-			$scope.games = data.games;
-			$scope.pickMap = data.leagues;
-		
-			$rootScope.$broadcast('weekLoaded');
+		$scope.$on('pageLoaded', function (event) {
+			$scope.nav = $rootScope.nav;
+			$scope.week.weekId = $rootScope.nav.selectedWeekId;
 		});
+//		$scope.league = {};
+//		$scope.week = {};
+//		
+//		$http.get('/makepicks').success(function(data) {
+//			$scope.username = data.nav.username;
+//			$scope.leagues = data.nav.leagues;
+//			$scope.league.seasonId = data.nav.selectedLeagueId;
+//			$scope.weeks = data.nav.weeks;
+//			$scope.week.weekId = data.nav.selectedWeekId;
+//			
+//			$scope.games = data.games;
+//			$scope.pickMap = data.leagues;
+//		
+//			$rootScope.$broadcast('weekLoaded');
+//		});
 		
 //		$http.get('/user').success(function(data) {
 //			$scope.username = data.name;

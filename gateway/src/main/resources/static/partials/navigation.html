@@ -28,10 +28,10 @@
 								<option value="standings">Standings</option>
 							</select>
 						</div>
-						<span id="username">{{username}}</span>
+						<span id="username">{{nav.username}}</span>
 						<div id="week-container">
 							<select ng-model="week.weekId" id="week-select" >
-								<option ng-repeat="week in weeks" value="{{week.id}}">
+								<option ng-repeat="week in nav.weeks" value="{{week.id}}">
 							 		Week {{week.weekNumber}}
 								</option>
 							</select>
