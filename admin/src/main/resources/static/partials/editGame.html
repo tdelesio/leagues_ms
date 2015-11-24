@@ -5,10 +5,14 @@
 		<div class="form-group">
 			<label for="favorite-select" class="col-lg-2 control-label">Favorite</label>
 			<div class="col-lg-10">
-				<select ng-model="edit_game_model.favId" required id="favorite-select" class="form-control">
-					<option ng-repeat="team in teams" value="{{team.id}}">
-						 {{team.city}}&nbsp;{{team.teamName}}
-					</option>
+				<select ng-model="edit_game_model.fav" required id="favorite-select" class="form-control"
+					ng-options="team.fullTeamName for team in teams track by team.id">
+		
+<!-- 					ng-options="team.city+' '+team.teamName for team in teams track by team.id"> -->
+				
+<!-- 					<option ng-selected="team.id == edit_game_model.favId" ng-repeat="team in teams" value="{{team.id}}"> -->
+<!-- 						 {{team.city}}&nbsp;{{team.teamName}} -->
+<!-- 					</option> -->
 				</select>
 			</div>
 		</div>
@@ -21,10 +25,8 @@
 		<div class="form-group">
 			<label for="dog-select" class="col-lg-2 control-label">Dog</label>
 			<div class="col-lg-10">
-				<select ng-model="edit_game_model.dogId" required id="dog-select" class="form-control">
-					<option ng-repeat="team in teams" value="{{team.id}}">
-						 {{team.city}}&nbsp;{{team.teamName}}
-					</option>
+				<select ng-model="edit_game_model.dog" required id="dog-select" class="form-control"
+					ng-options="team.fullTeamName for team in teams track by team.id">
 				</select>
 			</div>
 		</div>

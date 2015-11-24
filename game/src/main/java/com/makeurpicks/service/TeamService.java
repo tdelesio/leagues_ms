@@ -32,8 +32,8 @@ public class TeamService {
 
 	public Team createTeam(Team team) {
 		
-		String id = UUID.randomUUID().toString();
-		team.setId(id);
+		//String id = UUID.randomUUID().toString();
+		team.setId(team.getShortName().toLowerCase());
 		teamRepository.save(team);
 		
 		return team;

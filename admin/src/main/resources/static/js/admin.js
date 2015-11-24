@@ -207,7 +207,7 @@
 		
 		this.showEditGame = function(game) {
 			$log.debug('ShowEditGame: gameId='+game.id);
-			
+			$scope.edit_game_model = {};
 			
 			
 			$http.get('/admin/games/'+game.id).success(function(data) {
@@ -218,10 +218,24 @@
 				$log.debug('gameStart='+gameStart)
 				data.gameStart = {};
 				
+				$scope.edit_game_model.fav = {};
+				$scope.edit_game_model.dog = {};
+				
+				$http.get('/admin/teams/'+data.favId).success(function(data) {
+					$scope.edit_game_model.fav = data;
+				});
+				
+				$http.get('/admin/teams/'+data.dogId).success(function(data) {
+					$scope.edit_game_model.dog = data;
+				});
 				
 				$scope.edit_game_model.gameStart = gameStart;
-				$scope.edit_game_model.favId = data.favId;
-				$scope.edit_game_model.dogId = data.dogId;
+				
+//				$scope.edit_game_model.fav.fullTeamName = data.favFullName;
+//				$scope.edit_game_model.fav.id = data.favId;
+//				$scope.edit_game_model.dog = {};
+//				$scope.edit_game_model.dog.fullTeamName = data.dogFullName;
+//				$scope.edit_game_model.dogId = data.dogId;
 				$scope.edit_game_model.spread = data.spread;
 				$scope.edit_game_model.favHome = data.favHome;
 				$scope.edit_game_model.favScore = data.favScore;
@@ -230,12 +244,20 @@
 //				$scope.edit_game_model.weekId = data.weekId;
 //				$scope.edit_game_model.seasonId = data.seasonId;
 				
+				
 				$scope.showEdit = true;
+				
+				$log.debug(JSON.stringify($scope.edit_game_model.fav));
 			});
 		};
 		
 		this.editGame = function(game) {
-						
+			
+			
+			game.favId = game.fav.id;
+			game.dogId = game.dog.id;
+
+			$log.debug('editGame game='+JSON.stringify(game));
 			$http({
 				method : "PUT",
 				url : '/admin/games/',

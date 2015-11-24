@@ -2,10 +2,6 @@ server:
     port: 9999
     context-path: /auth
 
-#security:
-#  user:
-#    password: password
-#
 # IMPORTANT NOTICE: 
 # You have to replace this keypair and make sure the private key remains private!
 #

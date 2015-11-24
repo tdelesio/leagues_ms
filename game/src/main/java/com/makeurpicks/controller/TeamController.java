@@ -33,6 +33,7 @@ public class TeamController {
 	@RequestMapping(method=RequestMethod.GET, value="/{id}")
 	public @ResponseBody Team getTeamById(@PathVariable String id)
 	{
+		System.out.println(id);
 		return teamService.getTeam(id);
 	}
 	
