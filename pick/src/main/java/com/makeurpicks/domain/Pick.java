@@ -63,6 +63,12 @@ public class Pick extends AbstractModel {
 		return pickLastUpdated;
 	}
 
+	@Override
+	public String toString() {
+		return "Pick [teamId=" + teamId + ", playerId=" + playerId + ", weekId=" + weekId + ", gameId=" + gameId
+				+ ", noPick=" + noPick + ", pickLastUpdated=" + pickLastUpdated + "]";
+	}
+
 
 	
 }

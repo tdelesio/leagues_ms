@@ -31,8 +31,6 @@ public class GatewayController {
 
 	@Autowired
 	private WeekIntegrationService weekIntegrationService;
-
-	MakePicks picks;
 	
 	@RequestMapping("/user")
     public Object home(Principal principal) {

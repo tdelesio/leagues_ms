@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -60,6 +61,8 @@ public class PickService {
 	{
 		//make sure all the parms are set
 		validatePick(pick);  
+		
+		pick.setId(UUID.randomUUID().toString());
 		
 		//save pick by pick id
 		pickRepository.save(pick);
@@ -168,11 +171,6 @@ public class PickService {
 	}
 	
 	
-	private GameResponse getGameById(String gameId)
-	{
-		return gameIntegrationService.getGameById(gameId);
-	}
-	
 	private void validatePick(Pick pick)
 	{
 		List<PickExceptions> codes = new ArrayList<PickExceptions>();
@@ -202,14 +200,14 @@ public class PickService {
 			codes.add(PickExceptions.PLAYER_IS_NUll);
 		
 		
-		GameResponse game = getGameById(pick.getGameId());
+		GameResponse game = gameIntegrationService.getGameById(pick.getGameId());
 //		Game game = dao.loadByPrimaryKey(Game.class, pick.getGame().getId());
 		if (game == null)
 			codes.add(PickExceptions.GAME_IS_NULL);
 		
 		//load the game to make sure that the team passed is actually playing in the game
 //		if (game.getFav().getId()!=pick.getTeam().getId() && game.getDog().getId()!=pick.getTeam().getId())
-		if (game.getFavId()!=pick.getTeamId() && game.getDogId()!=pick.getTeamId())
+		if (!game.getFavId().equals(pick.getTeamId()) && !game.getDogId().equals(pick.getTeamId()))
 			codes.add(PickExceptions.TEAM_NOT_PLAYING_IN_GAME);
 				
 		//check to make sure that the game hasn't started
@@ -233,7 +231,7 @@ public class PickService {
 		
 		//make sure the week matches the game
 //		if (game.getWeek().getId()!=pick.getWeek().getId())
-		if (game.getWeekId()!=pick.getWeekId())
+		if (!game.getWeekId().equals(pick.getWeekId()))
 			codes.add(PickExceptions.WEEK_IS_NOT_VALID);
 				
 		if (!codes.isEmpty())

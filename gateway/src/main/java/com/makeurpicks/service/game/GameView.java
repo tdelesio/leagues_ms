@@ -12,6 +12,7 @@ import scala.annotation.meta.setter;
 
 public class GameView implements Serializable {
 
+	private String id;
 	private double spread = 0.5;
 	private String seasonId;
 	private String favId;
@@ -131,4 +132,12 @@ public class GameView implements Serializable {
 	{
 		return gameStart.isBefore(ZonedDateTime.now());
 	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	
+	
 }

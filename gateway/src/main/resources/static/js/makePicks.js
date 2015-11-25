@@ -5,32 +5,6 @@
 		
 		$scope.page = {};
 		
-//		$scope.pickMap = {};
-//		$scope.gameMetaMap = {};
-//		$scope.showGS = true;
-		
-		//get the games for the week and league
-		
-//		$scope.$on('weekLoaded', function (event) {
-//			$log.debug(event);
-//			$log.debug('MakePickController week='+JSON.stringify($scope.week));
-			
-			//load all the games
-//			leagueService.getGames($scope.week.weekId).then(function(data) {
-//				$log.debug('MakePickController:games='+JSON.stringify(data.data))
-//				$scope.games = data.data;
-//				
-//				
-//			});
-//			
-//			//load all the picks
-//			leagueService.getMyPicks($scope.week.weekId).then(function(data) {
-//				$log.debug('MakePickController:picks='+JSON.stringify(data.data))
-//				$scope.pickMap = data.data;
-//			});
-		
-			
-//		});
 		
 		leagueService.loadMakePicks().then(function(data) {
 			$log.debug('MakePickController:loadMakePicks='+JSON.stringify(data.data))
@@ -47,7 +21,7 @@
 				var local_model = {};
 			
 				local_model.teamId = teamid;
-				local_model.gameid = gameid;
+				local_model.gameId = gameid;
 				local_model.weekId = $scope.week.weekId;
 				
 				if (pickid == undefined)
