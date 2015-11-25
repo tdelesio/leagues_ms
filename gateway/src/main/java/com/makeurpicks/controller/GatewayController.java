@@ -16,6 +16,8 @@ import com.makeurpicks.service.pick.PickIntegrationService;
 import com.makeurpicks.service.week.WeekIntegrationService;
 
 import rx.Observable;
+import rx.Observer;
+import rx.functions.Action1;
 
 @RestController
 public class GatewayController {
@@ -39,17 +41,26 @@ public class GatewayController {
 	
 	@RequestMapping("/makepicks/{weekid}")
 	 public DeferredResult<MakePicks> movieDetails(@PathVariable String weekId, Principal principal) {
-		return buildMakePicks(principal.getName(), weekId);
+//		return buildMakePicks(principal.getName(), weekId);
+		return toDeferredResult(buildMakePicks(principal.getName(), weekId));
 	}
 
 	@RequestMapping("/makepicks")
 	public DeferredResult<MakePicks> makePicks(Principal principal) {
 
-		return buildMakePicks(principal.getName(), null);
+//		return buildMakePicks(principal.getName(), null);
+		return toDeferredResult(buildMakePicks(principal.getName(), null));
+	}
+	
+	@RequestMapping("/makepicks2")
+	public MakePicks makePicks2(Principal principal) {
+
+//		return buildMakePicks(principal.getName(), null);
+		return toNonDeferredResult(buildMakePicks(principal.getName(), null));
 	}
 	
 
-	private DeferredResult<MakePicks> buildMakePicks(String userId, String weekId) {
+	private Observable<MakePicks> buildMakePicks(String userId, String weekId) {
 	
 		DeferredResult<MakePicks> result = new DeferredResult<>();
 		MakePicks makePicksView = new MakePicks();
@@ -59,19 +70,52 @@ public class GatewayController {
 		;
 
 		
-		Observable.zip(gameIntegrationService.getGamesForWeek(makePicksView.getNav().getSelectedWeekId()),
+		return Observable.zip(gameIntegrationService.getGamesForWeek(makePicksView.getNav().getSelectedWeekId()),
 				pickIntegrationService.getPicksForPlayerForWeek(makePicksView.getNav().getSelectedWeekId()), (games, picks) -> {
 					
 					makePicksView.setGames(games);
 					makePicksView.setPicks(picks);
 					return makePicksView;
-				})
-			.subscribe(n -> result.setResult(n));
+				});
+//			.subscribe(n -> )
+//			.subscribe(n -> result.setResult(n));
 		
-		return result;
+//		return result;
 			
 	}
+	
+	public MakePicks toNonDeferredResult(Observable<MakePicks> details)
+	{
+		MakePicks makePicks;
+		return details.toBlocking().last();
+//		details.subscribe(new Action1<MakePicks>() {
+//		    @Override
+//		    public void call(MakePicks picks) {
+//		        makePicks = picks;
+//		    }       
+//		});   
+		
+//		return makePicks;
+	}
 
+	public DeferredResult<MakePicks> toDeferredResult(Observable<MakePicks> details) {
+        DeferredResult<MakePicks> result = new DeferredResult<>();
+        details.subscribe(new Observer<MakePicks>() {
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+            }
+
+            @Override
+            public void onNext(MakePicks makePicks) {
+                result.setResult(makePicks);
+            }
+        });
+        return result;
+    }
 	
 	private Observable<NavigationView> emmitNavigation(String userId, String weekId)
 	{

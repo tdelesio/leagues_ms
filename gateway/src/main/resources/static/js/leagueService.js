@@ -26,7 +26,7 @@
 				     });
 				},
 				
-				loadMakePicks : function () {
+				loadMakePicksPage : function () {
 					$log.debug("leagueService:loadMakePicks");
 					
 					return $http.get('/makepicks').success(function(result) {

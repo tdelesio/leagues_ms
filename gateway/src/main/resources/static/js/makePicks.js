@@ -6,7 +6,7 @@
 		$scope.page = {};
 		
 		
-		leagueService.loadMakePicks().then(function(data) {
+		leagueService.loadMakePicksPage().then(function(data) {
 			$log.debug('MakePickController:loadMakePicks='+JSON.stringify(data.data))
 			$scope.page = data.data;
 			$rootScope.nav = data.data.nav;
@@ -30,6 +30,7 @@
 					method = "PUT";
 				
 				$log.debug("MakePicksController:makePick submittedModel="+JSON.stringify(local_model));
+				
 				$http({
 					method : method,
 					url : '/picks/',
@@ -38,7 +39,10 @@
 					data : JSON.stringify(local_model)
 				}).success(function(res) { 
 	
-					$scope.pickMap[gameId] = res;
+					if ($scope.page.picks == undefined)
+						$scope.page.picks = {};
+					
+					$scope.page.picks[gameid] = res;
 					
 				}).error(function(res) {
 					alert('fail');

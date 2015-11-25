@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.oauth2.client.OAuth2RestOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -34,6 +35,10 @@ private Log log = LogFactory.getLog(PickIntegrationService.class);
     @LoadBalanced
     RestTemplate restTemplate;
 	
+	@Autowired
+    @LoadBalanced
+    private OAuth2RestOperations secureRestTemplate;
+	
 	@HystrixCommand(fallbackMethod = "stubPicks",
             commandProperties = {
                     @HystrixProperty(name = "execution.isolation.strategy", value = "SEMAPHORE")
@@ -44,9 +49,9 @@ private Log log = LogFactory.getLog(PickIntegrationService.class);
             @Override
             public Map<String, PickView> invoke() {
             	
-//            	ParameterizedTypeReference<Map<String, PickView>> responseType = new ParameterizedTypeReference<Map<String, PickView>>() {};
-//                return restTemplate.exchange("http://picks/self/weekid/{weekid}", HttpMethod.GET, null, responseType, weekid).getBody();
-            	return Collections.emptyMap();                
+            	ParameterizedTypeReference<Map<String, PickView>> responseType = new ParameterizedTypeReference<Map<String, PickView>>() {};
+                return secureRestTemplate.exchange("http://pick/picks/self/weekid/{weekid}", HttpMethod.GET, null, responseType, weekid).getBody();
+//            	return Collections.emptyMap();                
             }
         };
     }

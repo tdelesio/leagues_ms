@@ -29,11 +29,11 @@ public class GameIntegrationService {
     @LoadBalanced
     private OAuth2RestOperations secureRestTemplate;
 	
-//    @HystrixCommand(fallbackMethod = "stubGame",
-//            commandProperties = {
-//                    @HystrixProperty(name = "execution.isolation.strategy", value = "SEMAPHORE")
-//            }
-//    )
+    @HystrixCommand(fallbackMethod = "stubGame",
+            commandProperties = {
+                    @HystrixProperty(name = "execution.isolation.strategy", value = "SEMAPHORE")
+            }
+    )
     public GameResponse getGameById(String id)
     {
 //    	final GameResponse response = secureRestTemplate.getForObject("http://game/games/{id}", GameResponse.class, id);
@@ -43,8 +43,8 @@ public class GameIntegrationService {
         return response;
     }
     
-//    @SuppressWarnings("unused")
-//    private GameResponse stubGame(final String id) {
-//    	throw new PickValidationException(PickExceptions.GAME_SERVICE_IS_DOWN);
-//    }
+    @SuppressWarnings("unused")
+    private GameResponse stubGame(final String id) {
+    	throw new PickValidationException(PickExceptions.GAME_SERVICE_IS_DOWN);
+    }
 }
