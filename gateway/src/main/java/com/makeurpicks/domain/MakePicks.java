@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.makeurpicks.service.game.GameView;
+import com.makeurpicks.service.pick.DoublePickView;
 import com.makeurpicks.service.pick.PickView;
 
 public class MakePicks implements Serializable {
@@ -12,7 +13,7 @@ public class MakePicks implements Serializable {
 	private NavigationView nav;
 	private List<GameView> games;
 	private Map<String, PickView> picks;
-	
+	private DoublePickView doublePick;
 	
 
 	public NavigationView getNav() {
@@ -38,6 +39,16 @@ public class MakePicks implements Serializable {
 	public void setPicks(Map<String, PickView> picks) {
 		this.picks = picks;
 	}
+
+	public DoublePickView getDoublePick() {
+		return doublePick;
+	}
+
+	public void setDoublePick(DoublePickView doublePick) {
+		this.doublePick = doublePick;
+	}
+
+	
 	
 	
 }

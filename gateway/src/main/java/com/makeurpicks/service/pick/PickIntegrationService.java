@@ -1,8 +1,6 @@
 package com.makeurpicks.service.pick;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -16,7 +14,6 @@ import org.springframework.security.oauth2.client.OAuth2RestOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.makeurpicks.service.league.LeagueView;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.netflix.hystrix.contrib.javanica.command.ObservableResult;
@@ -60,6 +57,29 @@ private Log log = LogFactory.getLog(PickIntegrationService.class);
     private Map<String, PickView> stubPicks(final String weekId) {
     	
         return Collections.emptyMap();
+    }
+    
+    @HystrixCommand(fallbackMethod = "stubDoublePick",
+            commandProperties = {
+                    @HystrixProperty(name = "execution.isolation.strategy", value = "SEMAPHORE")
+            }
+    )
+    public Observable<DoublePickView> getDoublePickForPlayerForWeek(String weekid) {
+        return new ObservableResult<DoublePickView>() {
+            @Override
+            public DoublePickView invoke() {
+            	
+            	
+            	return secureRestTemplate.exchange("http://pick/picks/double/weekid/{weekid}", HttpMethod.GET, null, DoublePickView.class, weekid).getBody();
+//            	return Collections.emptyMap();                
+            }
+        };
+    }
+
+    @SuppressWarnings("unused")
+    private DoublePickView stubDoublePick(final String weekId) {
+    	
+        return new DoublePickView();
     }
 }
 

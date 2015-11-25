@@ -116,7 +116,22 @@ public class GameView implements Serializable {
 		return gameStart.withZoneSameInstant(ZoneId.of("-5")).format(DateTimeFormatter.ofPattern("EEE MM-dd-yyy hh:mm:ss a"));
 	}
 	
-	public boolean hasScoresEntered()
+	public String getGameWinner()
+	{
+		if (getHasGameStarted() && getHasGameStarted())
+		{
+			if (dogScore+spread > favScore)
+				return dogId;
+			else
+				return favId;
+		}
+		else
+		{ 
+			return "na";
+		}
+	}
+	
+	public boolean getHasScoresEntered()
 	{
 		if (favScore==0&&dogScore==0)
 		{

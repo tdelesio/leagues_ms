@@ -12,12 +12,12 @@ import com.makeurpicks.domain.MakePicks;
 import com.makeurpicks.domain.NavigationView;
 import com.makeurpicks.service.game.GameIntegrationService;
 import com.makeurpicks.service.league.LeagueIntegrationService;
+import com.makeurpicks.service.pick.DoublePickView;
 import com.makeurpicks.service.pick.PickIntegrationService;
 import com.makeurpicks.service.week.WeekIntegrationService;
 
 import rx.Observable;
 import rx.Observer;
-import rx.functions.Action1;
 
 @RestController
 public class GatewayController {
@@ -70,11 +70,18 @@ public class GatewayController {
 		;
 
 		
-		return Observable.zip(gameIntegrationService.getGamesForWeek(makePicksView.getNav().getSelectedWeekId()),
-				pickIntegrationService.getPicksForPlayerForWeek(makePicksView.getNav().getSelectedWeekId()), (games, picks) -> {
+		return Observable.zip(
+				gameIntegrationService.getGamesForWeek(makePicksView.getNav().getSelectedWeekId()),
+				pickIntegrationService.getPicksForPlayerForWeek(makePicksView.getNav().getSelectedWeekId()),
+				pickIntegrationService.getDoublePickForPlayerForWeek(makePicksView.getNav().getSelectedWeekId()),
+				(games, picks, doublePick) -> {
 					
 					makePicksView.setGames(games);
 					makePicksView.setPicks(picks);
+					if (doublePick == null)
+						makePicksView.setDoublePick(new DoublePickView());
+					else		
+						makePicksView.setDoublePick(doublePick);
 					return makePicksView;
 				});
 //			.subscribe(n -> )
