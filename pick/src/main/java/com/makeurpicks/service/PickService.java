@@ -285,9 +285,7 @@ public class PickService {
 		else
 		{
 			//there is no orginal pick, so create a new one
-			DoublePick doublePick = new DoublePick(pick.getWeekId(), pick.getPlayerId());
-			doublePick.setPickId(pickId);
-			
+			DoublePick doublePick = new DoublePick(pick.getWeekId(), pick.getPlayerId(), pickId, game.getId(), game.getHasGameStarted());
 			doublePickRepository.save(doublePick);
 			
 			return doublePick;

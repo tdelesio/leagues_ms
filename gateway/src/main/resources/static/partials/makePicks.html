@@ -1,14 +1,35 @@
 <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+<!-- 
+team status:
+lock
+opponent
+doubleable
+unpicked
+double
+pick
+
+gamestatus:
+double_won
+won
+double_loss
+loss
+locked_double_pick
+locked_pick
+double_pick
+pick
+no_pick
+open
+ -->	
 	
-	<div class="scoreboard shadow" ng-class="game.hasGameStarted ? 'loss' : 'pickable'">
+	<div class="gamebox shadow {{gamestatus}}">
 		<div class="col-sm-12">
 			
 			<pick-row game=game teamid=fav></pick-row>
 
-			<div class="row scorerow fav" ng-click="makePick(game.id, game.favId, nil)"> 
+			<div class="row gamerow {{favstatus}}" ng-click="makePick(game.id, game.favId, nil)"> 
 			
 				<!-- PICK TOOL -->
-				<div class="col-xs-1 pick-selection"><i class="fa fa-check-circle-o hide"></i></div>
+				<div class="col-xs-1 pick-selection-icon"><i class="fa fa-check-circle-o {{favstatus}}"></i></div>
 			
 				<!-- TEAM ICON -->
 				<div class="col-xs-2">
@@ -17,7 +38,7 @@
 			
 				<!-- TEAM NAME ABBR-->
 				<div class="col-xs-5 col-sm-6">
-					<span class="short-name" ng-class="game.favHome ? 'home' : ''">{{game.favShortName}}</span><span class="long-name" ng-class="game.favHome ? 'home' : ''">{{game.favFullName}}-{{favstatus}}</span>
+					<span class="short-name" ng-class="game.favHome ? 'home' : ''">{{game.favShortName}}</span><span class="long-name" ng-class="game.favHome ? 'home' : ''">{{game.favFullName}}</span>
 				</div>
 			
 				<!-- SPREAD -->
@@ -29,10 +50,10 @@
 			
 			<pick-row game=game teamid=dog></pick-row>
 			
-			<div class="row scorerow dog" ng-click="makePick(game.id, game.dogId, nil)"> 
+			<div class="row gamerow {{dogstatus}}" ng-click="makePick(game.id, game.dogId, nil)"> 
 
 				<!-- PICK TOOL -->
-				<div class="col-xs-1 pick-selection"><i class="fa fa-check-circle-o hide"></i></div>
+				<div class="col-xs-1 pick-selection-icon"><i class="fa fa-check-circle-o {{dogstatus}}"></i></div>
 
 				<!-- TEAM ICON -->
 				<div class="col-xs-2">
@@ -41,7 +62,7 @@
 
 				<!-- TEAM NAME ABBR-->
 				<div class="col-xs-5 col-sm-6">
-					<span class="short-name" ng-class="game.favHome ? '' : 'home'">{{game.dogShortName}}</span><span class="long-name" ng-class="game.favHome ? '' : 'home'">{{game.dogFullName}}-{{dogstatus}}</span>
+					<span class="short-name" ng-class="game.favHome ? '' : 'home'">{{game.dogShortName}}</span><span class="long-name" ng-class="game.favHome ? '' : 'home'">{{game.dogFullName}}</span>
 				</div>
 
 				<!-- SPREAD -->
