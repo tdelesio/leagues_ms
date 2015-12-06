@@ -6,6 +6,7 @@ public class DoublePickView {
 	private String pickId="";
 	private String gameId="";
 	private boolean hasDoubleGameStarted=false;
+	private String previousDoubleGameId;
 	
 	public String getId() {
 		return id;
@@ -31,6 +32,13 @@ public class DoublePickView {
 	public void setHasDoubleGameStarted(boolean hasDoubleGameStarted) {
 		this.hasDoubleGameStarted = hasDoubleGameStarted;
 	}
+	public String getPreviousDoubleGameId() {
+		return previousDoubleGameId;
+	}
+	public void setPreviousDoubleGameId(String previousDoubleGameId) {
+		this.previousDoubleGameId = previousDoubleGameId;
+	}
+
 	
 	
 }

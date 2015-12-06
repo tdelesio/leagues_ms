@@ -78,14 +78,24 @@ public class PickService {
 	}
 
 
-	public Pick updatePick(Pick pick, String loggedInPlayerId)
+	public Pick updatePick(Pick pick)
 	{
 		//make sure all the parms are set
 		validatePick(pick);  
 		
 		Pick pickFromDS = pickRepository.findOne(pick.getId());
-		if (pickFromDS.getPlayerId() != loggedInPlayerId)
+		if (pickFromDS == null)
+			throw new PickValidationException(PickExceptions.PICK_IS_NULL);
+		if (!pickFromDS.getPlayerId().equals(pick.getPlayerId()))
 			throw new PickValidationException(PickExceptions.UNAUTHORIZED_USER);
+		
+		//check to see if the pick is the existing double pick
+		DoublePick doublePick = doublePickRepository.findOne(DoublePick.buildString(pick.getWeekId(), pick.getPlayerId()));
+		if (doublePick != null && doublePick.getPickId().equals(pick.getId()))
+		{
+			//the game being updated is the double so we need to clear it out
+			doublePickRepository.delete(doublePick);
+		}
 		
 		//save pick by pick id
 		pickRepository.save(pick);
@@ -276,9 +286,11 @@ public class PickService {
 				throw new PickValidationException(PickExceptions.GAME_HAS_ALREADY_STARTED);
 			}
 			
-			//update the to the new pick and update the repo
 			orginialDoublePick.setPickId(pickId);
-			doublePickRepository.save(orginialDoublePick);
+			orginialDoublePick.setGameId(pick.getGameId());
+			orginialDoublePick.setHasDoubleGameStarted(false);
+			orginialDoublePick.setPreviousDoubleGameId(orginalGame.getId());
+			doublePickRepository.save(orginialDoublePick);			
 			
 			return orginialDoublePick;
 		}

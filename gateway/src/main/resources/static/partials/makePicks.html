@@ -19,17 +19,17 @@ double_pick
 pick
 no_pick
 open
- -->	
+ -->
+	<pick-row game=game status=status page=page	></pick-row>
 	
-	<div class="gamebox shadow {{gamestatus}}">
+	<div class="gamebox shadow {{status.gamestatus[game.id]}}">
 		<div class="col-sm-12">
 			
-			<pick-row game=game teamid=fav></pick-row>
-
-			<div class="row gamerow {{favstatus}}" ng-click="makePick(game.id, game.favId, nil)"> 
+			
+			<div class="row gamerow {{status.teamstatus[game.favId]}}" ng-click="(status.teamstatus[game.favId] === 'opponent' || status.teamstatus[game.favId] === 'doubleable' || status.teamstatus[game.favId] === 'unpicked' ) && makePick(game, 'fav', $index)"> 
 			
 				<!-- PICK TOOL -->
-				<div class="col-xs-1 pick-selection-icon"><i class="fa fa-check-circle-o {{favstatus}}"></i></div>
+				<div class="col-xs-1 pick-selection-icon"><i class="fa fa-check-circle-o {{status.teamstatus[game.favId]}}"><span ng-show="status.teamstatus[game.favId] === 'double'">x2</span></i></div>
 			
 				<!-- TEAM ICON -->
 				<div class="col-xs-2">
@@ -48,12 +48,10 @@ open
 				<div class="col-xs-1">{{game.favScore}}</div>
 			</div>
 			
-			<pick-row game=game teamid=dog></pick-row>
-			
-			<div class="row gamerow {{dogstatus}}" ng-click="makePick(game.id, game.dogId, nil)"> 
+			<div class="row gamerow {{status.teamstatus[game.dogId]}}" ng-click="(status.teamstatus[game.dogId] === 'opponent' || status.teamstatus[game.dogId] === 'doubleable' || status.teamstatus[game.dogId] === 'unpicked' ) && makePick(game, 'dog', $index)"> 
 
 				<!-- PICK TOOL -->
-				<div class="col-xs-1 pick-selection-icon"><i class="fa fa-check-circle-o {{dogstatus}}"></i></div>
+				<div class="col-xs-1 pick-selection-icon"><i class="fa fa-check-circle-o {{status.teamstatus[game.dogId]}}"><span ng-show="status.teamstatus[game.dogId] === 'double'">x2</span></i></div>
 
 				<!-- TEAM ICON -->
 				<div class="col-xs-2">

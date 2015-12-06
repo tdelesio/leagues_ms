@@ -64,7 +64,7 @@ public class PickController  {
 		
 		log.debug(pick);
 		
-		return pickService.updatePick(pick, pick.getPlayerId());
+		return pickService.updatePick(pick);
 	}
 	
 	

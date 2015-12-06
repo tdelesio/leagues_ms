@@ -202,6 +202,10 @@ div.opponent:hover	{
 	padding-top:5px;	
 }
 
+.pick-selection-icon .unpicked {
+	visibility: hidden;	
+}
+
 .pick-selection-icon .opponent {
 	visibility: hidden;	
 }
@@ -222,9 +226,21 @@ div.opponent:hover	{
 /* 	font-size:15px; */
 }
 
-.won {border-color:#00CC00;}
+/* gamestatus */
+.won {
+	border-color:#00CC00;
+}
 
-.loss {border-color:#FF0000;}
+.loss {
+	border-color:#FF0000;
+}
+	
+/* .double_pick {  */
+/* 	border-width: 3px;	 */
+/* } */
+
+
+
 	
 /* 	
 unused classes
@@ -264,8 +280,7 @@ unused classes
 					
 		.hasdouble { color:#353434;}
 		.double .hasdouble { color:#FEB000; font-weight:bold; position:absolute; top:-4px;}			
-		.doubled { font-weight:bold }
-		.doubled:after {content: "x2";}
+		
 		#logout a { color: white; }		
 		
 /************* 
@@ -305,8 +320,8 @@ STANDINGS
 
 
 
-.loser {color:#999;}
-.double {background-color:#0c253f; border-width:3px;}
+/* .loser {color:#999;} */
+/* .double {background-color:#0c253f; border-width:3px;} */
 
 
 

@@ -1,55 +1,26 @@
 (function () {
 	var app = angular.module('navigation', []);
 
-	app.controller('NavigationController', function ($scope, $rootScope, $http, $window, $log, leagueService) {
+	app.controller('NavigationController', function ($scope, $rootScope, $http, $window, $log, makePickPageService) {
 		
 		$scope.nav = {};
 		$scope.week = {};
 		
-		$scope.$on('pageLoaded', function (event) {
-			$scope.nav = $rootScope.nav;
-			$scope.week.weekId = $rootScope.nav.selectedWeekId;
+		makePickPageService.getPage().then(function(data) {
+			$log.debug('MakePickController:loadMakePicks='+JSON.stringify(data))
+			$scope.nav = data.nav; 
+			$scope.week.weekId = data.nav.selectedWeekId;
 		});
-//		$scope.league = {};
-//		$scope.week = {};
-//		
-//		$http.get('/makepicks').success(function(data) {
-//			$scope.username = data.nav.username;
-//			$scope.leagues = data.nav.leagues;
-//			$scope.league.seasonId = data.nav.selectedLeagueId;
-//			$scope.weeks = data.nav.weeks;
-//			$scope.week.weekId = data.nav.selectedWeekId;
-//			
-//			$scope.games = data.games;
-//			$scope.pickMap = data.leagues;
-//		
-//			$rootScope.$broadcast('weekLoaded');
+		
+//		$scope.$watch('page', function () {
+//			$log.debug(JSON.stringify($scope.page));
+//			$scope.nav = $scope.page.nav;
+//			$scope.week.weekId = $scope.page.nav.selectedWeekId;
 //		});
 		
-//		$http.get('/user').success(function(data) {
-//			$scope.username = data.name;
-//		});
-
-		
-//		//get the leagues
-//		leagueService.getLeagues().then(function(data) {
-//			
-//			$log.debug('SettingsController:Leagues=' +JSON.stringify(data));
-//
-//			//set them into the leagues values
-//			$scope.leagues = data;
-//			$scope.league.seasonId = data[0].seasonId;
-//			
-//			$http.get('/weeks/seasonid/'+$scope.league.seasonId).success(function(data) {
-//				
-//				$log.debug('SettingsController:Weeks='+JSON.stringify(data))
-//				$scope.weeks = data;
-//				$scope.week.weekId = data[0].id;
-//			
-//				$rootScope.$broadcast('weekLoaded');
-//			});
-//			
-//			
+//		$scope.$on('pageLoaded', function (event) {
+//			$scope.nav = $rootScope.nav;
+//			$scope.week.weekId = $rootScope.nav.selectedWeekId;
 //		});
 		
 		this.settings = function getSettings() {

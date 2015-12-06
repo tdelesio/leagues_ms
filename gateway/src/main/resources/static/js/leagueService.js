@@ -24,14 +24,6 @@
 					return $http.get('/picks/self/weekid/'+weekId).success(function(result) {
 				           return result.data;
 				     });
-				},
-				
-				loadMakePicksPage : function () {
-					$log.debug("leagueService:loadMakePicks");
-					
-					return $http.get('/makepicks').success(function(result) {
-				           return result.data;
-				     });
 				}
 				
 				

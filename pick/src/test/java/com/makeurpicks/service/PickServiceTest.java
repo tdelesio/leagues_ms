@@ -332,7 +332,7 @@ private static ConfigurableApplicationContext server;
 		
 		try
 		{
-			pickService.updatePick(pick1, player1);
+			pickService.updatePick(pick1);
 			
 			fail();
 		}
@@ -353,7 +353,7 @@ private static ConfigurableApplicationContext server;
 		try
 		{
 			pick2.setTeamId(team1);
-			pickService.updatePick(pick2, player1);
+			pickService.updatePick(pick2);
 			
 			fail();
 		}
@@ -363,7 +363,7 @@ private static ConfigurableApplicationContext server;
 		}
 		
 		pick2.setTeamId(team4);
-		pickService.updatePick(pick2, player1);
+		pickService.updatePick(pick2);
 			
 		assertEquals(team4, pickRepository.findOne(pick2.getId()).getTeamId());
 

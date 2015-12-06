@@ -5,6 +5,12 @@ public class DoublePick extends AbstractModel {
 	private String pickId;
 	private String gameId;
 	private boolean hasDoubleGameStarted=false;
+	private String previousDoubleGameId;
+	
+	public DoublePick()
+	{
+		
+	}
 	
 	public DoublePick(String weekId, String playerId, String pickId, String gameId, boolean gameStarted)
 	{
@@ -32,8 +38,17 @@ public class DoublePick extends AbstractModel {
 //		this.gameId = gameId;
 //	}
 
+	
 	public String getGameId() {
 		return gameId;
+	}
+
+	public String getPreviousDoubleGameId() {
+		return previousDoubleGameId;
+	}
+
+	public void setPreviousDoubleGameId(String previousDoubleGameId) {
+		this.previousDoubleGameId = previousDoubleGameId;
 	}
 
 	public void setGameId(String gameId) {
