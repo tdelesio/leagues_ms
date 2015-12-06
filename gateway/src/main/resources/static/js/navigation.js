@@ -7,10 +7,21 @@
 		$scope.week = {};
 		
 		makePickPageService.getPage().then(function(data) {
-			$log.debug('MakePickController:loadMakePicks='+JSON.stringify(data))
+//			$log.debug('NavigationController:getPage='+JSON.stringify(data))
 			$scope.nav = data.nav; 
 			$scope.week.weekId = data.nav.selectedWeekId;
 		});
+		
+		$scope.changeWeek = function() {
+			
+			
+			
+			//$log.debug("NavigationController:changeWeek $scope.nav.selectedWeekId="+$scope.nav.selectedWeekId);
+			//makePickPageService.setWeek($scope.nav.selectedWeekId);
+			$log.debug('weekChanged week='+$scope.week.weekId);
+			$rootScope.$broadcast('weekChanged', $scope.week.weekId);
+			
+		};
 		
 //		$scope.$watch('page', function () {
 //			$log.debug(JSON.stringify($scope.page));

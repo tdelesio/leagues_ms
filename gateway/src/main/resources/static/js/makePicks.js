@@ -204,19 +204,8 @@
 						scope.status.teamstatus[favId] = favstatus;
 						scope.status.teamstatus[dogId] = dogstatus;
 						
-						console.log('favId='+favId+' dogId='+dogId+' pickedTeam='+pickedTeamIdForGame+' gameWinner='+teamIdForGameWinner+' gamestatus='+scope.status.gamestatus[scope.game.id]+' favstatus='+scope.status.teamstatus[favId]+' dogstatus='+scope.status.teamstatus[dogId]);
-//					}
-//				});
-				
-				//set the fav and dog status to decide how to handle linking
-//				if (attrs.teamid === 'fav') {
-//					scope.favstatus = teamstatus;
-//				}
-//				else {
-//					scope.dogstatus = teamstatus;
-//				}
-				
-				//set the game status for display
+//						console.log('favId='+favId+' dogId='+dogId+' pickedTeam='+pickedTeamIdForGame+' gameWinner='+teamIdForGameWinner+' gamestatus='+scope.status.gamestatus[scope.game.id]+' favstatus='+scope.status.teamstatus[favId]+' dogstatus='+scope.status.teamstatus[dogId]);
+
 				
 				
 			}
@@ -258,33 +247,24 @@
 		$scope.status = {};
 		$scope.status.gamestatus = {};
 		$scope.status.teamstatus = {};
-//		$scope.page = 
-		
-//		$log.debug('MakePickController:loadMakePicks='+JSON.stringify($scope.page))
-		
-//		leagueService.loadMakePicksPage().then(function(data) {
+
 		makePickPageService.getPage().then(function(data) {
-			$log.debug('MakePickController:loadMakePicks='+JSON.stringify(data))
+			//$log.debug('MakePickController:loadMakePicks='+JSON.stringify(data))
 			$scope.page = data;
 			$rootScope.nav = data.nav;
 			$rootScope.$broadcast('pageLoaded');
 		});
 		
+		$scope.$on('weekChanged', function (events, args) {
+			$log.debug('week='+args);
+			$http.get('/makepicks/'+args)
+	        .success(function(data) {
+//	        	$log.debug('MakePicksController:changeWeek='+JSON.stringify(data))
+	        	$scope.page = data;
+	        });
+		});
 		
-//		$scope.gamestatus = {};
-//		$scope.teamstatus = {};
-//		$scope.addgamestatus = function (id, status) {
-//			$scope.gamestatus[id]=status;
-//		}
- //		$scope.page = makePickPageService.getPage();
-		
-//		 $http.get('/makepicks')
-//	        .success(function(data) {
-//	        	$scope.page = data;
-//	        }).error(function (data) {
-//		 	
-//		 	});
-		
+				
 		$scope.makePick = function(game, rowid, $index) {
 		
 			

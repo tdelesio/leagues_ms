@@ -30,7 +30,7 @@
 						</div>
 						<span id="username">{{nav.username}}</span>
 						<div id="week-container">
-							<select ng-model="week.weekId" id="week-select" >
+							<select ng-model="week.weekId" id="week-select" ng-change="changeWeek()">
 								<option ng-repeat="week in nav.weeks" value="{{week.id}}">
 							 		Week {{week.weekNumber}}
 								</option>
