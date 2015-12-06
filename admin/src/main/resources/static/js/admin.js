@@ -280,6 +280,24 @@
 			});
 		};
 		
+		this.autoScore = function(week) {
+			
+			var week = {};
+			week.id = $scope.add_game_model.weekId;
+			$log.debug('autoScore: week='+JSON.stringify(week));
+			$http({
+				method : "POST",
+				url : '/admin/games/autoscore',
+				contentType : "application/json",
+				dataType : "json",
+				data : JSON.stringify(week)
+			}).success(function(res) { 
+//				$window.location.href = 'index.html';
+			}).error(function(res) {
+				alert('fail');
+			});
+		}
+		
 	
 		
 //		$http.get('teams/leaguetype/pickem').success(function(data) {

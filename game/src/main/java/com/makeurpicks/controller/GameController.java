@@ -60,6 +60,13 @@ public class GameController {
 		gameService.autoSetupWeek(week.getSeasonId());
 	}
 	
+	@RequestMapping(method=RequestMethod.POST, value="/autoscore")
+	@PreAuthorize("hasRole('ADMIN')")
+	public void callNFLandAutoScore(@RequestBody Week week)
+	{
+		gameService.updateScoreFromNFL(week.getId());
+	}
+	
 	
 	
 	

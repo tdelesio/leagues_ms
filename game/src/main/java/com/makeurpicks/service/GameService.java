@@ -1,13 +1,12 @@
 package com.makeurpicks.service;
 
-import java.time.DateTimeException;
 import java.time.ZonedDateTime;
-import java.time.temporal.TemporalField;
 import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.hibernate.id.enhanced.LegacyHiLoAlgorithmOptimizer;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Component;
@@ -27,6 +26,8 @@ import com.makeurpicks.repository.GameRepository;
 @Component
 public class GameService {
 
+	private Log log = LogFactory.getLog(GameService.class);
+	
 	@Autowired
 	private GameRepository gameRepository;
 	
@@ -115,6 +116,42 @@ public class GameService {
 		RestTemplate restTemplate = new RestTemplate();
 		restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
 		return restTemplate.getForObject("http://www.nfl.com/liveupdate/scorestrip/ss.json", NFLWeek.class);
+	}
+	
+	public void updateScoreFromNFL(String weekId)
+	{
+		NFLWeek nflWeek = loadFromNFL();
+		
+		
+		for (NFLGame nflGame:nflWeek.getGms())
+		{
+			Team home = teamService.getTeamByShortName("pickem", nflGame.getH());
+			Team away = teamService.getTeamByShortName("pickem", nflGame.getV());
+			
+			Game game = gameRepository.findByWeekIdAndFavIdAndDogId(weekId, home.getId(), away.getId());
+			if (game == null)
+			{
+				game = gameRepository.findByWeekIdAndFavIdAndDogId(weekId, away.getId(), home.getId());
+				if (game == null)
+				{
+					log.debug("No game found for "+home.getFullTeamName()+ " - "+away.getFullTeamName());
+					//no game found, continue;
+					continue;
+				}
+				else
+				{
+					game.setFavScore(nflGame.getVs());
+					game.setDogScore(nflGame.getHs());
+				}
+			}
+			else
+			{
+				game.setFavScore(nflGame.getHs());
+				game.setDogScore(nflGame.getVs());
+			}
+			
+			updateGameScore(game);
+		}
 	}
 	
 	public void autoSetupWeek(String seasonId)

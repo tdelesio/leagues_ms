@@ -12,4 +12,5 @@ public interface GameRepository extends CrudRepository<Game, String>{
 
 	public List<Game> findByWeekId(String weekId);
 	public List<Game> findByWeekIdOrderByGameStart(String weekId);
+	public Game findByWeekIdAndFavIdAndDogId(String weekId, String favId, String dogId);
 }
