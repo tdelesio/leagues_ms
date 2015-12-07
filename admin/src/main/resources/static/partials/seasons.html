@@ -1,23 +1,23 @@
 
-<h2>Leagues:</h2>
+<h2>Seasons:</h2>
 <table class="table table-striped table-hover ">
 <thead>
 <tr>
 	<th>edit</th>
 	<th>id</th>
-	<th>admin</th>
-	<th>season</th>
-	<th>league name</th>
+	<th>type</th>
+	<th>start</th>
+	<th>end</th>
 	</tr>
 </thead>
-<tr id="league" ng-repeat="league in leagues">
+<tr id="season" ng-repeat="season in seasons">
 
 <!-- <%if (games.gameStarted && (games.favScore !=0 || games.dogScore != 0)) {%>background-color: teal;<%}%> -->
 	<td><a href="">Edit</a></td>
-	<td>{{league.id}}</td> 
-	<td>{{league.adminId}}</td>
-	<td>{{league.seasonId}}</td>
-	<td>{{league.leagueName}}</td>
+	<td>{{season.id}}</td> 
+	<td>{{season.leagueType}}</td>
+	<td>{{season.startYear}}</td>
+	<td>{{season.endYear}}</td>
 		
 </tr>
 </table>

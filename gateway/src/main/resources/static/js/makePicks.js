@@ -56,8 +56,12 @@
 							//is team picked?
 							if (favId === pickedTeamIdForGame) {
 								//picked team matches compared team
-		
-								favstatus = "pick";
+								
+								if (doublePickId === pickIdForGame) {
+									favstatus = "double"
+								} else {
+									favstatus = "pick";
+								}
 							} else {
 								//normal pick lose
 								favstatus = "not_pick";
@@ -66,7 +70,11 @@
 							if (dogId === pickedTeamIdForGame) {
 								//picked team matches compared team
 		
-								dogstatus = "pick";
+								if (doublePickId === pickIdForGame) {
+									dogstatus = "double"
+								} else {
+									dogstatus = "pick";
+								}
 							} else {
 								//normal pick lose
 								dogstatus = "not_pick";
@@ -204,7 +212,7 @@
 						scope.status.teamstatus[favId] = favstatus;
 						scope.status.teamstatus[dogId] = dogstatus;
 						
-//						console.log('favId='+favId+' dogId='+dogId+' pickedTeam='+pickedTeamIdForGame+' gameWinner='+teamIdForGameWinner+' gamestatus='+scope.status.gamestatus[scope.game.id]+' favstatus='+scope.status.teamstatus[favId]+' dogstatus='+scope.status.teamstatus[dogId]);
+						console.log('favId='+favId+' dogId='+dogId+' pickedTeam='+pickedTeamIdForGame+' gameWinner='+teamIdForGameWinner+' gamestatus='+scope.status.gamestatus[scope.game.id]+' favstatus='+scope.status.teamstatus[favId]+' dogstatus='+scope.status.teamstatus[dogId]);
 
 				
 				

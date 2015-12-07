@@ -21,6 +21,10 @@
 		      url: "/leagues",
 		      templateUrl: "createLeague.html"
 		    })
+		   .state('seasons', {
+		      url: "/seasons",
+		      templateUrl: "createSeasons.html"
+		    })
 		});
 	
 	app.directive('chrome', function() {
@@ -72,6 +76,20 @@
 		};
 	});
 	
+	app.directive('seasons', function() {
+		return {
+			restrict: 'E',
+			templateUrl: 'partials/seasons.html'
+		};
+	});
+	
+	app.directive('weeks', function() {
+		return {
+			restrict: 'E',
+			templateUrl: 'partials/weeks.html'
+		};
+	});
+	
 	app.directive('editGame', function() {
 		return {
 			restrict: 'E',
@@ -104,11 +122,13 @@
 		});
 	});
 	
-	app.controller('SetupWeekController', function ($scope, $http, $log, $window, leagueService) {
+	app.controller('SetupWeekController', function ($scope, $http, $log, $window, $rootScope, leagueService) {
 		$log.debug('SetupWeekController');
 		$scope.add_game_model = {};
 		$scope.weeksSetup = false;
 		$scope.showEdit = false;
+		$scope.seasons = {};
+		$scope.weeks = {};
 		
 		//set default spread
 		$scope.add_game_model.spread = 3.5;
@@ -129,16 +149,18 @@
 	    
 		$scope.add_game_model.favHome = true;
 		
-		leagueService.getLeagues().then(function(data) {
+//		leagueService.getLeagues().then(function(data) {
+		$http.get('/admin/seasons/current').success(function(data) {
+			$scope.seasons = data;
 			
 			$log.debug('SetupController:Leagues=' +JSON.stringify(data));
 //			$http.get('leagues/').success(function(data) {
-			$scope.leagues = data;
+//			$scope.leagues = data;
 				
 			if (data[0] === undefined)
 				$window.location.href = '/admin/#/leagues';
 				
-				$scope.add_game_model.seasonId = data[0].seasonId;
+				$scope.add_game_model.seasonId = data[0].id;
 				
 				$http.get('/admin/weeks/seasonid/'+$scope.add_game_model.seasonId).success(function(data) {
 				
@@ -298,6 +320,26 @@
 			});
 		}
 		
+		$scope.changeWeek = function() {
+			
+			//$log.debug("NavigationController:changeWeek $scope.nav.selectedWeekId="+$scope.nav.selectedWeekId);
+			//makePickPageService.setWeek($scope.nav.selectedWeekId);
+			$log.debug('weekChanged week='+$scope.add_game_model.weekId);
+			$rootScope.$broadcast('weekChanged', $scope.add_game_model.weekId);
+			
+		};
+		
+		$scope.$on('weekChanged', function (events, args) {
+			$log.debug('week='+args);
+			
+			leagueService.getGames(args).then(function(data) {
+				$log.debug('SetupController:weekChanged='+JSON.stringify(data.data))
+				$scope.games = data.data;
+			
+			});
+			
+		});
+		
 	
 		
 //		$http.get('teams/leaguetype/pickem').success(function(data) {
@@ -306,31 +348,25 @@
 	})
 	
 	
-	
-	app.controller('CreateLeagueController', function ($scope, $http, $window, $log, leagueService) {
-	
-		$scope.league = {};
-		$scope.season = {};
-		$scope.showgames=true;
+	app.controller('CreateSeasonController', function ($scope, $http, $window, $log, leagueService) {
 		
-		leagueService.getLeagues().then(function(data) {
-			$scope.leagues = data;
-		});
+		$scope.showseasons=true;
+		$scope.season={};
+		$scope.season.leagueType = "pickem";
+		$scope.season.startYear = 2015;
+		$scope.season.endYear = 2016;
 		
 		$http.get('/admin/seasons/current').success(function(data) {
 			$scope.seasons = data;
 			if (data[0] === undefined)
-				$scope.showgames=false;
-			$scope.league.seasonId = data[0].id;
+				$scope.showseasons=false;
 		});
 		
-		$scope.season.startYear = 2015;
-		$scope.season.endYear = 2016;
-		$scope.season.leagueType = "pickem";
 		
 		this.addSeason = function() {
 
-			$log.debug("CreateLeagueController:addSeason");
+		
+			$log.debug("CreateSeasonController:addSeason");
 			
 			$http({
 				method : "POST",
@@ -353,6 +389,29 @@
 				alert('fail');
 			});
 		}
+	});
+	
+	app.controller('CreateLeagueController', function ($scope, $http, $window, $log, leagueService) {
+	
+		$scope.league = {};
+		$scope.season = {};
+		$scope.showgames=true;
+		
+		leagueService.getLeagues().then(function(data) {
+			$scope.leagues = data;
+		});
+		
+		$http.get('/admin/seasons/current').success(function(data) {
+			$scope.seasons = data;
+			if (data[0] === undefined)
+				$scope.showgames=false;
+			$scope.league.seasonId = data[0].id;
+		});
+		
+		$scope.season.startYear = 2015;
+		$scope.season.endYear = 2016;
+		$scope.season.leagueType = "pickem";
+		
 		
 		this.addLeague = function() {
 
@@ -383,11 +442,23 @@
 	
 	app.controller('CreateWeekController', function ($scope, $http, $window, $log, leagueService) {
 		$scope.week = {};
+		$scope.weeks = {};
+//		leagueService.getLeagues().then(function(data) {
+//			$scope.leagues = data;
+//			$scope.week.seasonId = data[0].seasonId;
+//		});
 		
-		leagueService.getLeagues().then(function(data) {
-			$scope.leagues = data;
-			$scope.week.seasonId = data[0].seasonId;
+		$http.get('/admin/seasons/current').success(function(data) {
+			$scope.seasons = data;
+			$scope.week.seasonId = data[0].id;
+			
+			var url = '/admin/weeks/seasonid/'+data[0].id;
+			$http.get(url).success(function(data) {
+				$scope.weeks = data;
+			});
 		});
+		
+		
 		
 		this.autoWeek = function(week) {
 			$log.debug('autoWeek: week='+JSON.stringify(week));

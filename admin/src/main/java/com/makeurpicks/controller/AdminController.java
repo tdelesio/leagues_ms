@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.makeurpicks.service.AdminService;
+import com.makeurpicks.service.Dummy;
+
 @RestController
 public class AdminController {
 
@@ -18,6 +21,10 @@ public class AdminController {
 //    @Value("${config.oauth2.resourceURI}")
 //    private String resourceURI;
 	
+	
+	@Autowired
+	private AdminService adminService;
+	
 	@RequestMapping("/user")
     public Object home(Principal principal) {
 //        return restTemplate.getForObject(resourceURI, Object.class);
@@ -25,5 +32,10 @@ public class AdminController {
     }
 	
 
+	@RequestMapping("/dummy")
+	public @ResponseBody Dummy createDummyData()
+	{
+		return adminService.createDummyWeeks();
+	}
 }
 

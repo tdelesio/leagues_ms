@@ -216,14 +216,18 @@ div.opponent:hover	{
 
 .won .pick-selection-icon { 
 	color:#00CC00; 
-/* 	padding-top:5px;  */
-/* 	font-size:17px; */
+}
+
+.double_won .pick-selection-icon { 
+	color:#00CC00; 
 }
 	
 .loss .pick-selection-icon {
 	color:#FF0000;  
-/* 	padding-top:5px;  */
-/* 	font-size:15px; */
+}
+
+.double_loss .pick-selection-icon {
+	color:#FF0000;  
 }
 
 /* gamestatus */
@@ -231,8 +235,18 @@ div.opponent:hover	{
 	border-color:#00CC00;
 }
 
+.double_won {
+	border-color:#00CC00;
+	border-width: 4px;
+}
+
 .loss {
 	border-color:#FF0000;
+}
+
+.double_loss {
+	border-color:#FF0000;
+	border-width: 4px;
 }
 	
 /* .double_pick {  */

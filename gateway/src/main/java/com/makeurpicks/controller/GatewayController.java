@@ -40,9 +40,9 @@ public class GatewayController {
     }
 	
 	@RequestMapping("/makepicks/{weekid}")
-	 public DeferredResult<MakePicks> movieDetails(@PathVariable String weekId, Principal principal) {
+	 public DeferredResult<MakePicks> movieDetails(@PathVariable String weekid, Principal principal) {
 //		return buildMakePicks(principal.getName(), weekId);
-		return toDeferredResult(buildMakePicks(principal.getName(), weekId));
+		return toDeferredResult(buildMakePicks(principal.getName(), weekid));
 	}
 
 	@RequestMapping("/makepicks")

@@ -2,11 +2,11 @@
 <form name="addGame" ng-show="weeksSetup" ng-submit="setupCtrl.addGame(add_game_model)" class="form-horizontal">
 	<fieldset>
 		<div class="form-group">
-			<label for="league-select" class="col-lg-2 control-label">League</label>
+			<label for="season-select" class="col-lg-2 control-label">Season</label>
 			<div class="col-lg-10">
-        		<select ng-model="add_game_model.seasonId" id="league-select" class="form-control">
-					<option ng-repeat="league in leagues" value="{{league.seasonId}}">
-				 		{{league.leagueName}}
+				<select ng-model="add_game_model.seasonId" required id="season-select"  ng-change="changeSeason()">
+					<option ng-repeat="season in seasons" value="{{season.id}}">
+		 				{{season.leagueType}} ({{season.startYear}} - {{season.endYear}})
 					</option>
 				</select>
      		</div>
@@ -14,7 +14,7 @@
 		<div class="form-group">
 			<label for="week-select" class="col-lg-2 control-label">Week</label>
 			<div class="col-lg-10">
-				<select ng-model="add_game_model.weekId" id="week-select" class="form-control">
+				<select ng-model="add_game_model.weekId" id="week-select" class="form-control" ng-change="changeWeek()">
 					<option ng-repeat="week in weeks" value="{{week.id}}">
 				 		{{week.weekNumber}}
 					</option>

@@ -4,8 +4,8 @@
 		<label for="league-select" class="col-lg-2 control-label">League</label>
 		<div class="col-lg-10">
 			<select ng-model="week.seasonId" required id="league-select" class="form-control">
-				<option ng-repeat="league in leagues" value="{{league.seasonId}}">
-					 {{league.leagueName}}
+				<option ng-repeat="season in seasons" value="{{season.id}}">
+					 {{season.leagueType}} ({{season.startYear}} - {{season.endYear}})
 				</option>
 			</select>
 		</div>
@@ -20,6 +20,7 @@
    		<div class="col-lg-10 col-lg-offset-2">
    			<button class="btn btn-primary">Add Week</button>
    		</div>
+   		<br/>
    		<br/>
    		<div class="col-lg-10 col-lg-offset-2">
    			<a href="" ng-click="createCtrl.autoWeek()" class="btn btn-primary">Auto Create Week</a>
