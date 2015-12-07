@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +28,8 @@ import com.makeurpicks.repository.PicksByWeekRepository;
 @Component
 public class PickService {
 
+	private Log log = LogFactory.getLog(PickService.class);
+	
 	@Autowired
 	private PickRepository pickRepository;
 	
@@ -221,8 +225,8 @@ public class PickService {
 			codes.add(PickExceptions.TEAM_NOT_PLAYING_IN_GAME);
 				
 		//check to make sure that the game hasn't started
-		if (game.getHasGameStarted())
-			codes.add(PickExceptions.GAME_HAS_ALREADY_STARTED);
+//		if (game.getHasGameStarted())
+//			codes.add(PickExceptions.GAME_HAS_ALREADY_STARTED);
 		
 		//need to make sure that the user is in that league
 //		List<LeagueResponse> leagues = getLeaguesForPlayer(pick.getPlayerId());

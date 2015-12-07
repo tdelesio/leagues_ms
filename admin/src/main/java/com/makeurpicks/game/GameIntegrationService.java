@@ -29,4 +29,9 @@ private Log log = LogFactory.getLog(GameIntegrationService.class);
     {
     	return secureRestTemplate.postForEntity("http://game/games/", gameView, GameView.class).getBody();
     }
+    
+    public void updateGame(GameView gameView)
+    {
+    	secureRestTemplate.put("http://game/games/", gameView);
+    }
 }

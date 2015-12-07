@@ -104,7 +104,7 @@ public class AdminService {
 		double_won.setWeekId(week1.getId());
 		double_won.setFavId("gb");
 		double_won.setDogId("det");
-		double_won.setGameStart(ZonedDateTime.now().minusDays(1));
+		double_won.setGameStart(ZonedDateTime.now().plusDays(1));
 		double_won.setFavScore(35); 
 		double_won.setDogScore(22);
 		double_won = gameIntegrationService.createGame(double_won);
@@ -125,10 +125,13 @@ public class AdminService {
 		DoublePickView double_won_doublepick = new DoublePickView();
 		double_won_doublepick.setGameId(double_won.getId());
 		double_won_doublepick.setPickId(double_won_pick.getId());
-		double_won_doublepick = pickIntegrationService.createDoublePick(double_won_doublepick);
-		if (double_won_doublepick == null || double_won_doublepick.getId() == null)
-			throw new RuntimeException();		
-		dummy.addDouble(double_won_doublepick);
+		pickIntegrationService.createDoublePick(double_won_doublepick);
+//		if (double_won_doublepick == null || double_won_doublepick.getId() == null)
+//			throw new RuntimeException();		
+//		dummy.addDouble(double_won_doublepick);
+		
+		double_won.setGameStart(ZonedDateTime.now().minusDays(2));
+		gameIntegrationService.updateGame(double_won);
 		
 		//pick must be tb
 		GameView won = new GameView();
@@ -158,7 +161,7 @@ public class AdminService {
 		double_loss.setWeekId(week2.getId());
 		double_loss.setFavId("nyj");
 		double_loss.setDogId("nyg");
-		double_loss.setGameStart(ZonedDateTime.now().minusDays(1));
+		double_loss.setGameStart(ZonedDateTime.now().plusDays(1));
 		double_loss.setFavScore(9);
 		double_loss.setDogScore(0);
 		double_loss = gameIntegrationService.createGame(double_loss);
@@ -179,10 +182,13 @@ public class AdminService {
 		DoublePickView double_loss_doublepick = new DoublePickView();
 		double_loss_doublepick.setGameId(double_loss.getId());
 		double_loss_doublepick.setPickId(double_loss_pick.getId());
-		double_loss_doublepick = pickIntegrationService.createDoublePick(double_loss_doublepick);
-		if (double_loss_doublepick == null || double_loss_doublepick.getId() == null)
-			throw new RuntimeException();
-		dummy.addDouble(double_loss_doublepick);
+		pickIntegrationService.createDoublePick(double_loss_doublepick);
+//		if (double_loss_doublepick == null || double_loss_doublepick.getId() == null)
+//			throw new RuntimeException();
+//		dummy.addDouble(double_loss_doublepick);
+		
+		double_loss.setGameStart(ZonedDateTime.now().minusDays(2));
+		gameIntegrationService.updateGame(double_loss);
 		
 		
 		//pick jac
@@ -213,7 +219,7 @@ public class AdminService {
 		locked_double_pick.setWeekId(week3.getId());
 		locked_double_pick.setFavId("chi");
 		locked_double_pick.setDogId("sf");
-		locked_double_pick.setGameStart(ZonedDateTime.now().minusDays(1));
+		locked_double_pick.setGameStart(ZonedDateTime.now().plusDays(1));
 		locked_double_pick = gameIntegrationService.createGame(locked_double_pick);
 		if (locked_double_pick == null || locked_double_pick.getId() == null)
 			throw new RuntimeException();
@@ -232,10 +238,13 @@ public class AdminService {
 		DoublePickView locked_double_pick_doublepick = new DoublePickView();
 		locked_double_pick_doublepick.setGameId(locked_double_pick.getId());
 		locked_double_pick_doublepick.setPickId(locked_double_pick_pick.getId());
-		locked_double_pick_doublepick = pickIntegrationService.createDoublePick(locked_double_pick_doublepick);
-		if (locked_double_pick_doublepick == null || locked_double_pick_doublepick.getId() == null)
-			throw new RuntimeException();
-		dummy.addDouble(locked_double_pick_doublepick);
+		pickIntegrationService.createDoublePick(locked_double_pick_doublepick);
+//		if (locked_double_pick_doublepick == null || locked_double_pick_doublepick.getId() == null)
+//			throw new RuntimeException();
+//		dummy.addDouble(locked_double_pick_doublepick);
+		
+		locked_double_pick.setGameStart(ZonedDateTime.now().minusDays(2));
+		gameIntegrationService.updateGame(locked_double_pick);
 		
 		//pick buf
 		GameView locked_pick = new GameView();
@@ -306,10 +315,11 @@ public class AdminService {
 		DoublePickView double_pick_doublepick = new DoublePickView();
 		double_pick_doublepick.setGameId(double_pick.getId());
 		double_pick_doublepick.setPickId(double_pick_pick.getId());
-		double_pick_doublepick = pickIntegrationService.createDoublePick(double_pick_doublepick);
-		if (double_pick_doublepick == null || double_pick_doublepick.getId() == null)
-			throw new RuntimeException();
-		dummy.addDouble(double_pick_doublepick);
+		pickIntegrationService.createDoublePick(double_pick_doublepick);
+//		if (double_pick_doublepick == null || double_pick_doublepick.getId() == null)
+//			throw new RuntimeException();
+//		dummy.addDouble(double_pick_doublepick);
+		
 		
 		//pick sea
 		GameView pick = new GameView();

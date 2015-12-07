@@ -4,6 +4,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.oauth2.client.OAuth2RestOperations;
 import org.springframework.stereotype.Service;
 
@@ -25,8 +27,10 @@ private Log log = LogFactory.getLog(PickIntegrationService.class);
     	return secureRestTemplate.postForEntity("http://pick/picks/", pickView, PickView.class).getBody();
     }
     
-    public DoublePickView createDoublePick(DoublePickView doublePickView)
+    public void createDoublePick(DoublePickView doublePickView)
     {
-    	return secureRestTemplate.postForEntity("http://pick/double/", doublePickView, DoublePickView.class).getBody();
+//    	HttpEntity<DoublePickView> requestEntity = new HttpEntity<DoublePickView>(doublePickView);
+//    	return secureRestTemplate.exchange("http://pick/double/", HttpMethod.PUT, requestEntity, DoublePickView.class).getBody();
+    	secureRestTemplate.put("http://pick/picks/double", doublePickView);
     }
 }
