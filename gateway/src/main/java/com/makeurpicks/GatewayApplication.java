@@ -45,7 +45,10 @@ public class GatewayApplication {
         @Override
         public void configure(HttpSecurity http) throws Exception {
             http
-            	.logout().and()
+            	.logout()
+            	.invalidateHttpSession(true)
+            	 .deleteCookies("JSESSIONID")
+            	 .and()
             	.authorizeRequests()
                     .antMatchers("/login", "/beans", "/user").permitAll()
                     .anyRequest().authenticated().and()

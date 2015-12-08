@@ -1,7 +1,29 @@
 (function () {
 	var app = angular.module('navigation', []);
 
-	app.controller('NavigationController', function ($scope, $rootScope, $http, $window, $log, makePickPageService) {
+//	app.config(function($httpProvider) {
+//		$httpProvider.interceptors.push('authInterceptor');
+//	});
+	
+//	app.factory('authInterceptor', [
+//	                                "$q", "$window", "$location", "session", function($q, $window, $location, session) {
+//	                                    return {
+//	                                      request: function(config) {
+//	                                        config.headers = config.headers || {};
+//	                                        config.headers.Authorization = 'Bearer ' + session.get('token'); // add your token from your service or whatever
+//	                                        return config;
+//	                                      },
+//	                                      response: function(response) {
+//	                                        return response || $q.when(response);
+//	                                      },
+//	                                      responseError: function(rejection) {
+//	                                        // your error handler
+//	                                      }
+//	                                    };
+//	                                  }
+//	                                ]);
+	
+	app.controller('NavigationController', function ($scope, $rootScope, $http, $window, $log, $location, makePickPageService) {
 		
 		$scope.nav = {};
 		$scope.week = {};
@@ -22,6 +44,17 @@
 			$rootScope.$broadcast('weekChanged', $scope.week.weekId);
 			
 		};
+		
+		$scope.logout = function() {
+			  $http.post('/logout', {}).success(function() {
+//			$http.post('/login?logout', {}).success(function() {
+//			$http.post('/oauth/token/revoke', {}).success(function() {
+
+			    $location.path("/");
+			  }).error(function(data) {
+			    $rootScope.authenticated = false;
+			  });
+			}
 		
 //		$scope.$watch('page', function () {
 //			$log.debug(JSON.stringify($scope.page));

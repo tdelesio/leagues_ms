@@ -3,9 +3,18 @@ package com.makeurpicks.controller;
 import java.security.Principal;
 import java.util.Collections;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
 
@@ -13,7 +22,6 @@ import com.makeurpicks.domain.MakePicks;
 import com.makeurpicks.domain.NavigationView;
 import com.makeurpicks.service.game.GameIntegrationService;
 import com.makeurpicks.service.league.LeagueIntegrationService;
-import com.makeurpicks.service.pick.DoublePickView;
 import com.makeurpicks.service.pick.PickIntegrationService;
 import com.makeurpicks.service.week.WeekIntegrationService;
 
@@ -34,6 +42,24 @@ public class GatewayController {
 
 	@Autowired
 	private WeekIntegrationService weekIntegrationService;
+	
+	@Autowired
+	private DefaultTokenServices defaultTokenServices;
+	
+	@Autowired
+	private TokenStore tokenStore;
+
+	@RequestMapping(value = "/oauth/token/revoke", method = RequestMethod.POST)
+	public @ResponseBody void logout(HttpSession session) {
+		session.invalidate();
+//		SecurityContextHolder.clearContext();
+//		new SecurityContextLogoutHandler().l
+//		OAuth2Authentication auth = (OAuth2Authentication)SecurityContextHolder.getContext().getAuthentication();
+//		OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails)auth.getDetails();
+//	
+////		tokenStore.revemoveAccessToken(details.getTokenValue());
+//		defaultTokenServices.revokeToken(details.getTokenValue());	
+	}
 	
 	@RequestMapping("/user")
     public Object home(Principal principal) {
