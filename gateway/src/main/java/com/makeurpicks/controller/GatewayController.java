@@ -1,6 +1,7 @@
 package com.makeurpicks.controller;
 
 import java.security.Principal;
+import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -77,11 +78,19 @@ public class GatewayController {
 				(games, picks, doublePick) -> {
 					
 					makePicksView.setGames(games);
-					makePicksView.setPicks(picks);
-					if (doublePick == null)
-						makePicksView.setDoublePick(new DoublePickView());
-					else		
-						makePicksView.setDoublePick(doublePick);
+					
+					if (picks != null && picks.get("failure")!=null)
+					{
+						makePicksView.setHystrixFailureOnPicks(true);
+						makePicksView.setPicks(Collections.EMPTY_MAP);
+					}
+					else
+						makePicksView.setPicks(picks);
+					makePicksView.setDoublePick(doublePick);
+//					if (doublePick == null)
+//						makePicksView.setDoublePick(new DoublePickView());
+//					else		
+						
 					return makePicksView;
 				});
 //			.subscribe(n -> )

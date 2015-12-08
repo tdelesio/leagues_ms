@@ -261,6 +261,9 @@
 			$scope.page = data;
 			$rootScope.nav = data.nav;
 			$rootScope.$broadcast('pageLoaded');
+		},
+		function (response) {
+			$scope.error = "Could not load page.  Please try again later."
 		});
 		
 		$scope.$on('weekChanged', function (events, args) {
@@ -322,6 +325,8 @@
 					data : JSON.stringify(local_model)
 				}).success(function(res) { 
 	
+					$scope.error = undefined;
+					
 					if ($scope.page.picks == undefined)
 						$scope.page.picks = {};
 					
@@ -355,7 +360,7 @@
 					
 					
 				}).error(function(res) {
-					alert('fail');
+					$scope.error = "Pick was not made, please retry.";
 				});
 			
 		};	

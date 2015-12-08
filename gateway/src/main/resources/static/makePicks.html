@@ -1,4 +1,7 @@
 <div ng-controller="MakePicksController as makePicksCtrl">
+	<div ng-show="page.hystrixFailureOnPicks" class="error">Error retrieving picks.  Please try again later.</div>
+	<div ng-show="page.doublePick.hystrixFailure" class="error">Error retrieving double pick.  Please try again later.</div>
+	<div ng-show="error" class="error">{{error}}</div> 
 	<div ng-repeat="game in page.games">	
 		<div class="gametime" ng-show="game.gameStart != page.games[$index-1].gameStart">{{game.gameStartFormated}}</div>	
 <!-- 		ng-show="pickMap[game.id] === undefined" -->

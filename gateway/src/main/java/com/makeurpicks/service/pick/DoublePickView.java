@@ -8,6 +8,18 @@ public class DoublePickView {
 	private boolean hasDoubleGameStarted=false;
 	private String previousDoubleGameId;
 	
+	private boolean hystrixFailure=false;
+	
+	public DoublePickView()
+	{
+		
+	}
+	
+	public DoublePickView(boolean failure)
+	{
+		this.hystrixFailure = failure;
+	}
+	
 	public String getId() {
 		return id;
 	}
@@ -37,6 +49,12 @@ public class DoublePickView {
 	}
 	public void setPreviousDoubleGameId(String previousDoubleGameId) {
 		this.previousDoubleGameId = previousDoubleGameId;
+	}
+	public boolean isHystrixFailure() {
+		return hystrixFailure;
+	}
+	public void setHystrixFailure(boolean hystrixFailure) {
+		this.hystrixFailure = hystrixFailure;
 	}
 
 	

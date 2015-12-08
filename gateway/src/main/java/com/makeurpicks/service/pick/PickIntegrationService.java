@@ -1,6 +1,7 @@
 package com.makeurpicks.service.pick;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -55,8 +56,12 @@ private Log log = LogFactory.getLog(PickIntegrationService.class);
 
     @SuppressWarnings("unused")
     private Map<String, PickView> stubPicks(final String weekId) {
+
+
+    	Map<String, PickView> map = new HashMap<>(1);
+    	map.put("failure", new PickView(true));
     	
-        return Collections.emptyMap();
+    	return map;
     }
     
     @HystrixCommand(fallbackMethod = "stubDoublePick",
@@ -79,7 +84,7 @@ private Log log = LogFactory.getLog(PickIntegrationService.class);
     @SuppressWarnings("unused")
     private DoublePickView stubDoublePick(final String weekId) {
     	
-        return new DoublePickView();
+        return new DoublePickView(true);
     }
 }
 

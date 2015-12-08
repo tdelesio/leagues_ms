@@ -14,7 +14,8 @@ public class MakePicks implements Serializable {
 	private List<GameView> games;
 	private Map<String, PickView> picks;
 	private DoublePickView doublePick;
-	
+
+	private boolean hystrixFailureOnPicks = false;
 
 	public NavigationView getNav() {
 		return nav;
@@ -46,6 +47,14 @@ public class MakePicks implements Serializable {
 
 	public void setDoublePick(DoublePickView doublePick) {
 		this.doublePick = doublePick;
+	}
+
+	public boolean isHystrixFailureOnPicks() {
+		return hystrixFailureOnPicks;
+	}
+
+	public void setHystrixFailureOnPicks(boolean hystrixFailureOnPicks) {
+		this.hystrixFailureOnPicks = hystrixFailureOnPicks;
 	}
 
 	

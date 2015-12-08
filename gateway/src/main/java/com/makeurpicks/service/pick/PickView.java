@@ -13,7 +13,26 @@ public class PickView implements Serializable {
 	private boolean noPick=false;
 	private long pickLastUpdated = System.currentTimeMillis();
 	
+	private boolean hystrixFailure=false;
 	
+	public PickView()
+	{
+		
+	}
+	
+	public PickView(boolean failure)
+	{
+		this.hystrixFailure = failure;
+	}
+	
+
+	public boolean isHystrixFailure() {
+		return hystrixFailure;
+	}
+
+	public void setHystrixFailure(boolean hystrixFailure) {
+		this.hystrixFailure = hystrixFailure;
+	}
 
 	public String getId() {
 		return id;

@@ -1,5 +1,6 @@
 package com.makeurpicks.service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,7 +18,10 @@ public class WeekService {
 	
 	public List<Week> getWeeksBySeason(String seasonId)
 	{
-		return weekRepository.findBySeasonId(seasonId);
+		List<Week> weeks = weekRepository.findBySeasonId(seasonId);
+		Collections.sort(weeks, (w1, w2) -> Integer.compare(w2.getWeekNumber(), w1.getWeekNumber()));
+		
+		return weeks;
 	}
 	
 	public Week createWeek(Week week)
