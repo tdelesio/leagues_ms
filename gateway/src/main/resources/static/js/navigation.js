@@ -27,23 +27,27 @@
 		
 		$scope.nav = {};
 		$scope.week = {};
+		$scope.league = {};
 		
 		makePickPageService.getPage().then(function(data) {
 //			$log.debug('NavigationController:getPage='+JSON.stringify(data))
 			$scope.nav = data.nav; 
 			$scope.week.weekId = data.nav.selectedWeekId;
+			$scope.league.seasonId = data.nav.selectedSeasonId;
 		});
 		
+	
+	
 		$scope.changeWeek = function() {
-			
-			
-			
-			//$log.debug("NavigationController:changeWeek $scope.nav.selectedWeekId="+$scope.nav.selectedWeekId);
-			//makePickPageService.setWeek($scope.nav.selectedWeekId);
 			$log.debug('weekChanged week='+$scope.week.weekId);
 			$rootScope.$broadcast('weekChanged', $scope.week.weekId);
 			
 		};
+		
+		$scope.changeLeague = function() {
+			$log.debug('leagueChanged league='+$scope.league.seasonId);
+			$rootScope.$broadcast('leagueChanged', $scope.league.seasonId);
+		};	
 		
 		$scope.logout = function() {
 			  $http.post('/logout', {}).success(function() {

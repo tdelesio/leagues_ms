@@ -1,7 +1,7 @@
 (function () {
 	var app = angular.module('makepicks', ['leagueservice']);
 	
-	app.directive("pickRow", function () {
+	app.directive("pickRow", ['makePickPageService', function (makePickPageService) {
 		return {
 			restrict: 'E',
 //			templateUrl: 'partials/makePickRow.html', 
@@ -24,201 +24,12 @@
 //					if (scope.page) {
 //						console.log(JSON.stringify(scope.page));
 //						console.log(JSON.stringify(scope.game));
-						var favId = scope.game.favId;
-						var dogId = scope.game.dogId;
-						
-						//set local variable for pickedTeam, nil if none
-						var pickedTeamIdForGame, pickIdForGame, pickMadeForGame;
-						if (scope.page.picks[scope.game.id]!=undefined) {
-							//check to see if a pick has been made for the game
-							pickedTeamIdForGame = scope.page.picks[scope.game.id].teamId;
-							pickIdForGame = scope.page.picks[scope.game.id].id;
-							pickMadeForGame = true;
-						}
-						else {
-							pickedTeamIdForGame = "nil";
-							pickIdForGame = "nil";
-							pickMadeForGame = false;
-						}
-						
-						//set game winner
-						var teamIdForGameWinner = scope.game.gameWinner;
-							
-						//set the double pickId
-						var doublePickId = scope.page.doublePick.pickId;
-						
-						var gamestatus, favstatus, dogstatus;
-						
-						//has game started?
-						if (scope.game.hasGameStarted) {
-							//game started
-							
-							//is team picked?
-							if (favId === pickedTeamIdForGame) {
-								//picked team matches compared team
-								
-								if (doublePickId === pickIdForGame) {
-									favstatus = "double"
-								} else {
-									favstatus = "pick";
-								}
-							} else {
-								//normal pick lose
-								favstatus = "not_pick";
-							}
-							
-							if (dogId === pickedTeamIdForGame) {
-								//picked team matches compared team
-		
-								if (doublePickId === pickIdForGame) {
-									dogstatus = "double"
-								} else {
-									dogstatus = "pick";
-								}
-							} else {
-								//normal pick lose
-								dogstatus = "not_pick";
-							}
-						
-							//has game ended?
-							if (scope.game.hasScoresEntered) {
-								//game is over
-								
-								//is picked team the winner?
-								if (pickedTeamIdForGame === teamIdForGameWinner) {
-									//is double pick?
-									if (doublePickId === pickIdForGame) {
-										//team is winner and is double
-										gamestatus = "double_won";
-									} else {
-										//team is winner
-										gamestatus = "won";
-									}
-								} else {
-									if (doublePickId === pickIdForGame) {
-										//team is loser and dobule
-										gamestatus = "double_loss";
-										
-									} else {
-										//team is loser
-										gamestatus = "loss";
-									}
-								}
-									
-								
-								
-							} else {
-								//game is not over
-								
-								//has pick been made for game?
-								if (pickMadeForGame) {
-									
-									if (doublePickId === pickIdForGame) {
-										//pick is a double pick
-										
-										gamestatus = "locked_double_pick";
-									} else {
-										//pick not double pick
-										
-										gamestatus = "locked_pick";
-									}
-						
-								} else {
-									gamestatus = "no_pick";
-									favstatus = "not_pick";
-									dogstatus = "not_pick";
-								}
-							}
-						
-							
-						} else {
-							//game has not started
-							
-							//has pick been made for game?
-							if (pickMadeForGame) {
-								
-								if (doublePickId === pickIdForGame) {
-									//pick is a double pick
-									
-									gamestatus = "double_pick";
-								} else {
-									//pick not double pick
-									
-									gamestatus = "pick";
-								}
-					
-							} else {
-								gamestatus = "open";
-							}
-							
-							
-							//is team picked?
-							if (pickedTeamIdForGame === favId) {
-								//team picked
-								
-								//is double pick?
-								if (doublePickId === pickIdForGame) {
-									//pick is double pick
-									
-									favstatus = "double";
-									dogstatus = "opponent";
-								
-								} else {
-									//pick is normal pick
-									
-									//has double pick game started?
-									if (scope.page.doublePick.hasDoubleGameStarted) {
-										
-										favstatus = "pick"
-										dogstatus = "opponent";
-									} else {
-										favstatus = "doubleable";
-										dogstatus = "opponent";
-									}
-								}
-							} else if (pickedTeamIdForGame === dogId) {
-								//is double pick?
-								if (doublePickId === pickIdForGame) {
-									//pick is double pick
-									
-									dogstatus = "double";
-									favstatus = "opponent";
-								
-								} else {
-									//pick is normal pick
-									
-									//has double pick game started?
-									if (scope.page.doublePick.hasDoubleGameStarted) {
-										
-										dogstatus = "pick"
-										favstatus = "opponent";
-									} else {
-										dogstatus = "doubleable";
-										favstatus = "opponent";
-									}
-								}
-								
-							} else {
-								dogstatus = "unpicked";
-								favstatus = "unpicked";
-							}
-							
-						}
-						scope.gamestatus = {};
-						scope.teamstatus = {};
-						
-						scope.status.gamestatus[scope.game.id] = gamestatus;
-						//scope.addgamestatus(scope.game.id, gamestatus);
-						scope.status.teamstatus[favId] = favstatus;
-						scope.status.teamstatus[dogId] = dogstatus;
-						
-						console.log('favId='+favId+' dogId='+dogId+' pickedTeam='+pickedTeamIdForGame+' gameWinner='+teamIdForGameWinner+' gamestatus='+scope.status.gamestatus[scope.game.id]+' favstatus='+scope.status.teamstatus[favId]+' dogstatus='+scope.status.teamstatus[dogId]);
-
+				makePickPageService.loadStatus(scope);
 				
 				
 			}
 		}
-	});
+	}]);
 	
 	//return $http.get('/makepicks').success(function(result);
 	app.factory('makePickPageService', ['$q', '$http', function($q, $http) {
@@ -244,7 +55,205 @@
 		  return {
 		    getPage: function(){
 		      return _deferred.promise;
-		    }
+		    },
+		    
+		    loadStatus: function(scope) {
+				var favId = scope.game.favId;
+				var dogId = scope.game.dogId;
+				
+				//set local variable for pickedTeam, nil if none
+				var pickedTeamIdForGame, pickIdForGame, pickMadeForGame;
+				if (scope.page.picks[scope.game.id]!=undefined) {
+					//check to see if a pick has been made for the game
+					pickedTeamIdForGame = scope.page.picks[scope.game.id].teamId;
+					pickIdForGame = scope.page.picks[scope.game.id].id;
+					pickMadeForGame = true;
+				}
+				else {
+					pickedTeamIdForGame = "nil";
+					pickIdForGame = "nil";
+					pickMadeForGame = false;
+				}
+				
+				//set game winner
+				var teamIdForGameWinner = scope.game.gameWinner;
+					
+				//set the double pickId
+				var doublePickId = "na";
+				var hasDoubleGameStarted = false;
+				if (scope.page.doublePick != null) {
+					daoublePickId = scope.page.doublePick.pickId;
+					hasDoubleGameStarted = scope.page.doublePick.hasDoubleGameStarted
+				}
+				
+				var gamestatus, favstatus, dogstatus;
+				
+				//has game started?
+				if (scope.game.hasGameStarted) {
+					//game started
+					
+					//is team picked?
+					if (favId === pickedTeamIdForGame) {
+						//picked team matches compared team
+						
+						if (doublePickId === pickIdForGame) {
+							favstatus = "double"
+						} else {
+							favstatus = "pick";
+						}
+					} else {
+						//normal pick lose
+						favstatus = "not_pick";
+					}
+					
+					if (dogId === pickedTeamIdForGame) {
+						//picked team matches compared team
+
+						if (doublePickId === pickIdForGame) {
+							dogstatus = "double"
+						} else {
+							dogstatus = "pick";
+						}
+					} else {
+						//normal pick lose
+						dogstatus = "not_pick";
+					}
+				
+					//has game ended?
+					if (scope.game.hasScoresEntered) {
+						//game is over
+						
+						//is picked team the winner?
+						if (pickedTeamIdForGame === teamIdForGameWinner) {
+							//is double pick?
+							if (doublePickId === pickIdForGame) {
+								//team is winner and is double
+								gamestatus = "double_won";
+							} else {
+								//team is winner
+								gamestatus = "won";
+							}
+						} else {
+							if (doublePickId === pickIdForGame) {
+								//team is loser and dobule
+								gamestatus = "double_loss";
+								
+							} else {
+								//team is loser
+								gamestatus = "loss";
+							}
+						}
+							
+						
+						
+					} else {
+						//game is not over
+						
+						//has pick been made for game?
+						if (pickMadeForGame) {
+							
+							if (doublePickId === pickIdForGame) {
+								//pick is a double pick
+								
+								gamestatus = "locked_double_pick";
+							} else {
+								//pick not double pick
+								
+								gamestatus = "locked_pick";
+							}
+				
+						} else {
+							gamestatus = "no_pick";
+							favstatus = "not_pick";
+							dogstatus = "not_pick";
+						}
+					}
+				
+					
+				} else {
+					//game has not started
+					
+					//has pick been made for game?
+					if (pickMadeForGame) {
+						
+						if (doublePickId === pickIdForGame) {
+							//pick is a double pick
+							
+							gamestatus = "double_pick";
+						} else {
+							//pick not double pick
+							
+							gamestatus = "pick";
+						}
+			
+					} else {
+						gamestatus = "open";
+					}
+					
+					
+					//is team picked?
+					if (pickedTeamIdForGame === favId) {
+						//team picked
+						
+						//is double pick?
+						if (doublePickId === pickIdForGame) {
+							//pick is double pick
+							
+							favstatus = "double";
+							dogstatus = "opponent";
+						
+						} else {
+							//pick is normal pick
+							
+							//has double pick game started?
+							if (hasDoubleGameStarted) {
+								
+								favstatus = "pick"
+								dogstatus = "opponent";
+							} else {
+								favstatus = "doubleable";
+								dogstatus = "opponent";
+							}
+						}
+					} else if (pickedTeamIdForGame === dogId) {
+						//is double pick?
+						if (doublePickId === pickIdForGame) {
+							//pick is double pick
+							
+							dogstatus = "double";
+							favstatus = "opponent";
+						
+						} else {
+							//pick is normal pick
+							
+							//has double pick game started?
+							if (hasDoubleGameStarted) {
+								
+								dogstatus = "pick"
+								favstatus = "opponent";
+							} else {
+								dogstatus = "doubleable";
+								favstatus = "opponent";
+							}
+						}
+						
+					} else {
+						dogstatus = "unpicked";
+						favstatus = "unpicked";
+					}
+					
+				}
+				scope.gamestatus = {};
+				scope.teamstatus = {};
+				
+				scope.status.gamestatus[scope.game.id] = gamestatus;
+				//scope.addgamestatus(scope.game.id, gamestatus);
+				scope.status.teamstatus[favId] = favstatus;
+				scope.status.teamstatus[dogId] = dogstatus;
+				
+				console.log('favId='+favId+' dogId='+dogId+' pickedTeam='+pickedTeamIdForGame+' gameWinner='+teamIdForGameWinner+' gamestatus='+scope.status.gamestatus[scope.game.id]+' favstatus='+scope.status.teamstatus[favId]+' dogstatus='+scope.status.teamstatus[dogId]);
+
+			}
 		  }
 
 		}]);
@@ -267,11 +276,23 @@
 		});
 		
 		$scope.$on('weekChanged', function (events, args) {
+			
+//			$scope.status.gamestatus = {};
+//			$scope.status.teamstatus = {};	
+			
 			$log.debug('week='+args);
 			$http.get('/makepicks/'+args)
 	        .success(function(data) {
 //	        	$log.debug('MakePicksController:changeWeek='+JSON.stringify(data))
 	        	$scope.page = data;
+	        	
+	        	var arrayLength = data.games.length;
+	        	for (var i = 0; i < arrayLength; i++) {
+	        		$scope.game=data.games[i];
+	        		makePickPageService.loadStatus($scope);
+	        	    }
+	        	
+	        	
 	        });
 		});
 		

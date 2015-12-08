@@ -40,6 +40,12 @@
 		return {
 			restrict: 'E',
 			templateUrl: 'partials/makePicks.html'
+//			link : function(scope, element, attrs) {
+//				
+//				scope.$on('weekChanged', function (events, args) {
+//					console.log('weekChanged');
+//				});
+//			}
 		};
 	});
 	
