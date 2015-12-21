@@ -251,7 +251,7 @@
 				scope.status.teamstatus[favId] = favstatus;
 				scope.status.teamstatus[dogId] = dogstatus;
 				
-				console.log('favId='+favId+' dogId='+dogId+' pickedTeam='+pickedTeamIdForGame+' gameWinner='+teamIdForGameWinner+' gamestatus='+scope.status.gamestatus[scope.game.id]+' favstatus='+scope.status.teamstatus[favId]+' dogstatus='+scope.status.teamstatus[dogId]);
+//				console.log('favId='+favId+' dogId='+dogId+' pickedTeam='+pickedTeamIdForGame+' gameWinner='+teamIdForGameWinner+' gamestatus='+scope.status.gamestatus[scope.game.id]+' favstatus='+scope.status.teamstatus[favId]+' dogstatus='+scope.status.teamstatus[dogId]);
 
 			}
 		  }
@@ -275,12 +275,13 @@
 			$scope.error = "Could not load page.  Please try again later."
 		});
 		
+		
 		$scope.$on('weekChanged', function (events, args) {
 			
 //			$scope.status.gamestatus = {};
 //			$scope.status.teamstatus = {};	
 			
-			$log.debug('week='+args);
+			$log.debug('weekChanged: week='+args);
 			$http.get('/makepicks/'+args)
 	        .success(function(data) {
 //	        	$log.debug('MakePicksController:changeWeek='+JSON.stringify(data))
@@ -315,6 +316,7 @@
 				local_model.teamId = teamid;
 				local_model.gameId = gameid;
 				local_model.weekId = $scope.week.weekId;
+				local_model.leagueId = $scope.league.id;
 				
 				var doubleSubmission = false;
 				var url = '/picks/';

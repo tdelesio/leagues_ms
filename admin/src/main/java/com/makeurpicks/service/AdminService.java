@@ -116,6 +116,7 @@ public class AdminService {
 		double_won_pick.setGameId(double_won.getId());
 		double_won_pick.setPlayerId("admin");
 		double_won_pick.setWeekId(week1.getId());
+		double_won_pick.setLeagueId(leagueView.getId());
 		double_won_pick.setTeamId("gb");
 		double_won_pick = pickIntegrationService.createPick(double_won_pick);
 		if (double_won_pick == null || double_won_pick.getId() == null)
@@ -125,6 +126,7 @@ public class AdminService {
 		DoublePickView double_won_doublepick = new DoublePickView();
 		double_won_doublepick.setGameId(double_won.getId());
 		double_won_doublepick.setPickId(double_won_pick.getId());
+		double_won_doublepick.setLeagueId(leagueView.getId());
 		pickIntegrationService.createDoublePick(double_won_doublepick);
 //		if (double_won_doublepick == null || double_won_doublepick.getId() == null)
 //			throw new RuntimeException();		
@@ -151,6 +153,7 @@ public class AdminService {
 		won_pick.setPlayerId("admin");
 		won_pick.setWeekId(week1.getId());
 		won_pick.setTeamId("tb");
+		won_pick.setLeagueId(leagueView.getId());
 		won_pick = pickIntegrationService.createPick(won_pick);
 		if (won_pick == null || won_pick.getId() == null)
 			throw new RuntimeException();
@@ -174,6 +177,7 @@ public class AdminService {
 		double_loss_pick.setPlayerId("admin");
 		double_loss_pick.setWeekId(week2.getId());
 		double_loss_pick.setTeamId("nyg");
+		double_loss_pick.setLeagueId(leagueView.getId());
 		double_loss_pick = pickIntegrationService.createPick(double_loss_pick);
 		if (double_loss_pick == null || double_loss_pick.getId() == null)
 			throw new RuntimeException();
@@ -182,6 +186,7 @@ public class AdminService {
 		DoublePickView double_loss_doublepick = new DoublePickView();
 		double_loss_doublepick.setGameId(double_loss.getId());
 		double_loss_doublepick.setPickId(double_loss_pick.getId());
+		double_loss_doublepick.setLeagueId(leagueView.getId());
 		pickIntegrationService.createDoublePick(double_loss_doublepick);
 //		if (double_loss_doublepick == null || double_loss_doublepick.getId() == null)
 //			throw new RuntimeException();
@@ -209,6 +214,7 @@ public class AdminService {
 		loss_pick.setPlayerId("admin");
 		loss_pick.setTeamId("jac");
 		loss_pick.setWeekId(week1.getId());
+		loss_pick.setLeagueId(leagueView.getId());
 		loss_pick = pickIntegrationService.createPick(loss_pick);
 		if (loss_pick == null || loss_pick.getId() == null)
 			throw new RuntimeException();
@@ -229,6 +235,7 @@ public class AdminService {
 		locked_double_pick_pick.setGameId(locked_double_pick.getId());
 		locked_double_pick_pick.setPlayerId("admin");
 		locked_double_pick_pick.setTeamId("sf");
+		locked_double_pick_pick.setLeagueId(leagueView.getId());
 		locked_double_pick_pick.setWeekId(week3.getId());
 		locked_double_pick_pick = pickIntegrationService.createPick(locked_double_pick_pick);
 		if (locked_double_pick_pick == null || locked_double_pick_pick.getId() == null)
@@ -238,6 +245,7 @@ public class AdminService {
 		DoublePickView locked_double_pick_doublepick = new DoublePickView();
 		locked_double_pick_doublepick.setGameId(locked_double_pick.getId());
 		locked_double_pick_doublepick.setPickId(locked_double_pick_pick.getId());
+		locked_double_pick_doublepick.setLeagueId(leagueView.getId());
 		pickIntegrationService.createDoublePick(locked_double_pick_doublepick);
 //		if (locked_double_pick_doublepick == null || locked_double_pick_doublepick.getId() == null)
 //			throw new RuntimeException();
@@ -262,6 +270,7 @@ public class AdminService {
 		locked_pick_pick.setPlayerId("admin");
 		locked_pick_pick.setTeamId("buf");
 		locked_pick_pick.setWeekId(week1.getId());
+		locked_pick_pick.setLeagueId(leagueView.getId());
 		locked_pick_pick = pickIntegrationService.createPick(locked_pick_pick);
 		if (locked_pick_pick == null || locked_pick_pick.getId()==null)
 			throw new RuntimeException();
@@ -306,6 +315,7 @@ public class AdminService {
 		double_pick_pick.setGameId(double_pick.getId());
 		double_pick_pick.setPlayerId("admin");
 		double_pick_pick.setTeamId("cin");
+		double_pick_pick.setLeagueId(leagueView.getId());
 		double_pick_pick.setWeekId(week4.getId());
 		double_pick_pick = pickIntegrationService.createPick(double_pick_pick);
 		if (double_pick_pick == null || double_pick_pick.getId() == null)
@@ -315,6 +325,7 @@ public class AdminService {
 		DoublePickView double_pick_doublepick = new DoublePickView();
 		double_pick_doublepick.setGameId(double_pick.getId());
 		double_pick_doublepick.setPickId(double_pick_pick.getId());
+		double_pick_doublepick.setLeagueId(leagueView.getId());
 		pickIntegrationService.createDoublePick(double_pick_doublepick);
 //		if (double_pick_doublepick == null || double_pick_doublepick.getId() == null)
 //			throw new RuntimeException();
@@ -337,6 +348,7 @@ public class AdminService {
 		pick_pick.setPlayerId("admin");
 		pick_pick.setTeamId("sea");
 		pick_pick.setWeekId(week1.getId());
+		pick_pick.setLeagueId(leagueView.getId());
 		pick_pick = pickIntegrationService.createPick(pick_pick);
 		if (pick_pick==null ||pick_pick.getId()==null)
 			throw new RuntimeException();

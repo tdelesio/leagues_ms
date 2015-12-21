@@ -5,6 +5,7 @@ public class DoublePickView {
 	private String id="";
 	private String pickId="";
 	private String gameId="";
+	private String leagueId="";
 	private boolean hasDoubleGameStarted=false;
 	private String previousDoubleGameId;
 	
@@ -55,6 +56,14 @@ public class DoublePickView {
 	}
 	public void setHystrixFailure(boolean hystrixFailure) {
 		this.hystrixFailure = hystrixFailure;
+	}
+
+	public String getLeagueId() {
+		return leagueId;
+	}
+
+	public void setLeagueId(String leagueId) {
+		this.leagueId = leagueId;
 	}
 
 	

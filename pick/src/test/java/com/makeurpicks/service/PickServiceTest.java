@@ -432,7 +432,7 @@ private static ConfigurableApplicationContext server;
 			//player1 picks for week1, league1
 			Pick pick1 = new PickBuilder()
 			.withGameId(game1League1Week1)
-//			.withLeagueId(league1)
+			.withLeagueId(league1)
 			.withPlayerId(player1)
 			.withTeamId(team1)
 			.withWeekId(week1League1)
@@ -441,7 +441,7 @@ private static ConfigurableApplicationContext server;
 			
 			Pick pick2 = new PickBuilder()
 			.withGameId(game2League1Week1)
-//			.withLeagueId(league1)
+			.withLeagueId(league1)
 			.withPlayerId(player1)
 			.withTeamId(team3)
 			.withWeekId(week1League1)
@@ -451,7 +451,7 @@ private static ConfigurableApplicationContext server;
 			//player2 picks for week1, league 1
 			Pick pick3 = new PickBuilder()
 			.withGameId(game1League1Week1)
-//			.withLeagueId(league1)
+			.withLeagueId(league1)
 			.withPlayerId(player2)
 			.withTeamId(team2)
 			.withWeekId(week1League1)
@@ -460,7 +460,7 @@ private static ConfigurableApplicationContext server;
 			
 			Pick pick4 = new PickBuilder()
 			.withGameId(game2League1Week1)
-//			.withLeagueId(league1)
+			.withLeagueId(league1)
 			.withPlayerId(player2)
 			.withTeamId(team4)
 			.withWeekId(week1League1)
@@ -470,7 +470,7 @@ private static ConfigurableApplicationContext server;
 			//player3 pick for week1, league1
 			Pick pick5 = new PickBuilder()
 			.withGameId(game1League1Week1)
-//			.withLeagueId(league1)
+			.withLeagueId(league1)
 			.withPlayerId(player3)
 			.withTeamId(team1)
 			.withWeekId(week1League1)
@@ -479,7 +479,7 @@ private static ConfigurableApplicationContext server;
 			
 			Pick pick6 = new PickBuilder()
 			.withGameId(game2League1Week1)
-//			.withLeagueId(league1)
+			.withLeagueId(league1)
 			.withPlayerId(player3)
 			.withTeamId(team4)
 			.withWeekId(week1League1)
@@ -490,7 +490,7 @@ private static ConfigurableApplicationContext server;
 			//player1 picks for week2, league1
 			Pick pick11 = new PickBuilder()
 			.withGameId(game1League1Week2)
-//			.withLeagueId(league1)
+			.withLeagueId(league1)
 			.withPlayerId(player1)
 			.withTeamId(team1)
 			.withWeekId(week2League1)
@@ -499,7 +499,7 @@ private static ConfigurableApplicationContext server;
 			
 			Pick pick12 = new PickBuilder()
 			.withGameId(game2League1Week2)
-//			.withLeagueId(league1)
+			.withLeagueId(league1)
 			.withPlayerId(player1)
 			.withTeamId(team2)
 			.withWeekId(week2League1)
@@ -509,7 +509,7 @@ private static ConfigurableApplicationContext server;
 			//player2 picks for week2, league 1
 			Pick pick13 = new PickBuilder()
 			.withGameId(game1League1Week2)
-//			.withLeagueId(league1)
+			.withLeagueId(league1)
 			.withPlayerId(player2)
 			.withTeamId(team4)
 			.withWeekId(week2League1)
@@ -518,7 +518,7 @@ private static ConfigurableApplicationContext server;
 			
 			Pick pick14 = new PickBuilder()
 			.withGameId(game2League1Week2)
-//			.withLeagueId(league1)
+			.withLeagueId(league1)
 			.withPlayerId(player2)
 			.withTeamId(team3)
 			.withWeekId(week2League1)
@@ -528,7 +528,7 @@ private static ConfigurableApplicationContext server;
 			//player3 pick for week2, league1
 			Pick pick15 = new PickBuilder()
 			.withGameId(game1League1Week2)
-//			.withLeagueId(league1)
+			.withLeagueId(league1)
 			.withPlayerId(player3)
 			.withTeamId(team4)
 			.withWeekId(week2League1)
@@ -537,7 +537,7 @@ private static ConfigurableApplicationContext server;
 			
 			Pick pick16 = new PickBuilder()
 			.withGameId(game2League1Week2)
-//			.withLeagueId(league1)
+			.withLeagueId(league1)
 			.withPlayerId(player3)
 			.withTeamId(team2)
 			.withWeekId(week2League1)
@@ -549,7 +549,7 @@ private static ConfigurableApplicationContext server;
 			//week1 should be same, team1 players team2, 
 			Pick pick21 = new PickBuilder()
 			.withGameId(game1League2Week1)
-//			.withLeagueId(league2)
+			.withLeagueId(league2)
 			.withPlayerId(player1)
 			.withTeamId(team2)
 			.withWeekId(week1League2)
@@ -558,7 +558,7 @@ private static ConfigurableApplicationContext server;
 			
 			Pick pick22 = new PickBuilder()
 			.withGameId(game2League2Week1)
-//			.withLeagueId(league2)
+			.withLeagueId(league2)
 			.withPlayerId(player1)
 			.withTeamId(team4)
 			.withWeekId(week1League2)
@@ -567,7 +567,7 @@ private static ConfigurableApplicationContext server;
 			
 			Pick pick23 = new PickBuilder()
 			.withGameId(game1League2Week1)
-//			.withLeagueId(league2)
+			.withLeagueId(league2)
 			.withPlayerId(player4)
 			.withTeamId(team2)
 			.withWeekId(week1League2)
@@ -576,7 +576,7 @@ private static ConfigurableApplicationContext server;
 			
 			Pick pick24 = new PickBuilder()
 			.withGameId(game2League2Week1)
-//			.withLeagueId(league2)
+			.withLeagueId(league2)
 			.withPlayerId(player4)
 			.withTeamId(team3)
 			.withWeekId(week1League2)
@@ -588,7 +588,7 @@ private static ConfigurableApplicationContext server;
 //			{
 //				picks.add(pick);
 //			}
-			Map<String, Map<String, Pick>> map = pickService.getPicksByWeek(week1League1);
+			Map<String, Map<String, Pick>> map = pickService.getPicksByWeek(league1,week1League1);
 			assertEquals(pick1, map.get(pick1.getPlayerId()).get(pick1.getGameId()));
 			assertEquals(pick2, map.get(pick2.getPlayerId()).get(pick2.getGameId()));
 			assertEquals(pick3, map.get(pick3.getPlayerId()).get(pick3.getGameId()));
@@ -604,7 +604,7 @@ private static ConfigurableApplicationContext server;
 //			assertEquals(3, map.size());
 			
 //			picks = new ArrayList<Pick>();
-			map = pickService.getPicksByWeek(week2League1);
+			map = pickService.getPicksByWeek(league1, week2League1);
 //			for (Pick pick :pickService.getPicksByWeek(week2League1))
 //			{
 //				picks.add(pick);
@@ -628,7 +628,7 @@ private static ConfigurableApplicationContext server;
 //			{
 //				picks.add(pick);
 //			}
-			map = pickService.getPicksByWeek(week1League2);
+			map = pickService.getPicksByWeek(league2, week1League2);
 			assertEquals(pick21, map.get(pick21.getPlayerId()).get(pick21.getGameId()));
 			assertEquals(pick22, map.get(pick22.getPlayerId()).get(pick22.getGameId()));
 			assertEquals(pick23, map.get(pick23.getPlayerId()).get(pick23.getGameId()));
@@ -856,7 +856,7 @@ private static ConfigurableApplicationContext server;
 			pickService.makePick(pick24);
 			
 //			List<Pick> picks = new ArrayList<Pick>();
-			Map<String, Pick> pickMap = pickService.getPicksByWeekAndPlayer(week1League1, player1);
+			Map<String, Pick> pickMap = pickService.getPicksByWeekAndPlayer(league1, week1League1, player1);
 //			for (Pick pick :pickService.getPicksByLeagueWeekAndPlayer(league1, week1League1, player1))
 //			{
 //				picks.add(pick);
@@ -867,7 +867,7 @@ private static ConfigurableApplicationContext server;
 //			assertTrue(picks.contains(pick2));
 			assertEquals(2, pickMap.size());
 			
-			pickMap = pickService.getPicksByWeekAndPlayer(week1League1, player2);
+			pickMap = pickService.getPicksByWeekAndPlayer(league1, week1League1, player2);
 			assertEquals(pick3, pickMap.get(pick3.getGameId()));
 			assertEquals(pick4, pickMap.get(pick4.getGameId()));
 //			picks = new ArrayList<Pick>();
@@ -879,7 +879,7 @@ private static ConfigurableApplicationContext server;
 //			assertTrue(picks.contains(pick4));
 			assertEquals(2, pickMap.size());
 			
-			pickMap = pickService.getPicksByWeekAndPlayer(week1League1, player3);
+			pickMap = pickService.getPicksByWeekAndPlayer(league1, week1League1, player3);
 			assertEquals(pick5, pickMap.get(pick5.getGameId()));
 			assertEquals(pick6, pickMap.get(pick6.getGameId()));
 //			picks = new ArrayList<Pick>();
@@ -891,7 +891,7 @@ private static ConfigurableApplicationContext server;
 //			assertTrue(picks.contains(pick6));
 			assertEquals(2, pickMap.size());
 			
-			pickMap = pickService.getPicksByWeekAndPlayer(week2League1, player1);
+			pickMap = pickService.getPicksByWeekAndPlayer(league1, week2League1, player1);
 			assertEquals(pick11, pickMap.get(pick11.getGameId()));
 			assertEquals(pick12, pickMap.get(pick12.getGameId()));
 //			picks = new ArrayList<Pick>();
@@ -903,7 +903,7 @@ private static ConfigurableApplicationContext server;
 //			assertTrue(picks.contains(pick12));
 			assertEquals(2, pickMap.size());
 			
-			pickMap = pickService.getPicksByWeekAndPlayer(week2League1, player2);
+			pickMap = pickService.getPicksByWeekAndPlayer(league1, week2League1, player2);
 			assertEquals(pick13, pickMap.get(pick13.getGameId()));
 			assertEquals(pick14, pickMap.get(pick14.getGameId()));
 //			picks = new ArrayList<Pick>();
@@ -915,7 +915,7 @@ private static ConfigurableApplicationContext server;
 //			assertTrue(picks.contains(pick14));
 			assertEquals(2, pickMap.size());
 			
-			pickMap = pickService.getPicksByWeekAndPlayer(week2League1, player3);
+			pickMap = pickService.getPicksByWeekAndPlayer(league1, week2League1, player3);
 			assertEquals(pick15, pickMap.get(pick15.getGameId()));
 			assertEquals(pick16, pickMap.get(pick16.getGameId()));
 //			picks = new ArrayList<Pick>();
@@ -927,7 +927,7 @@ private static ConfigurableApplicationContext server;
 //			assertTrue(picks.contains(pick16));
 			assertEquals(2, pickMap.size());
 			
-			pickMap = pickService.getPicksByWeekAndPlayer(week1League2, player1);
+			pickMap = pickService.getPicksByWeekAndPlayer(league2, week1League2, player1);
 			assertEquals(pick21, pickMap.get(pick21.getGameId()));
 			assertEquals(pick22, pickMap.get(pick22.getGameId()));
 //			picks = new ArrayList<Pick>();
@@ -939,7 +939,7 @@ private static ConfigurableApplicationContext server;
 //			assertTrue(picks.contains(pick22));
 			assertEquals(2, pickMap.size());
 			
-			pickMap = pickService.getPicksByWeekAndPlayer(week1League2, player4);
+			pickMap = pickService.getPicksByWeekAndPlayer(league2, week1League2, player4);
 			assertEquals(pick23, pickMap.get(pick23.getGameId()));
 			assertEquals(pick24, pickMap.get(pick24.getGameId()));
 //			picks = new ArrayList<Pick>();
@@ -1021,7 +1021,7 @@ private static ConfigurableApplicationContext server;
 		
 		//set double pick, should be fine
 		pickService.makeDoublePick(pick2.getId(), player1);
-		DoublePick dp = doublePickRepository.findOne(DoublePick.buildString(week1League1, player1));
+		DoublePick dp = doublePickRepository.findOne(DoublePick.buildString(league1, week1League1, player1));
 		assertEquals(pick2.getId(), dp.getPickId());
 		
 		//add a new pick
@@ -1036,7 +1036,7 @@ private static ConfigurableApplicationContext server;
 		
 		//change to new game
 		pickService.makeDoublePick(pick3.getId(), player1);
-		dp = doublePickRepository.findOne(DoublePick.buildString(week1League1, player1));
+		dp = doublePickRepository.findOne(DoublePick.buildString(league1, week1League1, player1));
 		assertEquals(pick3.getId(), dp.getPickId());
 
 		//change the time of game2 to passed
@@ -1044,7 +1044,7 @@ private static ConfigurableApplicationContext server;
 		try
 		{
 			pickService.makeDoublePick(pick2.getId(), player1);
-			dp = doublePickRepository.findOne(DoublePick.buildString(week1League1, player1));
+			dp = doublePickRepository.findOne(DoublePick.buildString(league1, week1League1, player1));
 			fail();
 		}
 		catch (PickValidationException exception)

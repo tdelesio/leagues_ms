@@ -25,6 +25,12 @@ public class WeekController  {
 		return weekService.getWeeksBySeason(id);
 	}
 	
+	@RequestMapping(method=RequestMethod.GET, value="/leagueid/{id}")
+	public @ResponseBody Iterable<Week> getWeeksByLeague(@PathVariable String id)
+	{
+		return weekService.getWeeksByLeague(id);
+	}
+	
 	@RequestMapping(method=RequestMethod.POST, value="/")
 	@PreAuthorize("hasRole('ADMIN')")
 	public @ResponseBody Week createWeek(@RequestBody Week week)

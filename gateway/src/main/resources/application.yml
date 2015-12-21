@@ -8,6 +8,7 @@ logging:
     com.netflix.zuul: INFO
     io.springbox.apigateway: DEBUG
     com.netflix.hystrix: DEBUG
+    com.makeurpicks: DEBUG
 
 security:
   oauth2:

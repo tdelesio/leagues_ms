@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 
@@ -15,6 +17,8 @@ public class RedisPlayersInLeagueRespository implements PlayersInLeagueRepositor
 
 	protected final HashOperations<String, String, PlayersInLeague> hashOps;
 	
+	private Log log = LogFactory.getLog(RedisPlayersInLeagueRespository.class);
+	
 	public RedisPlayersInLeagueRespository(RedisTemplate<String, PlayersInLeague> redisTemplate)
 	{
 		this.hashOps = redisTemplate.opsForHash();
@@ -25,6 +29,9 @@ public class RedisPlayersInLeagueRespository implements PlayersInLeagueRepositor
 
 	@Override
 	public void addPlayerToLeague(PlayerResponse player, String leagueId) {
+		
+		log.debug("PlayerResponse="+player+" leagueId="+leagueId);
+		
 		PlayersInLeague playersInLeague = findOne(leagueId);
 		if (playersInLeague == null)
 		{

@@ -18,10 +18,10 @@
 				     });
 				},
 				
-				getMyPicks: function(weekId) {
+				getMyPicks: function(leagueId, weekId) {
 					$log.debug("leagueService:getPicks weekId="+weekId);
 					
-					return $http.get('/picks/self/weekid/'+weekId).success(function(result) {
+					return $http.get('/picks/self/leagueid/'+leagueId+'/weekid/'+weekId).success(function(result) {
 				           return result.data;
 				     });
 				}

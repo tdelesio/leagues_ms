@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.client.OAuth2RestOperations;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,7 +33,7 @@ public class AdminController {
     }
 	
 
-	@RequestMapping("/dummy")
+	@RequestMapping(value="/dummy", method = RequestMethod.POST)
 	public @ResponseBody Dummy createDummyData()
 	{
 		return adminService.createDummyWeeks();

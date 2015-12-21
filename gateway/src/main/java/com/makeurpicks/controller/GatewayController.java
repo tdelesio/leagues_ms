@@ -5,6 +5,8 @@ import java.util.Collections;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -31,6 +33,8 @@ import rx.Observer;
 @RestController
 public class GatewayController {
 
+	private Log log = LogFactory.getLog(GatewayController.class);
+	
 	@Autowired
 	private GameIntegrationService gameIntegrationService;
 
@@ -67,7 +71,7 @@ public class GatewayController {
     }
 	
 	@RequestMapping("/makepicks/{weekid}")
-	 public DeferredResult<MakePicks> movieDetails(@PathVariable String weekid, Principal principal) {
+	 public DeferredResult<MakePicks> makePicksByWeekId(@PathVariable String weekid, Principal principal) {
 //		return buildMakePicks(principal.getName(), weekId);
 		return toDeferredResult(buildMakePicks(principal.getName(), weekid));
 	}
@@ -99,8 +103,8 @@ public class GatewayController {
 		
 		return Observable.zip(
 				gameIntegrationService.getGamesForWeek(makePicksView.getNav().getSelectedWeekId()),
-				pickIntegrationService.getPicksForPlayerForWeek(makePicksView.getNav().getSelectedWeekId()),
-				pickIntegrationService.getDoublePickForPlayerForWeek(makePicksView.getNav().getSelectedWeekId()),
+				pickIntegrationService.getPicksForPlayerForWeek(makePicksView.getNav().getSelectedLeagueId(), makePicksView.getNav().getSelectedWeekId()),
+				pickIntegrationService.getDoublePickForPlayerForWeek(makePicksView.getNav().getSelectedLeagueId(), makePicksView.getNav().getSelectedWeekId()),
 				(games, picks, doublePick) -> {
 					
 					makePicksView.setGames(games);
@@ -167,7 +171,11 @@ public class GatewayController {
 	
 			leagueIntegrationService.getLeaguesForPlayer(userId)
 				.filter(leagues -> leagues != null)
-				.doOnNext(leagues -> navigationView.setSelectedSeasonId(leagues.get(0).getSeasonId()))
+				.doOnNext(leagues -> {
+					log.debug(leagues);
+					navigationView.setSelectedLeagueId(leagues.get(0).getLeagueId());
+					navigationView.setSelectedSeasonId(leagues.get(0).getSeasonId());
+				})
 				.subscribe(leagues -> navigationView.setLeagues(leagues))			
 			;
 			

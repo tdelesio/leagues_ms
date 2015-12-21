@@ -1,7 +1,7 @@
 <form name="createWeek" ng-submit="createCtrl.addWeek()" class="form-horizontal">
 <fieldset>
 	<div class="form-group">
-		<label for="league-select" class="col-lg-2 control-label">League</label>
+		<label for="league-select" class="col-lg-2 control-label">Season</label>
 		<div class="col-lg-10">
 			<select ng-model="week.seasonId" required id="league-select" class="form-control">
 				<option ng-repeat="season in seasons" value="{{season.id}}">

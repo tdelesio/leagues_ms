@@ -6,7 +6,7 @@ public class PickBuilder {
 
 	private String id;
 	private String teamId;
-//	private String leagueId;
+	private String leagueId;
 	private String playerId;
 	private String weekId;
 	private String gameId;
@@ -27,7 +27,7 @@ public class PickBuilder {
 		Pick pick = new Pick();
 		pick.setId(id);
 		pick.setTeamId(teamId);
-//		pick.setLeagueId(leagueId);
+		pick.setLeagueId(leagueId);
 		pick.setWeekId(weekId);
 		pick.setGameId(gameId);
 		pick.setPlayerId(playerId);
@@ -40,11 +40,11 @@ public class PickBuilder {
 		return this;
 	}
 	
-//	public PickBuilder withLeagueId(String lid)
-//	{
-//		this.leagueId  = lid;
-//		return this;
-//	}
+	public PickBuilder withLeagueId(String lid)
+	{
+		this.leagueId  = lid;
+		return this;
+	}
 	
 	public PickBuilder withWeekId(String wid)
 	{

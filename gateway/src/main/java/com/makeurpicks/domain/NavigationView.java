@@ -12,6 +12,7 @@ public class NavigationView {
 	private List<WeekView> weeks;
 	private String selectedSeasonId;
 	private String selectedWeekId;
+	private String selectedLeagueId;
 	
 
 
@@ -55,6 +56,14 @@ public class NavigationView {
 	}
 	public void setWeeks(List<WeekView> weeks) {
 		this.weeks = weeks;
+	}
+
+	public String getSelectedLeagueId() {
+		return selectedLeagueId;
+	}
+
+	public void setSelectedLeagueId(String selectedLeagueId) {
+		this.selectedLeagueId = selectedLeagueId;
 	}
 	
 	

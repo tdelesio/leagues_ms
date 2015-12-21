@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.oauth2.client.OAuth2RestOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
@@ -22,6 +23,10 @@ public class LeagueIntegrationService {
     @Qualifier("loadBalancedRestTemplate")
     @LoadBalanced
     RestTemplate restTemplate;
+	
+	@Autowired
+    @LoadBalanced
+    private OAuth2RestOperations secureRestTemplate;
 
     @HystrixCommand(fallbackMethod = "stubLeague",
             commandProperties = {
@@ -30,7 +35,7 @@ public class LeagueIntegrationService {
     )
 	public @ResponseBody LeagueResponse getLeagueById(String id)
 	{
-    	final LeagueResponse response = restTemplate.getForObject("http://gateway/leagues/{id}", LeagueResponse.class, id);
+    	final LeagueResponse response = secureRestTemplate.getForObject("http://league/leagues/{id}", LeagueResponse.class, id);
         return response;
 	}
     
@@ -49,7 +54,7 @@ public class LeagueIntegrationService {
 	public @ResponseBody List<LeagueResponse> getLeaguesForPlayer(String playerId)
 	{
 		ParameterizedTypeReference<List<LeagueResponse>> responseType = new ParameterizedTypeReference<List<LeagueResponse>>() {};
-        return restTemplate.exchange("http://gateway/leagues/player/playerId/{id}", HttpMethod.GET, null, responseType, playerId).getBody();
+        return secureRestTemplate.exchange("http://league/leagues/player/playerId/{id}", HttpMethod.GET, null, responseType, playerId).getBody();
 	}
     
     @SuppressWarnings("unused")

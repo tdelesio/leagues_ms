@@ -10,10 +10,10 @@
 	<th>league name</th>
 	</tr>
 </thead>
-<tr id="league" ng-repeat="league in leagues">
+<tr id="league" ng-repeat="league in leagues" >
 
 <!-- <%if (games.gameStarted && (games.favScore !=0 || games.dogScore != 0)) {%>background-color: teal;<%}%> -->
-	<td><a href="">Edit</a></td>
+	<td><a href="">Edit</a></br><a href="#" ng-click="showPlayers(league.id)">Players</a> </td>
 	<td>{{league.id}}</td> 
 	<td>{{league.adminId}}</td>
 	<td>{{league.seasonId}}</td>

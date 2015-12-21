@@ -1,4 +1,4 @@
-package com.makeurpicks.service.league;
+package com.makeurpicks.domain;
 
 public class LeagueView {
 

@@ -28,22 +28,22 @@ public class PickController  {
 	private PickService pickService;
 	
 	
-	@RequestMapping(method=RequestMethod.GET, value="/weekid/{weekid}")
-	public @ResponseBody Map<String, Map<String, Pick>> getPicksByWeek(@PathVariable String weekid)
+	@RequestMapping(method=RequestMethod.GET, value="/leagueid/{leagueid}/weekid/{weekid}")
+	public @ResponseBody Map<String, Map<String, Pick>> getPicksByWeek(@PathVariable String leagueid, @PathVariable String weekid)
 	{
-		return pickService.getPicksByWeek(weekid);
+		return pickService.getPicksByWeek(leagueid, weekid);
 	}
 
-	@RequestMapping(method=RequestMethod.GET, value="/self/weekid/{weekid}")
-	public @ResponseBody Map<String, Pick> getPicksByWeekAndPlayer(Principal user, @PathVariable String weekid)
+	@RequestMapping(method=RequestMethod.GET, value="/self/leagueid/{leagueid}/weekid/{weekid}")
+	public @ResponseBody Map<String, Pick> getPicksByWeekAndPlayer(Principal user, @PathVariable String leagueid, @PathVariable String weekid)
 	{
-		return pickService.getPicksByWeekAndPlayer(weekid, user.getName());
+		return pickService.getPicksByWeekAndPlayer(leagueid, weekid, user.getName());
 	}
 	
-	@RequestMapping(method=RequestMethod.GET, value="/player/weekid/{weekid}/playerid/{playerid}")
-	public @ResponseBody Map<String, Pick> getPicksByWeekAndPlayer(Principal user, @PathVariable String weekid, @PathVariable String playerid)
+	@RequestMapping(method=RequestMethod.GET, value="/player/leagueid/{leagueid}/weekid/{weekid}/playerid/{playerid}")
+	public @ResponseBody Map<String, Pick> getPicksByWeekAndPlayer(Principal user, @PathVariable String leagueid, @PathVariable String weekid, @PathVariable String playerid)
 	{
-		return pickService.getOtherPicksByWeekAndPlayer(weekid, playerid);
+		return pickService.getOtherPicksByWeekAndPlayer(leagueid, weekid, playerid);
 	}
 	
 	
@@ -76,10 +76,10 @@ public class PickController  {
 		return pickService.makeDoublePick(pick.getPickId(), user.getName());
 	}
 	
-	@RequestMapping(method=RequestMethod.GET, value="/double/weekid/{weekid}")
-	public @ResponseBody DoublePick getDoublePick(Principal user, @PathVariable String weekid)
+	@RequestMapping(method=RequestMethod.GET, value="/double/leagueid/{leagueid}/weekid/{weekid}")
+	public @ResponseBody DoublePick getDoublePick(Principal user, @PathVariable String leagueid, @PathVariable String weekid)
 	{
-		return pickService.getDoublePick(weekid, user.getName());
+		return pickService.getDoublePick(leagueid, weekid, user.getName());
 	}
 	
 

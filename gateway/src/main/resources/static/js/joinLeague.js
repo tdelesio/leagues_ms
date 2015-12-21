@@ -2,7 +2,7 @@
 	var app = angular.module('joinleague', []);
 	
 	app.controller('JoinLeagueController', function ($scope, $http, $window, $log) {
-		$scope.usererror = {};
+//		$scope.usererror = {};
 		
 		$http.get('/user').success(function(data) {
 			$scope.user = data.name;
@@ -22,7 +22,7 @@
 					$window.location.href = '/index.html';
 					
 				}).error(function(res) {
-					$scope.usererror('Could not join league.  Check to make sure league name is correct.')
+					$scope.usererror='Could not join league.  Check to make sure league name is correct.';
 				});
 			
 		};	

@@ -94,7 +94,7 @@ public class PickService {
 			throw new PickValidationException(PickExceptions.UNAUTHORIZED_USER);
 		
 		//check to see if the pick is the existing double pick
-		DoublePick doublePick = doublePickRepository.findOne(DoublePick.buildString(pick.getWeekId(), pick.getPlayerId()));
+		DoublePick doublePick = doublePickRepository.findOne(DoublePick.buildString(pick.getLeagueId(), pick.getWeekId(), pick.getPlayerId()));
 		if (doublePick != null && doublePick.getPickId().equals(pick.getId()))
 		{
 			//the game being updated is the double so we need to clear it out
@@ -107,15 +107,15 @@ public class PickService {
 		return pick;
 	}
 	
-	public Map<String, Pick>getPicksByWeekAndPlayer(String weekId, String playerId)
+	public Map<String, Pick>getPicksByWeekAndPlayer(String leagueId, String weekId, String playerId)
 	{
-		Map<String, Map<String, String>> map = picksByWeekRepository.getPlayersByWeek(weekId);
+		Map<String, Map<String, String>> map = picksByWeekRepository.getPlayersByWeek(leagueId, weekId);
 		return getPicksByWeekAndPlayer(map, weekId, playerId);
 	}
 	
-	public Map<String, Pick> getOtherPicksByWeekAndPlayer(String weekId, String playerId)
+	public Map<String, Pick> getOtherPicksByWeekAndPlayer(String leagueId, String weekId, String playerId)
 	{
-		Map<String, Pick> picks = getPicksByWeekAndPlayer(weekId, playerId);
+		Map<String, Pick> picks = getPicksByWeekAndPlayer(leagueId, weekId, playerId);
 //		Map<String, Pick> filteredpicks = new HashMap<>(picks.size());
 //		gameClient.
 //		for ()
@@ -126,7 +126,7 @@ public class PickService {
 	private Map<String, Pick>getPicksByWeekAndPlayer(Map<String, Map<String, String>> map, String weekId, String playerId)
 	{
 //		Map<String, Map<String, String>> map = picksByWeekRepository.getPlayersByWeek(weekId);
-		if (map==null)
+		if (map==null || map.isEmpty())
 			return Collections.emptyMap();
 		Map<String, String> games = map.get(playerId);
 		Set<String> subkeys = games.keySet();
@@ -144,9 +144,11 @@ public class PickService {
 		
 	}
 	
-	public Map<String, Map<String, Pick>>getPicksByWeek(String weekId)
+//	Map<String, Map<String, Pick>>
+	
+	public Map<String, Map<String, Pick>>getPicksByWeek(String leagueId, String weekId)
 	{
-		Map<String, Map<String, String>> map = picksByWeekRepository.getPlayersByWeek(weekId);
+		Map<String, Map<String, String>> map = picksByWeekRepository.getPlayersByWeek(leagueId, weekId);
 		if (map==null)
 			return Collections.emptyMap();
 		
@@ -204,8 +206,8 @@ public class PickService {
 		if ("".equals(pick.getWeekId()))
 			codes.add(PickExceptions.WEEK_IS_NULL);
 		
-//		if ("".equals(pick.getLeagueId()))
-//			codes.add(PickExceptions.LEAGUE_IS_NULL);
+		if ("".equals(pick.getLeagueId()))
+			codes.add(PickExceptions.LEAGUE_IS_NULL);
 		
 //		/*if (pick.getLeagueId()==null)
 //			cod*/es.add(PickExceptions.LEAGUE_IS_NULL);
@@ -253,9 +255,9 @@ public class PickService {
 	}
 	
 	
-	public DoublePick getDoublePick(String weekId, String playerId)
+	public DoublePick getDoublePick(String leagueId, String weekId, String playerId)
 	{
-		return doublePickRepository.findOne(DoublePick.buildString(weekId, playerId));
+		return doublePickRepository.findOne(DoublePick.buildString(leagueId, weekId, playerId));
 	}
 
 	public DoublePick makeDoublePick(String pickId, String loggedInPlayerId)
@@ -277,7 +279,7 @@ public class PickService {
 			throw new PickValidationException(PickExceptions.UNAUTHORIZED_USER);
 		
 //		Picks oldPick = getDoublePickForPlayerLeagueAndWeek(pick.getName(), pick.getLeague(), pick.getWeek());
-		DoublePick orginialDoublePick = doublePickRepository.findOne(DoublePick.buildString(pick.getWeekId(), pick.getPlayerId())); 
+		DoublePick orginialDoublePick = doublePickRepository.findOne(DoublePick.buildString(pick.getLeagueId(), pick.getWeekId(), pick.getPlayerId())); 
 		
 		//need to check to see if the orginal pick game has started
 		if (orginialDoublePick!=null)
@@ -301,7 +303,7 @@ public class PickService {
 		else
 		{
 			//there is no orginal pick, so create a new one
-			DoublePick doublePick = new DoublePick(pick.getWeekId(), pick.getPlayerId(), pickId, game.getId(), game.getHasGameStarted());
+			DoublePick doublePick = new DoublePick(pick.getLeagueId(), pick.getWeekId(), pick.getPlayerId(), pickId, game.getId(), game.getHasGameStarted());
 			doublePickRepository.save(doublePick);
 			
 			return doublePick;

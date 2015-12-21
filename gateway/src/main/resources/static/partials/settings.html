@@ -4,8 +4,8 @@
 			<div class="col-sm-6">
 				<div class="subnav" id="season-view">
 					<div class="season-select">
-						<select ng-model="league.seasonId" id="season" ng-change="changeLeague()">
-							<option ng-repeat="league in nav.leagues" value="{{league.seasonId}}">
+						<select ng-model="league.leagueId" id="season" ng-change="changeLeague()" >
+							<option ng-repeat="league in nav.leagues" value="{{league.leagueId}}">
 						 		{{league.leagueName}}
 							</option>
 						</select>

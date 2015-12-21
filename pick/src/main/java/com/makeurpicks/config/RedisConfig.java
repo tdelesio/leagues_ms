@@ -61,9 +61,9 @@ public class RedisConfig {
 //	}
 	
 	@Bean
-	public RedisTemplate<String, Map<String, Map<String, String>>> picksByWeekRedisTemplate(RedisConnectionFactory redisConnectionFactory)
+	public RedisTemplate<String, Map<String, Map<String, Map<String, String>>>> picksByWeekRedisTemplate(RedisConnectionFactory redisConnectionFactory)
 	{
-		RedisTemplate<String, Map<String, Map<String, String>>> template = new RedisTemplate<>();
+		RedisTemplate<String, Map<String, Map<String, Map<String, String>>>> template = new RedisTemplate<>();
 		template.setConnectionFactory(redisConnectionFactory);
 		
 		template.setHashKeySerializer(stringRedisSerializer());

@@ -97,6 +97,13 @@
 		};
 	});
 	
+	app.directive('playersInLeague', function() {
+		return {
+			restrict: 'E',
+			templateUrl: 'partials/playersInLeague.html'
+		};
+	});
+	
 	
 	app.factory('leagueService', function ($http, $log) {
 	$log.debug('leagueService');
@@ -156,34 +163,33 @@
 			$log.debug('SetupController:Leagues=' +JSON.stringify(data));
 //			$http.get('leagues/').success(function(data) {
 //			$scope.leagues = data;
+			if (data[0] === undefined) {
+				$window.location.href = '/admin/#/seasons';
+				return;
+			}	
 				
-			if (data[0] === undefined)
-				$window.location.href = '/admin/#/leagues';
+			$scope.add_game_model.seasonId = data[0].id;
+			
+			$http.get('/admin/weeks/seasonid/'+$scope.add_game_model.seasonId).success(function(data) {
 				
-				$scope.add_game_model.seasonId = data[0].id;
-				
-				$http.get('/admin/weeks/seasonid/'+$scope.add_game_model.seasonId).success(function(data) {
-				
-				
-					$log.debug('SetupController:Weeks='+JSON.stringify(data))
-					$scope.weeks = data;
-					if (Object.keys(data).length > 0)
-					{
-						$scope.weeksSetup=true;
-						$scope.add_game_model.weekId = data[0].id;
+				$log.debug('SetupController:Weeks='+JSON.stringify(data))
+				$scope.weeks = data;
+				if (Object.keys(data).length > 0)
+				{
+					$scope.weeksSetup=true;
+					$scope.add_game_model.weekId = data[0].id;
 					
-//						$http.get('games/weekid/'+$scope.add_game_model.weekId).success(function(data) {
-						leagueService.getGames($scope.add_game_model.weekId).then(function(data) {
-							$log.debug('SetupController:Games='+JSON.stringify(data.data))
-							$scope.games = data.data;
+					leagueService.getGames($scope.add_game_model.weekId).then(function(data) {
+						$log.debug('SetupController:Games='+JSON.stringify(data.data))
+						$scope.games = data.data;
 						
-						});
-					}
-					else
-					{
-						$window.location.href = '/admin/#/create';
-					}
-				});
+					});
+				}
+				else
+				{
+					$window.location.href = '/admin/#/create';
+				}
+			});
 		});
 	
 		
@@ -370,20 +376,17 @@
 			
 			$http({
 				method : "POST",
-//				beforeSend: function (request) {
-//			        request.setRequestHeader(header, token);
-//			     },
 				url : '/admin/seasons/',
 				contentType : "application/json",
 				dataType : "json",
-				//data : $('form').serializeObject(),
 				data : JSON.stringify($scope.season)
 			}).success(function(res) { 
 				
-				$scope.showgames = true;
-				$http.get('/admin/seasons/current').success(function(data) {
-					$scope.seasons = data;
-				});
+//				$scope.showgames = true;
+//				$http.get('/admin/seasons/current').success(function(data) {
+//					$scope.seasons = data;
+//				});
+				$window.location.href = '/admin/#/leagues';
 				
 			}).error(function(res) {
 				alert('fail');
@@ -396,6 +399,7 @@
 		$scope.league = {};
 		$scope.season = {};
 		$scope.showgames=true;
+		$scope.hideplayers=false;
 		
 		leagueService.getLeagues().then(function(data) {
 			$scope.leagues = data;
@@ -419,14 +423,40 @@
 			
 			$http({
 				method : "POST",
-//				beforeSend: function (request) {
-//			        request.setRequestHeader(header, token);
-//			     },
 				url : '/admin/leagues/',
 				contentType : "application/json",
 				dataType : "json",
-				//data : $('form').serializeObject(),
 				data : JSON.stringify($scope.league)
+			}).success(function(res) { 
+				
+				leagueService.getLeagues().then(function(data) {
+					$scope.leagues = data;
+				});
+				
+			}).error(function(res) {
+				alert('fail');
+			});
+		}
+		
+		$scope.showPlayers = function(leagueId) {
+			
+			$log.debug("CreateLeagueController:showPlayers: leagueId="+leagueId);
+			$scope.hideplayers=true;
+			
+			$http.get('/admin/leagues/player/leagueid/'+leagueId).success(function(data) {
+				$scope.players = data;
+				
+			});
+		}
+		
+		$scope.dummyLeague = function () {
+			$http({
+				method : "POST",
+				url : '/admin/dummy',
+				contentType : "application/json",
+				dataType : "json"
+//					,
+//				data : JSON.stringify($scope.league)
 			}).success(function(res) { 
 				
 				leagueService.getLeagues().then(function(data) {
@@ -461,7 +491,14 @@
 		
 		
 		this.autoWeek = function(week) {
+			
+			if (week === undefined) {
+				week = {};
+				week.seasonId = $scope.week.seasonId;
+			}
+			
 			$log.debug('autoWeek: week='+JSON.stringify(week));
+			
 			$http({
 				method : "POST",
 //				method : "GET",

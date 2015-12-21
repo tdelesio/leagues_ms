@@ -33,20 +33,41 @@
 //			$log.debug('NavigationController:getPage='+JSON.stringify(data))
 			$scope.nav = data.nav; 
 			$scope.week.weekId = data.nav.selectedWeekId;
-			$scope.league.seasonId = data.nav.selectedSeasonId;
+			
+			$log.debug('NavigationController:getPage: data.nav.selectedLeagueId='+data.nav.selectedLeagueId);
+			$scope.league.leagueId = data.nav.selectedLeagueId;
 		});
 		
+		$scope.$on('leagueChanged', function(events, args) {
+		
+			$log.debug('NavigationController:on:leagueChanged: leagueId='+args);
+			$http.get('/weeks/leagueid/'+args)
+				.success(function(result) {
+					
+					var selectedWeek = result[0].id;
+					
+					$scope.nav.weeks=result;
+//					$scope.nav.selectedSeasonId;
+					$scope.nav.selectedWeekId=selectedWeek;
+					$scope.nav.selectedLeagueId=args;
+					
+					$scope.week.weekId = selectedWeek;
+					
+		           $rootScope.$broadcast('weekChanged', selectedWeek);
+		     });
+			
+		});
 	
 	
 		$scope.changeWeek = function() {
-			$log.debug('weekChanged week='+$scope.week.weekId);
+			$log.debug('NavigationController:changeWeek: scope.week.weekId='+$scope.week.weekId);
 			$rootScope.$broadcast('weekChanged', $scope.week.weekId);
 			
 		};
 		
 		$scope.changeLeague = function() {
-			$log.debug('leagueChanged league='+$scope.league.seasonId);
-			$rootScope.$broadcast('leagueChanged', $scope.league.seasonId);
+			$log.debug('NavigationController:changeLeague: league='+$scope.league.leagueId);
+			$rootScope.$broadcast('leagueChanged', $scope.league.leagueId);
 		};	
 		
 		$scope.logout = function() {

@@ -1,6 +1,5 @@
 package com.makeurpicks.service.pick;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,6 +13,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.oauth2.client.OAuth2RestOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
@@ -42,20 +42,22 @@ private Log log = LogFactory.getLog(PickIntegrationService.class);
                     @HystrixProperty(name = "execution.isolation.strategy", value = "SEMAPHORE")
             }
     )
-    public Observable<Map<String, PickView>> getPicksForPlayerForWeek(String weekid) {
+    public Observable<Map<String, PickView>> getPicksForPlayerForWeek(String leagueid, String weekid) {
         return new ObservableResult<Map<String, PickView>>() {
             @Override
             public Map<String, PickView> invoke() {
             	
+//            	UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
+            	log.debug("leagueid="+leagueid+" weekid="+weekid);
             	ParameterizedTypeReference<Map<String, PickView>> responseType = new ParameterizedTypeReference<Map<String, PickView>>() {};
-                return secureRestTemplate.exchange("http://pick/picks/self/weekid/{weekid}", HttpMethod.GET, null, responseType, weekid).getBody();
+                return secureRestTemplate.exchange("http://pick/picks/self/leagueid/{leagueid}/weekid/{weekid}", HttpMethod.GET, null, responseType, leagueid, weekid).getBody();
 //            	return Collections.emptyMap();                
             }
         };
     }
 
     @SuppressWarnings("unused")
-    private Map<String, PickView> stubPicks(final String weekId) {
+    private Map<String, PickView> stubPicks(final String leagueId, final String weekId) {
 
 
     	Map<String, PickView> map = new HashMap<>(1);
@@ -69,20 +71,20 @@ private Log log = LogFactory.getLog(PickIntegrationService.class);
                     @HystrixProperty(name = "execution.isolation.strategy", value = "SEMAPHORE")
             }
     )
-    public Observable<DoublePickView> getDoublePickForPlayerForWeek(String weekid) {
+    public Observable<DoublePickView> getDoublePickForPlayerForWeek(String leagueid, String weekid) {
         return new ObservableResult<DoublePickView>() {
             @Override
             public DoublePickView invoke() {
             	
-            	
-            	return secureRestTemplate.exchange("http://pick/picks/double/weekid/{weekid}", HttpMethod.GET, null, DoublePickView.class, weekid).getBody();
+            	log.debug("leagueid="+leagueid+" weekid="+weekid);
+            	return secureRestTemplate.exchange("http://pick/picks/double/leagueid/{leagueid}/weekid/{weekid}", HttpMethod.GET, null, DoublePickView.class, leagueid, weekid).getBody();
 //            	return Collections.emptyMap();                
             }
         };
     }
 
     @SuppressWarnings("unused")
-    private DoublePickView stubDoublePick(final String weekId) {
+    private DoublePickView stubDoublePick(final String leagueId, final String weekId) {
     	
         return new DoublePickView(true);
     }

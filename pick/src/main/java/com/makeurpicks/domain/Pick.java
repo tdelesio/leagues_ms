@@ -3,7 +3,7 @@ package com.makeurpicks.domain;
 public class Pick extends AbstractModel {
 
 	private String teamId;
-//	private String leagueId;
+	private String leagueId;
 	private String playerId;
 	private String weekId;
 	private String gameId;
@@ -20,13 +20,13 @@ public class Pick extends AbstractModel {
 		this.teamId = teamId;
 	}
 
-//	public String getLeagueId() {
-//		return leagueId;
-//	}
-//
-//	public void setLeagueId(String leagueId) {
-//		this.leagueId = leagueId;
-//	}
+	public String getLeagueId() {
+		return leagueId;
+	}
+
+	public void setLeagueId(String leagueId) {
+		this.leagueId = leagueId;
+	}
 
 	public String getPlayerId() {
 		return playerId;

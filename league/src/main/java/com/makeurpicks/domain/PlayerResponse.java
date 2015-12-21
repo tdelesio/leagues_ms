@@ -40,6 +40,12 @@ public class PlayerResponse extends AbstractModel {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+
+	@Override
+	public String toString() {
+		return "PlayerResponse [email=" + email + ", firstName=" + firstName + ", lastName=" + lastName + ", id=" + id
+				+ "]";
+	}
 	
 	
 }

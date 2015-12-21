@@ -26,7 +26,6 @@ public class PicksApplication {
     @Configuration
     @EnableWebSecurity
     @EnableGlobalMethodSecurity(prePostEnabled = true)
-//    @EnableOAuth2Sso
     protected static class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         @Override
