@@ -36,8 +36,8 @@ public class PickService {
 	@Autowired
 	private GameIntegrationService gameIntegrationService;
 	
-	@Autowired 
-	private LeagueIntegrationService leagueIntegrationService;
+//	@Autowired 
+//	private LeagueIntegrationService leagueIntegrationService;
 	
 	@Autowired
 	private DoublePickRepository doublePickRepository;
@@ -45,26 +45,10 @@ public class PickService {
 	@Autowired
 	private PicksByWeekRepository picksByWeekRepository;
 
-	
-
-
-
-	public void setLeagueIntegrationService(LeagueIntegrationService leagueIntegrationService) {
-		this.leagueIntegrationService = leagueIntegrationService;
-	}
-
-
-
-	public void setGameIntegrationService(GameIntegrationService gameIntegrationService) {
-		this.gameIntegrationService = gameIntegrationService;
-	}
-
-
-
 	public Pick makePick(Pick pick)
 	{
 		//make sure all the parms are set
-		validatePick(pick);  
+		validatePick(pick, false);  
 		
 		pick.setId(UUID.randomUUID().toString());
 		
@@ -85,7 +69,7 @@ public class PickService {
 	public Pick updatePick(Pick pick)
 	{
 		//make sure all the parms are set
-		validatePick(pick);  
+		validatePick(pick, true);  
 		
 		Pick pickFromDS = pickRepository.findOne(pick.getId());
 		if (pickFromDS == null)
@@ -181,13 +165,13 @@ public class PickService {
 	
 	
 	
-	private List<LeagueResponse> getLeaguesForPlayer(String playerId) 
-	{
-		return leagueIntegrationService.getLeaguesForPlayer(playerId);
-	}
+//	private List<LeagueResponse> getLeaguesForPlayer(String playerId) 
+//	{
+//		return leagueIntegrationService.getLeaguesForPlayer(playerId);
+//	}
 	
 	
-	private void validatePick(Pick pick)
+	private void validatePick(Pick pick, boolean isUpdate)
 	{
 		List<PickExceptions> codes = new ArrayList<PickExceptions>();
 		
@@ -227,8 +211,8 @@ public class PickService {
 			codes.add(PickExceptions.TEAM_NOT_PLAYING_IN_GAME);
 				
 		//check to make sure that the game hasn't started
-//		if (game.getHasGameStarted())
-//			codes.add(PickExceptions.GAME_HAS_ALREADY_STARTED);
+		if (!isUpdate && game.getHasGameStarted())
+			codes.add(PickExceptions.GAME_HAS_ALREADY_STARTED);
 		
 		//need to make sure that the user is in that league
 //		List<LeagueResponse> leagues = getLeaguesForPlayer(pick.getPlayerId());

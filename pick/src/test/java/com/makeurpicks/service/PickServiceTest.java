@@ -45,16 +45,16 @@ import com.makeurpicks.repository.PicksByWeekRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = PicksApplication.class)
-@IntegrationTest({ "server.port:0", "spring.cloud.config.enabled:true" })
-@WebAppConfiguration
+//@IntegrationTest({ "server.port:0", "spring.cloud.config.enabled:true" })
+//@WebAppConfiguration
 public class PickServiceTest {
 
-private static ConfigurableApplicationContext server;
+//	private static ConfigurableApplicationContext server;
 	
-	private static int configPort = 8888;
+//	private static int configPort = 8888;
 	
-	@Mock
-	private LeagueIntegrationService leagueClientMock;
+//	@Mock
+//	private LeagueIntegrationService leagueClientMock;
 	
 	@Mock
 	private GameIntegrationService gameClientMock;
@@ -72,17 +72,8 @@ private static ConfigurableApplicationContext server;
 	@Autowired
 	private PicksByWeekRepository picksByWeekRepository;
 	
-//	@Autowired
-//	private PicksByLeagueWeekRepository picksByLeagueWeekRepository;
-//	
-//	@Autowired
-//	private PicksByLeagueWeekAndPlayerRepository picksByLeagueWeekPlayerRepository;
-//	
-//	@Autowired
-//	private RedisTemplate<String, String> stringRedisTemplate;
-	
-	@BeforeClass
-	public static void init() throws Exception {
+//	@BeforeClass
+//	public static void init() throws Exception {
 //		String baseDir = ConfigServerTestUtils.getBaseDirectory("leagues");
 		
 //		String repo = ConfigServerTestUtils.prepareLocalRepo(baseDir, "target/repos",
@@ -96,7 +87,7 @@ private static ConfigurableApplicationContext server;
 //		configPort = ((EmbeddedWebApplicationContext) server)
 //				.getEmbeddedServletContainer().getPort();
 //		System.setProperty("config.port", "" + configPort);
-	}
+//	}
 	@Before
 	public void setup()
 	{
@@ -112,9 +103,9 @@ private static ConfigurableApplicationContext server;
 		
 //		stringRedisTemplate.getConnectionFactory().getConnection().flushDb();
 		
-		pickService.setGameIntegrationService(gameClientMock);
+//		pickService.setGameIntegrationService(gameClientMock);
 		
-		pickService.setLeagueIntegrationService(leagueClientMock);
+//		pickService.setLeagueIntegrationService(leagueClientMock);
 		
 		
 		
@@ -123,23 +114,31 @@ private static ConfigurableApplicationContext server;
 //		picksByLeagueWeekRepository.deleteAll();
 	}
 	
-	@AfterClass
-	public static void close() {
-		System.clearProperty("config.port");
-		if (server != null) {
-			server.close();
-		}
-	}
+//	@AfterClass
+//	public static void close() {
+//		System.clearProperty("config.port");
+//		if (server != null) {
+//			server.close();
+//		}
+//	}
 	
-	private void leagueClientMock(String leagueId)
-	{
-		when(leagueClientMock.getLeagueById(leagueId)).thenReturn(new LeagueResponse(leagueId));
-	}
+	
+//	private void leagueClientMock(String leagueId)
+//	{
+//		when(leagueClientMock.getLeagueById(leagueId)).thenReturn(new LeagueResponse(leagueId));
+//	}
 	
 	private void gameClientMock(String gameId, String favId, String dogId, String weekId, long gameStartTime)
 	{
 		Date date = new Date(gameStartTime);
 		ZonedDateTime time = ZonedDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+		when(gameClientMock.getGameById(gameId)).thenReturn(new GameResponse(gameId, time, favId, dogId, weekId));
+	}
+	
+	private void gameClientMock(String gameId, String favId, String dogId, String weekId, ZonedDateTime time)
+	{
+//		Date date = new Date(gameStartTime);
+//		ZonedDateTime time = ZonedDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
 		when(gameClientMock.getGameById(gameId)).thenReturn(new GameResponse(gameId, time, favId, dogId, weekId));
 	}
 	
@@ -173,8 +172,8 @@ private static ConfigurableApplicationContext server;
 		String team3 = "t3";
 		String team4 = "t4";
 		
-		leagueClientMock(league1);
-		leagueClientMock(league2);
+//		leagueClientMock(league1);
+//		leagueClientMock(league2);
 		
 		gameClientMock(game1League1Week1, team1, team2, week1League1, System.currentTimeMillis()-10000);
 		gameClientMock(game1League1Week2, team1, team4, week2League1, System.currentTimeMillis()+10000);
@@ -183,28 +182,28 @@ private static ConfigurableApplicationContext server;
 		gameClientMock(game1League2Week1, team1, team2, week1League2, System.currentTimeMillis()+10000);
 		gameClientMock(game2League2Week1, team3, team4, week1League2, System.currentTimeMillis()+10000);
 		
-		List<LeagueResponse> leagues = new ArrayList<LeagueResponse>();
-		leagues.add(new LeagueResponse(league1));
-		leagues.add(new LeagueResponse(league2));
-		when(leagueClientMock.getLeaguesForPlayer(player1)).thenReturn(leagues);
-		
-		leagues = new ArrayList<LeagueResponse>();
-		leagues.add(new LeagueResponse(league1));
-		when(leagueClientMock.getLeaguesForPlayer(player2)).thenReturn(leagues);
-		
-		leagues = new ArrayList<LeagueResponse>();
-		leagues.add(new LeagueResponse(league1));
-		when(leagueClientMock.getLeaguesForPlayer(player3)).thenReturn(leagues);
-		
-		leagues = new ArrayList<LeagueResponse>();
-		leagues.add(new LeagueResponse(league2));
-		when(leagueClientMock.getLeaguesForPlayer(player4)).thenReturn(leagues);
+//		List<LeagueResponse> leagues = new ArrayList<LeagueResponse>();
+//		leagues.add(new LeagueResponse(league1));
+//		leagues.add(new LeagueResponse(league2));
+//		when(leagueClientMock.getLeaguesForPlayer(player1)).thenReturn(leagues);
+//		
+//		leagues = new ArrayList<LeagueResponse>();
+//		leagues.add(new LeagueResponse(league1));
+//		when(leagueClientMock.getLeaguesForPlayer(player2)).thenReturn(leagues);
+//		
+//		leagues = new ArrayList<LeagueResponse>();
+//		leagues.add(new LeagueResponse(league1));
+//		when(leagueClientMock.getLeaguesForPlayer(player3)).thenReturn(leagues);
+//		
+//		leagues = new ArrayList<LeagueResponse>();
+//		leagues.add(new LeagueResponse(league2));
+//		when(leagueClientMock.getLeaguesForPlayer(player4)).thenReturn(leagues);
 		
 		try
 		{
 			Pick pick1 = new PickBuilder()
 			.withGameId(game1League1Week1)
-//			.withLeagueId(league1)
+			.withLeagueId(league1)
 			.withPlayerId(player1)
 			.withTeamId(team1)
 			.withWeekId(week1League1)
@@ -222,7 +221,7 @@ private static ConfigurableApplicationContext server;
 		{
 			Pick pick2 = new PickBuilder()
 			.withGameId(game2League1Week1)
-//			.withLeagueId(league1)
+			.withLeagueId(league1)
 			.withPlayerId(player1)
 			.withTeamId(team1)
 			.withWeekId(week1League1)
@@ -258,7 +257,7 @@ private static ConfigurableApplicationContext server;
 		{
 			Pick pick2 = new PickBuilder()
 			.withGameId(game2League1Week1)
-//			.withLeagueId(league1)
+			.withLeagueId(league1)
 			.withPlayerId(player1)
 			.withTeamId(team1)
 			.withWeekId(week2League1)
@@ -294,33 +293,33 @@ private static ConfigurableApplicationContext server;
 		String team3 = "t3";
 		String team4 = "t4";
 		
-		leagueClientMock(league1);
-		leagueClientMock(league2);
+//		leagueClientMock(league1);
+//		leagueClientMock(league2);
 		
 		
-		List<LeagueResponse> leagues = new ArrayList<LeagueResponse>();
-		leagues.add(new LeagueResponse(league1));
-		leagues.add(new LeagueResponse(league2));
-		when(leagueClientMock.getLeaguesForPlayer(player1)).thenReturn(leagues);
+//		List<LeagueResponse> leagues = new ArrayList<LeagueResponse>();
+//		leagues.add(new LeagueResponse(league1));
+//		leagues.add(new LeagueResponse(league2));
+//		when(leagueClientMock.getLeaguesForPlayer(player1)).thenReturn(leagues);
+//		
+//		leagues = new ArrayList<LeagueResponse>();
+//		leagues.add(new LeagueResponse(league1));
+//		when(leagueClientMock.getLeaguesForPlayer(player2)).thenReturn(leagues);
+//		
+//		leagues = new ArrayList<LeagueResponse>();
+//		leagues.add(new LeagueResponse(league1));
+//		when(leagueClientMock.getLeaguesForPlayer(player3)).thenReturn(leagues);
+//		
+//		leagues = new ArrayList<LeagueResponse>();
+//		leagues.add(new LeagueResponse(league2));
+//		when(leagueClientMock.getLeaguesForPlayer(player4)).thenReturn(leagues);
 		
-		leagues = new ArrayList<LeagueResponse>();
-		leagues.add(new LeagueResponse(league1));
-		when(leagueClientMock.getLeaguesForPlayer(player2)).thenReturn(leagues);
-		
-		leagues = new ArrayList<LeagueResponse>();
-		leagues.add(new LeagueResponse(league1));
-		when(leagueClientMock.getLeaguesForPlayer(player3)).thenReturn(leagues);
-		
-		leagues = new ArrayList<LeagueResponse>();
-		leagues.add(new LeagueResponse(league2));
-		when(leagueClientMock.getLeaguesForPlayer(player4)).thenReturn(leagues);
-		
-		gameClientMock(game1League1Week1, team1, team2, week1League1, System.currentTimeMillis()+5000);
+		gameClientMock(game1League1Week1, team1, team2, week1League1, System.currentTimeMillis()+2000);
 		gameClientMock(game2League1Week1, team3, team4, week1League1, System.currentTimeMillis()+500000);
 		
 		Pick pick1 = new PickBuilder()
 		.withGameId(game1League1Week1)
-//		.withLeagueId(league1)
+		.withLeagueId(league1)
 		.withPlayerId(player1)
 		.withTeamId(team1)
 		.withWeekId(week1League1)
@@ -330,20 +329,20 @@ private static ConfigurableApplicationContext server;
 		try{Thread.sleep(5000);}catch(Exception e){}
 		pick1.setTeamId(team2);
 		
-		try
-		{
+//		try
+//		{
 			pickService.updatePick(pick1);
 			
-			fail();
-		}
-		catch (PickValidationException exception)
-		{
-			assertTrue(exception.getMessage().contains(PickExceptions.GAME_HAS_ALREADY_STARTED.toString()));
-		}
+//			fail();
+//		}
+//		catch (PickValidationException exception)
+//		{
+//			assertTrue(exception.getMessage().contains(PickExceptions.GAME_HAS_ALREADY_STARTED.toString()));
+//		}
 		
 		Pick pick2 = new PickBuilder()
 		.withGameId(game2League1Week1)
-//		.withLeagueId(league1)
+		.withLeagueId(league1)
 		.withPlayerId(player1)
 		.withTeamId(team3)
 		.withWeekId(week1League1)
@@ -399,8 +398,8 @@ private static ConfigurableApplicationContext server;
 			String team3 = "t3";
 			String team4 = "t4";
 			
-			leagueClientMock(league1);
-			leagueClientMock(league2);
+//			leagueClientMock(league1);
+//			leagueClientMock(league2);
 			
 			gameClientMock(game1League1Week1, team1, team2, week1League1, System.currentTimeMillis()+100000);
 			gameClientMock(game1League1Week2, team1, team4, week2League1, System.currentTimeMillis()+100000);
@@ -409,22 +408,22 @@ private static ConfigurableApplicationContext server;
 			gameClientMock(game1League2Week1, team1, team2, week1League2, System.currentTimeMillis()+100000);
 			gameClientMock(game2League2Week1, team3, team4, week1League2, System.currentTimeMillis()+100000);
 			
-			List<LeagueResponse> leagues = new ArrayList<LeagueResponse>();
-			leagues.add(new LeagueResponse(league1));
-			leagues.add(new LeagueResponse(league2));
-			when(leagueClientMock.getLeaguesForPlayer(player1)).thenReturn(leagues);
-			
-			leagues = new ArrayList<LeagueResponse>();
-			leagues.add(new LeagueResponse(league1));
-			when(leagueClientMock.getLeaguesForPlayer(player2)).thenReturn(leagues);
-			
-			leagues = new ArrayList<LeagueResponse>();
-			leagues.add(new LeagueResponse(league1));
-			when(leagueClientMock.getLeaguesForPlayer(player3)).thenReturn(leagues);
-			
-			leagues = new ArrayList<LeagueResponse>();
-			leagues.add(new LeagueResponse(league2));
-			when(leagueClientMock.getLeaguesForPlayer(player4)).thenReturn(leagues);
+//			List<LeagueResponse> leagues = new ArrayList<LeagueResponse>();
+//			leagues.add(new LeagueResponse(league1));
+//			leagues.add(new LeagueResponse(league2));
+//			when(leagueClientMock.getLeaguesForPlayer(player1)).thenReturn(leagues);
+//			
+//			leagues = new ArrayList<LeagueResponse>();
+//			leagues.add(new LeagueResponse(league1));
+//			when(leagueClientMock.getLeaguesForPlayer(player2)).thenReturn(leagues);
+//			
+//			leagues = new ArrayList<LeagueResponse>();
+//			leagues.add(new LeagueResponse(league1));
+//			when(leagueClientMock.getLeaguesForPlayer(player3)).thenReturn(leagues);
+//			
+//			leagues = new ArrayList<LeagueResponse>();
+//			leagues.add(new LeagueResponse(league2));
+//			when(leagueClientMock.getLeaguesForPlayer(player4)).thenReturn(leagues);
 			
 			//league1, week1, team1 playing team2, team3 playing team4
 
@@ -671,8 +670,8 @@ private static ConfigurableApplicationContext server;
 			String team3 = "t3";
 			String team4 = "t4";
 			
-			leagueClientMock(league1);
-			leagueClientMock(league2);
+//			leagueClientMock(league1);
+//			leagueClientMock(league2);
 			
 			gameClientMock(game1League1Week1, team1, team2, week1League1, System.currentTimeMillis()+10000);
 			gameClientMock(game1League1Week2, team1, team4, week2League1, System.currentTimeMillis()+10000);
@@ -681,22 +680,22 @@ private static ConfigurableApplicationContext server;
 			gameClientMock(game1League2Week1, team1, team2, week1League2, System.currentTimeMillis()+10000);
 			gameClientMock(game2League2Week1, team3, team4, week1League2, System.currentTimeMillis()+10000);
 			
-			List<LeagueResponse> leagues = new ArrayList<LeagueResponse>();
-			leagues.add(new LeagueResponse(league1));
-			leagues.add(new LeagueResponse(league2));
-			when(leagueClientMock.getLeaguesForPlayer(player1)).thenReturn(leagues);
-			
-			leagues = new ArrayList<LeagueResponse>();
-			leagues.add(new LeagueResponse(league1));
-			when(leagueClientMock.getLeaguesForPlayer(player2)).thenReturn(leagues);
-			
-			leagues = new ArrayList<LeagueResponse>();
-			leagues.add(new LeagueResponse(league1));
-			when(leagueClientMock.getLeaguesForPlayer(player3)).thenReturn(leagues);
-			
-			leagues = new ArrayList<LeagueResponse>();
-			leagues.add(new LeagueResponse(league2));
-			when(leagueClientMock.getLeaguesForPlayer(player4)).thenReturn(leagues);
+//			List<LeagueResponse> leagues = new ArrayList<LeagueResponse>();
+//			leagues.add(new LeagueResponse(league1));
+//			leagues.add(new LeagueResponse(league2));
+//			when(leagueClientMock.getLeaguesForPlayer(player1)).thenReturn(leagues);
+//			
+//			leagues = new ArrayList<LeagueResponse>();
+//			leagues.add(new LeagueResponse(league1));
+//			when(leagueClientMock.getLeaguesForPlayer(player2)).thenReturn(leagues);
+//			
+//			leagues = new ArrayList<LeagueResponse>();
+//			leagues.add(new LeagueResponse(league1));
+//			when(leagueClientMock.getLeaguesForPlayer(player3)).thenReturn(leagues);
+//			
+//			leagues = new ArrayList<LeagueResponse>();
+//			leagues.add(new LeagueResponse(league2));
+//			when(leagueClientMock.getLeaguesForPlayer(player4)).thenReturn(leagues);
 			
 			//league1, week1, team1 playing team2, team3 playing team4
 
@@ -704,7 +703,7 @@ private static ConfigurableApplicationContext server;
 			//player1 picks for week1, league1
 			Pick pick1 = new PickBuilder()
 			.withGameId(game1League1Week1)
-//			.withLeagueId(league1)
+			.withLeagueId(league1)
 			.withPlayerId(player1)
 			.withTeamId(team1)
 			.withWeekId(week1League1)
@@ -713,7 +712,7 @@ private static ConfigurableApplicationContext server;
 			
 			Pick pick2 = new PickBuilder()
 			.withGameId(game2League1Week1)
-//			.withLeagueId(league1)
+			.withLeagueId(league1)
 			.withPlayerId(player1)
 			.withTeamId(team3)
 			.withWeekId(week1League1)
@@ -723,7 +722,7 @@ private static ConfigurableApplicationContext server;
 			//player2 picks for week1, league 1
 			Pick pick3 = new PickBuilder()
 			.withGameId(game1League1Week1)
-//			.withLeagueId(league1)
+			.withLeagueId(league1)
 			.withPlayerId(player2)
 			.withTeamId(team2)
 			.withWeekId(week1League1)
@@ -732,7 +731,7 @@ private static ConfigurableApplicationContext server;
 			
 			Pick pick4 = new PickBuilder()
 			.withGameId(game2League1Week1)
-//			.withLeagueId(league1)
+			.withLeagueId(league1)
 			.withPlayerId(player2)
 			.withTeamId(team4)
 			.withWeekId(week1League1)
@@ -742,7 +741,7 @@ private static ConfigurableApplicationContext server;
 			//player3 pick for week1, league1
 			Pick pick5 = new PickBuilder()
 			.withGameId(game1League1Week1)
-//			.withLeagueId(league1)
+			.withLeagueId(league1)
 			.withPlayerId(player3)
 			.withTeamId(team1)
 			.withWeekId(week1League1)
@@ -751,7 +750,7 @@ private static ConfigurableApplicationContext server;
 			
 			Pick pick6 = new PickBuilder()
 			.withGameId(game2League1Week1)
-//			.withLeagueId(league1)
+			.withLeagueId(league1)
 			.withPlayerId(player3)
 			.withTeamId(team4)
 			.withWeekId(week1League1)
@@ -762,7 +761,7 @@ private static ConfigurableApplicationContext server;
 			//player1 picks for week2, league1
 			Pick pick11 = new PickBuilder()
 			.withGameId(game1League1Week2)
-//			.withLeagueId(league1)
+			.withLeagueId(league1)
 			.withPlayerId(player1)
 			.withTeamId(team1)
 			.withWeekId(week2League1)
@@ -771,7 +770,7 @@ private static ConfigurableApplicationContext server;
 			
 			Pick pick12 = new PickBuilder()
 			.withGameId(game2League1Week2)
-//			.withLeagueId(league1)
+			.withLeagueId(league1)
 			.withPlayerId(player1)
 			.withTeamId(team2)
 			.withWeekId(week2League1)
@@ -781,7 +780,7 @@ private static ConfigurableApplicationContext server;
 			//player2 picks for week2, league 1
 			Pick pick13 = new PickBuilder()
 			.withGameId(game1League1Week2)
-//			.withLeagueId(league1)
+			.withLeagueId(league1)
 			.withPlayerId(player2)
 			.withTeamId(team4)
 			.withWeekId(week2League1)
@@ -790,7 +789,7 @@ private static ConfigurableApplicationContext server;
 			
 			Pick pick14 = new PickBuilder()
 			.withGameId(game2League1Week2)
-//			.withLeagueId(league1)
+			.withLeagueId(league1)
 			.withPlayerId(player2)
 			.withTeamId(team3)
 			.withWeekId(week2League1)
@@ -800,7 +799,7 @@ private static ConfigurableApplicationContext server;
 			//player3 pick for week2, league1
 			Pick pick15 = new PickBuilder()
 			.withGameId(game1League1Week2)
-//			.withLeagueId(league1)
+			.withLeagueId(league1)
 			.withPlayerId(player3)
 			.withTeamId(team4)
 			.withWeekId(week2League1)
@@ -809,7 +808,7 @@ private static ConfigurableApplicationContext server;
 			
 			Pick pick16 = new PickBuilder()
 			.withGameId(game2League1Week2)
-//			.withLeagueId(league1)
+			.withLeagueId(league1)
 			.withPlayerId(player3)
 			.withTeamId(team2)
 			.withWeekId(week2League1)
@@ -821,7 +820,7 @@ private static ConfigurableApplicationContext server;
 			//week1 should be same, team1 players team2, 
 			Pick pick21 = new PickBuilder()
 			.withGameId(game1League2Week1)
-//			.withLeagueId(league2)
+			.withLeagueId(league2)
 			.withPlayerId(player1)
 			.withTeamId(team2)
 			.withWeekId(week1League2)
@@ -830,7 +829,7 @@ private static ConfigurableApplicationContext server;
 			
 			Pick pick22 = new PickBuilder()
 			.withGameId(game2League2Week1)
-//			.withLeagueId(league2)
+			.withLeagueId(league2)
 			.withPlayerId(player1)
 			.withTeamId(team4)
 			.withWeekId(week1League2)
@@ -839,7 +838,7 @@ private static ConfigurableApplicationContext server;
 			
 			Pick pick23 = new PickBuilder()
 			.withGameId(game1League2Week1)
-//			.withLeagueId(league2)
+			.withLeagueId(league2)
 			.withPlayerId(player4)
 			.withTeamId(team2)
 			.withWeekId(week1League2)
@@ -848,7 +847,7 @@ private static ConfigurableApplicationContext server;
 			
 			Pick pick24 = new PickBuilder()
 			.withGameId(game2League2Week1)
-//			.withLeagueId(league2)
+			.withLeagueId(league2)
 			.withPlayerId(player4)
 			.withTeamId(team3)
 			.withWeekId(week1League2)
@@ -975,11 +974,11 @@ private static ConfigurableApplicationContext server;
 		String team5 = "t5";
 		String team6 = "t6";
 		
-		leagueClientMock(league1);
-	
-		List<LeagueResponse> leagues = new ArrayList<LeagueResponse>();
-		leagues.add(new LeagueResponse(league1));
-		when(leagueClientMock.getLeaguesForPlayer(player1)).thenReturn(leagues);
+//		leagueClientMock(league1);
+//	
+//		List<LeagueResponse> leagues = new ArrayList<LeagueResponse>();
+//		leagues.add(new LeagueResponse(league1));
+//		when(leagueClientMock.getLeaguesForPlayer(player1)).thenReturn(leagues);
 		
 		
 		gameClientMock(game1League1Week1, team1, team2, week1League1, System.currentTimeMillis()+5000);
@@ -988,7 +987,7 @@ private static ConfigurableApplicationContext server;
 		
 		Pick pick1 = new PickBuilder()
 		.withGameId(game1League1Week1)
-//		.withLeagueId(league1)
+		.withLeagueId(league1)
 		.withPlayerId(player1)
 		.withTeamId(team1)
 		.withWeekId(week1League1)
@@ -1012,7 +1011,7 @@ private static ConfigurableApplicationContext server;
 		
 		Pick pick2 = new PickBuilder()
 		.withGameId(game2League1Week1)
-//		.withLeagueId(league1)
+		.withLeagueId(league1)
 		.withPlayerId(player1)
 		.withTeamId(team3)
 		.withWeekId(week1League1)
@@ -1027,7 +1026,7 @@ private static ConfigurableApplicationContext server;
 		//add a new pick
 		Pick pick3 = new PickBuilder()
 		.withGameId(game3League1Week1)
-//		.withLeagueId(league1)
+		.withLeagueId(league1)
 		.withPlayerId(player1)
 		.withTeamId(team5)
 		.withWeekId(week1League1)
