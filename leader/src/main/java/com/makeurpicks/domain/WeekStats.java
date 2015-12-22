@@ -1,6 +1,6 @@
 package com.makeurpicks.domain;
 
-public class SeasonStats extends AbstractModel {
+public class WeekStats extends AbstractModel {
 
 	private String username;
 	private int wins;
@@ -50,6 +50,12 @@ public class SeasonStats extends AbstractModel {
 	}
 	public void setSpreadPoints(double spreadPoints) {
 		this.spreadPoints = spreadPoints;
+	}
+
+	@Override
+	public String toString() {
+		return "WeekStats [username=" + username + ", wins=" + wins + ", loses=" + loses + ", spreadPoints="
+				+ spreadPoints + ", id=" + id + "]";
 	}
 
 	

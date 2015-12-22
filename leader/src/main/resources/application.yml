@@ -1,0 +1,25 @@
+server:
+  port: 8085
+  
+security:
+  oauth2:
+    client:
+      access-token-uri: http://localhost:9999/auth/oauth/token
+      user-authorization-uri: http://localhost:9999/auth/oauth/authorize
+      client-id: ui
+      client-secret: secret
+    resource:
+      jwt:
+        key-uri: "http://localhost:9999/auth/oauth/token_key"
+        key-value: |
+            -----BEGIN PUBLIC KEY-----
+            MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDNQZKqTlO/+2b4ZdhqGJzGBDlt
+            b5PZmBz1ALN2YLvt341pH6i5mO1V9cX5Ty1LM70fKfnIoYUP4KCE33dPnC7LkUwE
+            /myh1zM6m8cbL5cYFPyP099thbVxzJkjHWqywvQih/qOOjliomKbM9pxG8Z1dB26
+            hL9dSAZuA8xExjlPmQIDAQAB
+            -----END PUBLIC KEY-----
+            
+logging:
+  level:
+    org.springframework.security: DEBUG
+    com.makeurpicks: DEBUG

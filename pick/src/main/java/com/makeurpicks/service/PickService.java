@@ -259,6 +259,22 @@ public class PickService {
 	{
 		return doublePickRepository.findOne(DoublePick.buildString(leagueId, weekId, playerId));
 	}
+	
+	public Map<String, DoublePick> getDoublePicks(String leagueId, String weekId)
+	{
+		String key = new StringBuilder(leagueId).append("+").append(weekId).append("+").toString();
+		Map<String, DoublePick> doublePicks = new HashMap<>();
+		for (DoublePick dp : doublePickRepository.findAll())
+		{
+			if (dp.getId().startsWith(key))
+			{
+				String playerId = dp.getId().substring(dp.getId().indexOf(key));
+				doublePicks.put(playerId, dp);
+			}
+		}
+		
+		return doublePicks;
+	}
 
 	public DoublePick makeDoublePick(String pickId, String loggedInPlayerId)
 	{

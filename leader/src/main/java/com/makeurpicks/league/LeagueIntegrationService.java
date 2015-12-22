@@ -1,4 +1,4 @@
-package com.makeurpicks.service.league;
+package com.makeurpicks.league;
 
 import java.util.Arrays;
 import java.util.List;
@@ -6,15 +6,12 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.oauth2.client.OAuth2RestOperations;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
-import com.makeurpicks.domain.Player;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.netflix.hystrix.contrib.javanica.command.ObservableResult;
@@ -25,12 +22,6 @@ import rx.Observable;
 public class LeagueIntegrationService {
 
 	private Log log = LogFactory.getLog(LeagueIntegrationService.class);
-
-	
-	@Autowired
-    @Qualifier("loadBalancedRestTemplate")
-    @LoadBalanced
-    RestTemplate unSecureRestTemplate;
 	
 	@Autowired
     @LoadBalanced
@@ -65,34 +56,4 @@ public class LeagueIntegrationService {
     	stub.setId("ERROR");
         return Arrays.asList(stub);
     }
-    
-    
-	
-	@HystrixCommand(fallbackMethod = "defaultGetLeaguesForPlayer"
-			,commandProperties = {
-                    @HystrixProperty(name = "execution.isolation.strategy", value = "SEMAPHORE")
-            }
-    )
-    public Observable<List<LeagueView>> getLeaguesForPlayer(String id) {
-
-		
-		return new ObservableResult<List<LeagueView>>() {
-            @Override
-            public List<LeagueView> invoke() {
-        	
-            	ParameterizedTypeReference<List<LeagueView>> responseType = new ParameterizedTypeReference<List<LeagueView>>() {};
-                List<LeagueView> leagueViews = secureRestTemplate.exchange("http://league/leagues/player/{id}", HttpMethod.GET, null, responseType, id).getBody();
-                return leagueViews;                             
-            }
-        };
-    }
-
-    @SuppressWarnings("unused")
-    public List<LeagueView> defaultGetLeaguesForPlayer(String id) {
-    	LeagueView stub = new LeagueView();
-    	stub.setLeagueId("0");
-    	stub.setLeagueName("None");
-        return Arrays.asList(stub);
-    }
-	
 }

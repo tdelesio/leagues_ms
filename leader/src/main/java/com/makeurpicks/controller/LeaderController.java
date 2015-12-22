@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.makeurpicks.domain.SeasonStats;
+import com.makeurpicks.domain.WeekStats;
 import com.makeurpicks.domain.WinSummary;
 
 @RestController
@@ -16,7 +16,7 @@ import com.makeurpicks.domain.WinSummary;
 public class LeaderController {
 
 	@RequestMapping(value="/seasonid/{seasonid}/weekid/{weekid}")
-	public @ResponseBody SeasonStats getPlayersPlusWinsInLeague(@PathVariable String seasonid, @PathVariable String weekid)
+	public @ResponseBody WeekStats getPlayersPlusWinsInLeague(@PathVariable String seasonid, @PathVariable String weekid)
 	{
 		return null;
 	}

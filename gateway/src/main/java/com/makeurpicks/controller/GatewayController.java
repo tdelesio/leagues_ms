@@ -1,16 +1,15 @@
 package com.makeurpicks.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
-import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,9 +21,13 @@ import org.springframework.web.context.request.async.DeferredResult;
 
 import com.makeurpicks.domain.MakePicks;
 import com.makeurpicks.domain.NavigationView;
+import com.makeurpicks.domain.ViewPicks;
 import com.makeurpicks.service.game.GameIntegrationService;
+import com.makeurpicks.service.game.GameView;
 import com.makeurpicks.service.league.LeagueIntegrationService;
+import com.makeurpicks.service.league.PlayerView;
 import com.makeurpicks.service.pick.PickIntegrationService;
+import com.makeurpicks.service.pick.PickView;
 import com.makeurpicks.service.week.WeekIntegrationService;
 
 import rx.Observable;
@@ -56,13 +59,6 @@ public class GatewayController {
 	@RequestMapping(value = "/oauth/token/revoke", method = RequestMethod.POST)
 	public @ResponseBody void logout(HttpSession session) {
 		session.invalidate();
-//		SecurityContextHolder.clearContext();
-//		new SecurityContextLogoutHandler().l
-//		OAuth2Authentication auth = (OAuth2Authentication)SecurityContextHolder.getContext().getAuthentication();
-//		OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails)auth.getDetails();
-//	
-////		tokenStore.revemoveAccessToken(details.getTokenValue());
-//		defaultTokenServices.revokeToken(details.getTokenValue());	
 	}
 	
 	@RequestMapping("/user")
@@ -82,15 +78,90 @@ public class GatewayController {
 //		return buildMakePicks(principal.getName(), null);
 		return toDeferredResult(buildMakePicks(principal.getName(), null));
 	}
-	
-	@RequestMapping("/makepicks2")
-	public MakePicks makePicks2(Principal principal) {
+//	
+//	@RequestMapping("/makepicks2")
+//	public MakePicks makePicks2(Principal principal) {
+//
+////		return buildMakePicks(principal.getName(), null);
+//		return toNonDeferredResult(buildMakePicks(principal.getName(), null));
+//	}
+
+	@RequestMapping("/viewpicks/leagueid/{leagueid}/weekid/{weekid}")
+	public DeferredResult<ViewPicks> viewPicks(Principal principal, @PathVariable String leagueid, @PathVariable String weekid) {
 
 //		return buildMakePicks(principal.getName(), null);
-		return toNonDeferredResult(buildMakePicks(principal.getName(), null));
+		return toViewDeferredResult(buildViewPicks(principal.getName(), leagueid, weekid));
 	}
 	
 
+	private Observable<ViewPicks> buildViewPicks(String userId, String leagueId, String weekId) {
+		
+		DeferredResult<ViewPicks> result = new DeferredResult<>();
+		ViewPicks viewPicksView = new ViewPicks();
+		
+//		emmitNavigation(userId, weekId)
+//			.subscribe(nav -> makePicksView.setNav(nav))
+//		;
+
+		
+		return Observable.zip(
+				gameIntegrationService.getGamesForWeek(weekId),
+				pickIntegrationService.getPicksForPlayerForWeek(leagueId, weekId),
+				pickIntegrationService.getDoublePickForPlayerForWeek(leagueId, weekId),
+				leagueIntegrationService.getPlayersForLeague(leagueId),
+				(games, picks, doublePick, players) -> {
+					
+					List<List<String>> rows = new ArrayList<>(17);
+					List<String> columns;
+					
+					GameView game;
+					for (int i=0; i<games.size(); i++)
+					{
+						game = games.get(i);
+						columns = new ArrayList<>(players.size());
+						
+						//put header in first row
+						if (i==0)
+						{
+							//0,0 should have a blank space
+							columns.add("&nbsp;");
+							for (PlayerView player: players)
+							{
+								columns.add(player.getId());
+							}
+							
+							rows.add(columns);
+							continue;
+						}
+						
+						if (i==1)
+						{
+							columns.add("wins");
+						}
+							
+						columns.add(new StringBuilder(game.getFavShortName()).append(" vs ").append(game.getDogShortName()).toString());
+						
+						for (PlayerView player: players)
+						{
+							if (!game.getHasGameStarted()) {
+								columns.add("-");
+							}
+							else
+							{
+								PickView pick = picks.get(player.getId());
+								if (pick == null) 
+									columns.add("-");
+							}
+						}
+						
+					}
+
+					viewPicksView.setData(rows);
+					return viewPicksView;
+				});
+			
+	}
+	
 	private Observable<MakePicks> buildMakePicks(String userId, String weekId) {
 	
 		DeferredResult<MakePicks> result = new DeferredResult<>();
@@ -117,32 +188,19 @@ public class GatewayController {
 					else
 						makePicksView.setPicks(picks);
 					makePicksView.setDoublePick(doublePick);
-//					if (doublePick == null)
-//						makePicksView.setDoublePick(new DoublePickView());
-//					else		
+	
 						
 					return makePicksView;
 				});
-//			.subscribe(n -> )
-//			.subscribe(n -> result.setResult(n));
-		
-//		return result;
 			
 	}
 	
-	public MakePicks toNonDeferredResult(Observable<MakePicks> details)
-	{
-		MakePicks makePicks;
-		return details.toBlocking().last();
-//		details.subscribe(new Action1<MakePicks>() {
-//		    @Override
-//		    public void call(MakePicks picks) {
-//		        makePicks = picks;
-//		    }       
-//		});   
-		
-//		return makePicks;
-	}
+//	public MakePicks toNonDeferredResult(Observable<MakePicks> details)
+//	{
+//		MakePicks makePicks;
+//		return details.toBlocking().last();
+//
+//	}
 
 	public DeferredResult<MakePicks> toDeferredResult(Observable<MakePicks> details) {
         DeferredResult<MakePicks> result = new DeferredResult<>();
@@ -158,6 +216,25 @@ public class GatewayController {
             @Override
             public void onNext(MakePicks makePicks) {
                 result.setResult(makePicks);
+            }
+        });
+        return result;
+    }
+	
+	public DeferredResult<ViewPicks> toViewDeferredResult(Observable<ViewPicks> details) {
+        DeferredResult<ViewPicks> result = new DeferredResult<>();
+        details.subscribe(new Observer<ViewPicks>() {
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+            }
+
+            @Override
+            public void onNext(ViewPicks viewPicks) {
+                result.setResult(viewPicks);
             }
         });
         return result;

@@ -82,5 +82,11 @@ public class PickController  {
 		return pickService.getDoublePick(leagueid, weekid, user.getName());
 	}
 	
+	@RequestMapping(method=RequestMethod.GET, value="/doubles/leagueid/{leagueid}/weekid/{weekid}")
+	public @ResponseBody Map<String, DoublePick> getDoublePick(@PathVariable String leagueid, @PathVariable String weekid)
+	{
+		return pickService.getDoublePicks(leagueid, weekid);
+	}
+	
 
 }
