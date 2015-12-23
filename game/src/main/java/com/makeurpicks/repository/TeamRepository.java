@@ -37,4 +37,9 @@ public class TeamRepository {
 	{
 		return teamsByLeagueType.get(leagueType);
 	}
+	
+	public Map<String, Team> getTeamMap()
+	{
+		return teams;
+	}
 }

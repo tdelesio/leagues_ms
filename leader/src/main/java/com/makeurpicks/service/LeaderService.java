@@ -1,6 +1,7 @@
 package com.makeurpicks.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +10,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.makeurpicks.domain.PlayerWins;
+import com.makeurpicks.domain.ViewPickColumn;
 import com.makeurpicks.domain.WeekStats;
 import com.makeurpicks.game.GameIntegrationService;
 import com.makeurpicks.game.GameView;
@@ -18,6 +21,7 @@ import com.makeurpicks.pick.DoublePickView;
 import com.makeurpicks.pick.PickIntegrationService;
 import com.makeurpicks.pick.PickView;
 
+import GameIntegrationService.TeamIntegrationService;
 import rx.Observable;
 
 @Service
@@ -33,68 +37,178 @@ public class LeaderService {
 	@Autowired
 	private GameIntegrationService gameIntegrationService;
 	
-	public Observable<List<WeekStats>> getPlayersPlusWinsInLeague(String leagueId, String weekId)
+	@Autowired
+	private TeamIntegrationService teamIntegrationService;
+	
+	private String matrixKey(String playerId, String gameId)
+	{
+		return new StringBuilder(playerId).append("+").append(gameId).toString();
+	}
+	
+	public Observable<List<List<ViewPickColumn>>> getPlayersPlusWinsInLeague(String leagueId, String weekId)
 	{
 
-		List<WeekStats> weekStats = new ArrayList<WeekStats>();
+//		List<WeekStats> weekStats = new ArrayList<WeekStats>();
 
+		List<List<ViewPickColumn>> row = new ArrayList<>();
+		
 		return Observable.zip(
 				leagueIntegrationService.getPlayersForLeague(leagueId),
 				pickIntegrationService.getPicksForPlayerForWeek(leagueId, weekId),
 				pickIntegrationService.getDoublePickForPlayerForWeek(leagueId, weekId),
 				gameIntegrationService.getGamesForWeek(weekId),
-				(players, picks, doublePicks, games) -> {
+				teamIntegrationService.getTeams(),
+				(players, picks, doublePicks, games, teams) -> {
 					
 					
 					
-					Map<String, Integer> winsByPlayer = new HashMap<>();
+					Map<String, PlayerWins> winsByPlayer = new HashMap<>();
+//					SortedMap<String, PlayerWins> winsByPlayer = new TreeMap<>((w1, w2) -> new Integer(w2.getWins()).compareTo(new Integer(w1.getWins())));
+//					Map<String, PlayerWins> winsByPlayer;
+//					winsByPlayer.entrySet().stream()
+//					.sorted(Map.Entry.comparingByValue((w1, w2) -> new Integer(w2.getWins()).compareTo(new Integer(w1.getWins()))))
+//			        .collect(Collectors.toMap(
+//			                Map.Entry::getKey, 
+//			                Map.Entry::getValue,  
+//			                (x,y)-> {throw new AssertionError();},
+//			                LinkedHashMap::new
+//			        ));
+					 
+					ViewPickColumn pickColumn;
+					Map<String, ViewPickColumn> pickMatrix = new HashMap<>();
 					
 					for (PlayerView player : players)
 					{
 						Map<String, PickView> picksForAllPlayers = picks.get(player.getId());
+//						columns = new ArrayList<>(players.size());
+						
+						//init player wins to handle non-pickers
+						int wins = 0;
 						
 						for (GameView game : games)
 						{
+							
+							if (!game.getHasGameStarted())
+							{
+								pickColumn = ViewPickColumn.asNotStarted(game.getId(), player.getId());
+								continue;
+							}
+							
+							//figure out gamewinner
 							String gameWinner = game.getGameWinner();
 							
 							PickView pick = picksForAllPlayers.get(game.getId());
 							if (pick != null)
 							{
+								DoublePickView dpv = doublePicks.get(player.getId());
+								boolean isDouble = false;
+								if (dpv!=null && dpv.getGameId().equals(game.getId()))
+									isDouble = true;
+								
 								if (gameWinner.equals(pick.getTeamId()))
 								{
-									Integer wins = winsByPlayer.get(player.getId());
-									if (wins == null)
-										wins = new Integer(0);
-									
-									DoublePickView dpv = doublePicks.get(player.getId());
-										
-									if (dpv!=null && dpv.getGameId().equals(game.getId()))
-										wins = new Integer(wins.intValue()+2);
+									PlayerWins playerWins = winsByPlayer.get(player.getId());
+									if (playerWins == null)
+										wins = 0;
 									else
-										wins = new Integer(wins.intValue()+1);
+										wins = playerWins.getWins();
+										
+									if (isDouble)
+									{
+										wins = new Integer(wins+=2);
+										pickColumn = ViewPickColumn.asDoubleWinner(game.getId(), player.getId(), teams.get(pick.getTeamId()).getShortName());
+									}
+									else
+									{
+										wins = new Integer(wins+=1);
+										pickColumn = ViewPickColumn.asWinner(game.getId(), player.getId(), teams.get(pick.getTeamId()).getShortName());
+									}
 									
-									winsByPlayer.put(player.getId(), wins);
+//									winsByPlayer.add(PlayerWins.build(player.getId(), wins));
+									
+								}
+								else
+								{
+									//game loser
+									if (isDouble)
+										pickColumn = ViewPickColumn.asDoubleLoser(game.getId(), player.getId(), teams.get(pick.getTeamId()).getShortName());
+									else
+										pickColumn = ViewPickColumn.asLoser(game.getId(), player.getId(), teams.get(pick.getTeamId()).getShortName());
 								}
 							}
+							else
+							{
+								//no pick
+								pickColumn = ViewPickColumn.asNoPick(game.getId(), player.getId());
+							}
+							
+							
+							winsByPlayer.put(player.getId(), PlayerWins.build(player.getId(), wins));
+							pickMatrix.put(matrixKey(player.getId(), game.getId()), pickColumn);
 						}						
 					}
 					
-					for (PlayerView player : players)
+					Collection<PlayerWins> pw = winsByPlayer.values();
+					List<PlayerWins> sortedPlayers = new ArrayList<>(pw);
+					Collections.sort(sortedPlayers, (w1, w2) -> new Integer(w2.getWins()).compareTo(new Integer(w1.getWins())));
+					
+					
+					
+					
+					PlayerWins player;
+					GameView game;
+					List<ViewPickColumn> columns = new ArrayList<>(players.size());
+					for (int j=0; j<sortedPlayers.size();j++)
 					{
-						WeekStats weekStat = new WeekStats();
-						Integer wins = winsByPlayer.get(player.getId());
-						if (wins == null)
-							weekStat.setWins(0);
-						else
-							weekStat.setWins(wins.intValue());
+						player = sortedPlayers.get(j);
+						if (j == 0)
+						{
+							//0,0 should have a blank space
+							columns.add(ViewPickColumn.asBlank());
+						}
 						
-						weekStat.setUsername(player.getId());
-						weekStats.add(weekStat);
+						columns.add(ViewPickColumn.asColumnHeader(player.getPlayerId(), player.getWins()));
 					}
+					row.add(columns);
 					
-					Collections.sort(weekStats, (w1, w2) -> new Integer(w2.getWins()).compareTo(new Integer(w1.getWins())));
 					
-					return weekStats;
+					for (int i=0; i<games.size();i++)
+					{
+						game = games.get(i);
+						
+						columns = new ArrayList<>(players.size());
+						for (int j=0; j<sortedPlayers.size();j++)
+						{
+							player = sortedPlayers.get(j);
+							
+							if (j==0)
+							{
+								columns.add(ViewPickColumn.asRowHeader(game.getFavShortName(), game.getDogShortName()));
+			
+							}
+							
+							columns.add(pickMatrix.get(matrixKey(player.getPlayerId(), game.getId())));	
+							
+						}
+						
+						row.add(columns);
+					}
+//					for (PlayerView player : players)
+//					{
+//						WeekStats weekStat = new WeekStats();
+//						Integer wins = winsByPlayer.get(player.getId());
+//						if (wins == null)
+//							weekStat.setWins(0);
+//						else
+//							weekStat.setWins(wins.intValue());
+//						
+//						weekStat.setUsername(player.getId());
+//						weekStats.add(weekStat);
+//					}
+//					
+//					Collections.sort(weekStats, (w1, w2) -> new Integer(w2.getWins()).compareTo(new Integer(w1.getWins())));
+					
+					return row;
 				});
 		
 		

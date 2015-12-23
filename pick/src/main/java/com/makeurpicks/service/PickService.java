@@ -78,7 +78,7 @@ public class PickService {
 			throw new PickValidationException(PickExceptions.UNAUTHORIZED_USER);
 		
 		//check to see if the pick is the existing double pick
-		DoublePick doublePick = doublePickRepository.findOne(DoublePick.buildString(pick.getLeagueId(), pick.getWeekId(), pick.getPlayerId()));
+		DoublePick doublePick = doublePickRepository.findDoubleForPlayer(pick.getLeagueId(), pick.getWeekId(), pick.getPlayerId());
 		if (doublePick != null && doublePick.getPickId().equals(pick.getId()))
 		{
 			//the game being updated is the double so we need to clear it out
@@ -241,23 +241,24 @@ public class PickService {
 	
 	public DoublePick getDoublePick(String leagueId, String weekId, String playerId)
 	{
-		return doublePickRepository.findOne(DoublePick.buildString(leagueId, weekId, playerId));
+		return doublePickRepository.findDoubleForPlayer(leagueId, weekId, playerId);
 	}
 	
 	public Map<String, DoublePick> getDoublePicks(String leagueId, String weekId)
 	{
-		String key = new StringBuilder(leagueId).append("+").append(weekId).append("+").toString();
-		Map<String, DoublePick> doublePicks = new HashMap<>();
-		for (DoublePick dp : doublePickRepository.findAll())
-		{
-			if (dp.getId().startsWith(key))
-			{
-				String playerId = dp.getId().substring(dp.getId().indexOf(key));
-				doublePicks.put(playerId, dp);
-			}
-		}
-		
-		return doublePicks;
+//		String key = new StringBuilder(leagueId).append("+").append(weekId).append("+").toString();
+//		Map<String, DoublePick> doublePicks = new HashMap<>();
+//		for (DoublePick dp : doublePickRepository.findAll())
+//		{
+//			if (dp.getId().startsWith(key))
+//			{
+//				String playerId = dp.getId().substring(dp.getId().indexOf(key));
+//				doublePicks.put(playerId, dp);
+//			}
+//		}
+//		
+//		return doublePicks;
+		return doublePickRepository.findAllForLeagueAndWeek(leagueId, weekId);
 	}
 
 	public DoublePick makeDoublePick(String pickId, String loggedInPlayerId)
@@ -279,7 +280,8 @@ public class PickService {
 			throw new PickValidationException(PickExceptions.UNAUTHORIZED_USER);
 		
 //		Picks oldPick = getDoublePickForPlayerLeagueAndWeek(pick.getName(), pick.getLeague(), pick.getWeek());
-		DoublePick orginialDoublePick = doublePickRepository.findOne(DoublePick.buildString(pick.getLeagueId(), pick.getWeekId(), pick.getPlayerId())); 
+		DoublePick orginialDoublePick = doublePickRepository.findDoubleForPlayer(pick.getLeagueId(), pick.getWeekId(), pick.getPlayerId());
+		
 		
 		//need to check to see if the orginal pick game has started
 		if (orginialDoublePick!=null)
@@ -294,6 +296,7 @@ public class PickService {
 			
 			orginialDoublePick.setPickId(pickId);
 			orginialDoublePick.setGameId(pick.getGameId());
+			orginialDoublePick.setPlayerId(pick.getPlayerId());
 			orginialDoublePick.setHasDoubleGameStarted(false);
 			orginialDoublePick.setPreviousDoubleGameId(orginalGame.getId());
 			doublePickRepository.save(orginialDoublePick);			

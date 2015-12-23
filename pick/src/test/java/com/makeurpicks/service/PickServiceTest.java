@@ -965,6 +965,7 @@ public class PickServiceTest {
 		String game3League1Week1 = "g3";
 		
 		String player1 = "p1";
+		String player2 = "p2";
 	
 		
 		String team1 = "t1";
@@ -1020,7 +1021,7 @@ public class PickServiceTest {
 		
 		//set double pick, should be fine
 		pickService.makeDoublePick(pick2.getId(), player1);
-		DoublePick dp = doublePickRepository.findOne(DoublePick.buildString(league1, week1League1, player1));
+		DoublePick dp = doublePickRepository.findDoubleForPlayer(league1, week1League1, player1);
 		assertEquals(pick2.getId(), dp.getPickId());
 		
 		//add a new pick
@@ -1033,9 +1034,20 @@ public class PickServiceTest {
 		.build();
 		pickService.makePick(pick3);
 		
+		Pick pick4 = new PickBuilder()
+			.withGameId(game3League1Week1)
+			.withLeagueId(league1)
+			.withPlayerId(player2)
+			.withTeamId(team5)
+			.withWeekId(week1League1)
+			.build();
+		pickService.makePick(pick4);
+		
+		pickService.makeDoublePick(pick4.getId(), player2);
+		
 		//change to new game
 		pickService.makeDoublePick(pick3.getId(), player1);
-		dp = doublePickRepository.findOne(DoublePick.buildString(league1, week1League1, player1));
+		dp = doublePickRepository.findDoubleForPlayer(league1, week1League1, player1);
 		assertEquals(pick3.getId(), dp.getPickId());
 
 		//change the time of game2 to passed
@@ -1043,14 +1055,20 @@ public class PickServiceTest {
 		try
 		{
 			pickService.makeDoublePick(pick2.getId(), player1);
-			dp = doublePickRepository.findOne(DoublePick.buildString(league1, week1League1, player1));
+			dp = doublePickRepository.findDoubleForPlayer(league1, week1League1, player1);
 			fail();
 		}
 		catch (PickValidationException exception)
 		{
 			assertTrue(exception.getMessage().contains(PickExceptions.GAME_HAS_ALREADY_STARTED.toString()));
 		}
-	
+		
+		Map<String, DoublePick> doublePicks = pickService.getDoublePicks(league1, week1League1);
+		assertEquals(2, doublePicks.size());
+		
+		assertEquals(pick3.getId(), doublePicks.get(player1).getPickId());
+		
+		assertEquals(pick4.getId(), doublePicks.get(player2).getPickId());	
 	}
 
 }

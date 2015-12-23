@@ -3,22 +3,47 @@ package com.makeurpicks.controller;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.async.DeferredResult;
 
-import com.makeurpicks.domain.WeekStats;
+import com.makeurpicks.domain.ViewPickColumn;
 import com.makeurpicks.domain.WinSummary;
+import com.makeurpicks.service.LeaderService;
+
+import rx.Observer;
 
 @RestController
 @RequestMapping(value="/leaders")
 public class LeaderController {
 
-	@RequestMapping(value="/seasonid/{seasonid}/weekid/{weekid}")
-	public @ResponseBody WeekStats getPlayersPlusWinsInLeague(@PathVariable String seasonid, @PathVariable String weekid)
+	@Autowired 
+	private LeaderService leaderService;
+	
+	@RequestMapping(value="/week/leagueid/{leagueid}/weekid/{weekid}")
+	public @ResponseBody DeferredResult<List<List<ViewPickColumn>>> getPlayersPlusWinsInLeague(@PathVariable String leagueid, @PathVariable String weekid)
 	{
-		return null;
+		DeferredResult<List<List<ViewPickColumn>>> result = new DeferredResult<>();
+		leaderService.getPlayersPlusWinsInLeague(leagueid, weekid).subscribe(new Observer<List<List<ViewPickColumn>>>() {
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+            }
+
+            @Override
+            public void onNext(List<List<ViewPickColumn>> weekStats) {
+                result.setResult(weekStats);
+            }
+        });
+        
+		return result;
+	
 	}
 	
 	@RequestMapping(value="/winsummary/seasonid/{seasonid}")
@@ -32,4 +57,6 @@ public class LeaderController {
 	{
 		return null;
 	}
+	
+	
 }

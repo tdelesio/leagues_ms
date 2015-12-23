@@ -4,6 +4,7 @@ public class DoublePick extends AbstractModel {
 
 	private String pickId;
 	private String gameId;
+	private String playerId;
 	private boolean hasDoubleGameStarted=false;
 	private String previousDoubleGameId;
 	
@@ -14,9 +15,10 @@ public class DoublePick extends AbstractModel {
 	
 	public DoublePick(String leagueId, String weekId, String playerId, String pickId, String gameId, boolean gameStarted)
 	{
-		this.id = buildString(leagueId, weekId, playerId);
+		this.id = new StringBuilder(leagueId).append("+").append(weekId).toString();
 		this.gameId = gameId;
 		this.pickId = pickId;
+		this.playerId = playerId;
 		this.hasDoubleGameStarted = gameStarted;
 	}
 	
@@ -39,6 +41,14 @@ public class DoublePick extends AbstractModel {
 //	}
 
 	
+	public String getPlayerId() {
+		return playerId;
+	}
+
+	public void setPlayerId(String playerId) {
+		this.playerId = playerId;
+	}
+
 	public String getGameId() {
 		return gameId;
 	}
@@ -63,8 +73,4 @@ public class DoublePick extends AbstractModel {
 		this.hasDoubleGameStarted = hasDoubleGameStarted;
 	}
 
-	public static String buildString(String leagueId, String weekId, String playerId)
-	{
-		return new StringBuilder(leagueId).append("+").append(weekId).append("+").append(playerId).toString();
-	}
 }

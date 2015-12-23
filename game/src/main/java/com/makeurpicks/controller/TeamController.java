@@ -1,6 +1,7 @@
 package com.makeurpicks.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -33,8 +34,13 @@ public class TeamController {
 	@RequestMapping(method=RequestMethod.GET, value="/{id}")
 	public @ResponseBody Team getTeamById(@PathVariable String id)
 	{
-		System.out.println(id);
 		return teamService.getTeam(id);
+	}
+	
+	@RequestMapping(method=RequestMethod.GET, value="/")
+	public @ResponseBody Map<String, Team> getTeams()
+	{
+		return teamService.getTeamMap();
 	}
 	
 	@RequestMapping(method=RequestMethod.POST, value="/")

@@ -29,6 +29,10 @@ public class TeamService {
 		else
 			return teams;
 	}
+	
+	public Map<String, Team> getTeamMap() {
+		return teamRepository.getTeamMap();
+	}
 
 	public Team createTeam(Team team) {
 		

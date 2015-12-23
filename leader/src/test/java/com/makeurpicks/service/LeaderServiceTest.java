@@ -16,7 +16,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.makeurpicks.domain.WeekStats;
+import com.makeurpicks.domain.ViewPickColumn;
 import com.makeurpicks.game.GameIntegrationService;
 import com.makeurpicks.game.GameView;
 import com.makeurpicks.league.LeagueIntegrationService;
@@ -25,7 +25,8 @@ import com.makeurpicks.pick.DoublePickView;
 import com.makeurpicks.pick.PickIntegrationService;
 import com.makeurpicks.pick.PickView;
 
-import junit.framework.Assert;
+import GameIntegrationService.TeamIntegrationService;
+import GameIntegrationService.TeamView;
 import rx.Observable;
 import rx.observers.TestSubscriber;
 
@@ -43,6 +44,9 @@ public class LeaderServiceTest {
 	
 	@Mock
 	private PickIntegrationService pickClientMock;
+	
+	@Mock
+	private TeamIntegrationService teamClientMock;
 	
 	@Before
 	public void setup()
@@ -63,11 +67,14 @@ public class LeaderServiceTest {
 		
 		when(leagueClientMock.getPlayersForLeague(leagueId)).thenReturn(Observable.just(players));
 		
+		
 		List<GameView> games = new ArrayList<>();
 		GameView game1 = new GameView();
 		game1.setId("game1");
 		game1.setDogId("tb");
+		game1.setDogShortName("TB");
 		game1.setFavId("bal");
+		game1.setFavShortName("BAL");
 		game1.setFavScore(22);
 		game1.setDogScore(10);
 		game1.setGameStart(ZonedDateTime.now().minusHours(1));
@@ -77,6 +84,8 @@ public class LeaderServiceTest {
 		game2.setId("game2");
 		game2.setDogId("stl");
 		game2.setFavId("den");
+		game2.setDogShortName("STL");
+		game2.setFavShortName("DEN");
 		game2.setFavScore(22);
 		game2.setDogScore(10);
 		game2.setGameStart(ZonedDateTime.now().minusHours(1));
@@ -86,6 +95,8 @@ public class LeaderServiceTest {
 		game3.setId("game3");
 		game3.setDogId("phl");
 		game3.setFavId("nyg");
+		game3.setDogShortName("PHL");
+		game3.setFavShortName("NYG");
 		game3.setFavScore(22);
 		game3.setDogScore(10);
 		game3.setGameStart(ZonedDateTime.now().minusHours(1));
@@ -95,6 +106,8 @@ public class LeaderServiceTest {
 		game4.setId("game4");
 		game4.setDogId("sf");
 		game4.setFavId("sd");
+		game4.setDogShortName("SF");
+		game4.setFavShortName("SD");
 		game4.setFavScore(22);
 		game4.setDogScore(10);
 		game4.setGameStart(ZonedDateTime.now().minusHours(1));
@@ -104,6 +117,8 @@ public class LeaderServiceTest {
 		game5.setId("game5");
 		game5.setDogId("hou");
 		game5.setFavId("dal");
+		game5.setDogShortName("HOU");
+		game5.setFavShortName("DAL");
 		game5.setFavScore(22);
 		game5.setDogScore(10);
 		game5.setGameStart(ZonedDateTime.now().minusHours(1));
@@ -113,6 +128,8 @@ public class LeaderServiceTest {
 		game6.setId("game6");
 		game6.setDogId("ne");
 		game6.setFavId("nyj");
+		game6.setDogShortName("NE");
+		game6.setFavShortName("NYJ");
 		game6.setFavScore(22);
 		game6.setDogScore(10);
 		game6.setGameStart(ZonedDateTime.now().minusHours(1));
@@ -241,28 +258,132 @@ public class LeaderServiceTest {
 		
 		when(pickClientMock.getPicksForPlayerForWeek(leagueId, weekId)).thenReturn(Observable.just(picks));
 
+		Map<String, TeamView> teamMap = new HashMap<>();
 		
+		TeamView ne = new TeamView();
+		ne.setId("ne");
+		ne.setShortName("NE");
+		teamMap.put(ne.getId(), ne);
 		
+		TeamView tb = new TeamView();
+		tb.setId("tb");
+		tb.setShortName("TB");
+		teamMap.put(tb.getId(), tb);
 		
-		TestSubscriber<List<WeekStats>> testSubscriber = new TestSubscriber<>();
+		TeamView bal = new TeamView();;
+		bal.setId("bal");
+		bal.setShortName("BAL");
+		teamMap.put(bal.getId(), bal);
+		
+		TeamView stl = new TeamView();
+		stl.setId("stl");
+		stl.setShortName("STL");
+		teamMap.put(stl.getId(), stl);
+		
+		TeamView den = new TeamView();
+		den.setId("den");
+		den.setShortName("DEN");
+		teamMap.put(den.getId(), den);
+		
+		TeamView phl = new TeamView();
+		phl.setId("phl");
+		phl.setShortName("PHL");
+		teamMap.put(phl.getId(), phl);
+		
+		TeamView nyg = new TeamView();
+		nyg.setId("nyg");
+		nyg.setShortName("NYG");
+		teamMap.put(nyg.getId(), nyg);
+		
+		TeamView sf = new TeamView();
+		sf.setId("sf");
+		sf.setShortName("SF");
+		teamMap.put(sf.getId(), sf);
+		
+		TeamView sd = new TeamView();
+		sd.setId("sd");
+		sd.setShortName("SD");
+		teamMap.put(sd.getId(), sd);
+		
+		TeamView hou = new TeamView();
+		hou.setId("hou");
+		hou.setShortName("HOU");
+		teamMap.put(hou.getId(), hou);
+		
+		TeamView dal = new TeamView();
+		dal.setId("dal");
+		dal.setShortName("DAL");
+		teamMap.put(dal.getId(), dal);
+		
+		TeamView nyj = new TeamView();
+		nyj.setId("nyj");
+		nyj.setShortName("NYJ");
+		teamMap.put(nyj.getId(), nyj);
+		
+		when(teamClientMock.getTeams()).thenReturn(Observable.just(teamMap));
+		
+		TestSubscriber<List<List<ViewPickColumn>>> testSubscriber = new TestSubscriber<>();
 		leaderService.getPlayersPlusWinsInLeague(leagueId, weekId).subscribe(testSubscriber);
 		
 		testSubscriber.assertNoErrors();
-		List<WeekStats> weekStats = testSubscriber.getOnNextEvents().get(0);
+		List<List<ViewPickColumn>> rows = testSubscriber.getOnNextEvents().get(0);
 		
-		assertEquals(4, weekStats.size());
+		List<ViewPickColumn> column = rows.get(0);
+		assertEquals("&nbsp;", column.get(0).getValue());
+		assertEquals("player3(7)", column.get(1).getValue());
+		assertEquals("player4(4)", column.get(2).getValue());
+		assertEquals("player1(3)", column.get(3).getValue());
+		assertEquals("player2(1)", column.get(4).getValue());
 		
-		assertEquals("player3", weekStats.get(0).getUsername());
-		assertEquals(7, weekStats.get(0).getWins());
 		
-		assertEquals(4, weekStats.get(1).getWins());
-		assertEquals("player4", weekStats.get(1).getUsername());
+		//tb v bal 		
+		column = rows.get(1);
+		assertEquals("BAL vs TB", column.get(0).getValue());
+		assertEquals("BAL", column.get(1).getValue());
+		assertEquals("BAL", column.get(2).getValue());
+		assertEquals("BAL", column.get(3).getValue());
+		assertEquals("TB", column.get(4).getValue());
+	
 		
-		assertEquals("player1", weekStats.get(2).getUsername());
-		assertEquals(3, weekStats.get(2).getWins());
+		//stl v den, 
+		column = rows.get(2);
+		assertEquals("DEN vs STL", column.get(0).getValue());
+		assertEquals("DEN", column.get(1).getValue());
+		assertEquals("DEN", column.get(2).getValue());
+		assertEquals("DEN", column.get(3).getValue());
+		assertEquals("STL", column.get(4).getValue());
 		
-		assertEquals("player2", weekStats.get(3).getUsername());
-		assertEquals(1, weekStats.get(3).getWins());
+		//phl v nyg, 
+		column = rows.get(3);
+		assertEquals("NYG vs PHL", column.get(0).getValue());
+		assertEquals("NYG", column.get(1).getValue());
+		assertEquals("PHL", column.get(2).getValue());
+		assertEquals("X", column.get(3).getValue());
+		assertEquals("PHL", column.get(4).getValue());
+		
+		//sf v sd, 
+		column = rows.get(4);
+		assertEquals("SD vs SF", column.get(0).getValue());
+		assertEquals("SD", column.get(1).getValue());
+		assertEquals("SF", column.get(2).getValue());
+		assertEquals("X", column.get(3).getValue());
+		assertEquals("SD", column.get(4).getValue());
+		
+		//hou v dal, 
+		column = rows.get(5);
+		assertEquals("DAL vs HOU", column.get(0).getValue());
+		assertEquals("DAL", column.get(1).getValue());
+		assertEquals("DAL", column.get(2).getValue());
+		assertEquals("X", column.get(3).getValue());
+		assertEquals("HOU", column.get(4).getValue());
+	
+		//ne v nyj
+		column = rows.get(6);
+		assertEquals("NYJ vs NE", column.get(0).getValue());
+		assertEquals("NYJ", column.get(1).getValue());
+		assertEquals("NYJ", column.get(2).getValue());
+		assertEquals("X", column.get(3).getValue());
+		assertEquals("NE", column.get(4).getValue());
 		
 		
 		
