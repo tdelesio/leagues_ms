@@ -2,6 +2,20 @@ server:
     port: 9999
     context-path: /auth
 
+spring:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+  datasource:
+    url: jdbc:mysql://localhost/player
+    username: root
+    password: rage311
+    driver-class-name: com.mysql.jdbc.Driver
+
 # IMPORTANT NOTICE: 
 # You have to replace this keypair and make sure the private key remains private!
 #
@@ -35,5 +49,12 @@ config:
             /myh1zM6m8cbL5cYFPyP099thbVxzJkjHWqywvQih/qOOjliomKbM9pxG8Z1dB26
             hL9dSAZuA8xExjlPmQIDAQAB
             -----END PUBLIC KEY-----
-        
+       
+       
+logging:
+  level:
+    org.springframework.security: INFO
+    org.springframework.cloud.netflix: INFO
+    com.netflix.zuul: INFO
+    com.makeurpicks: DEBUG
             

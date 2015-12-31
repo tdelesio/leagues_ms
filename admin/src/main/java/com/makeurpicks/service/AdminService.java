@@ -99,6 +99,17 @@ public class AdminService {
 			throw new RuntimeException();
 		dummy.addWeek(week4);
 		
+		WeekView week5 = new WeekView();
+		week5.setWeekNumber(4);
+		week5.setSeasonId(season.getId());
+		
+		week5 = weekIntegrationService.createWeek(week5);
+		if (week5 == null || week5.getId() == null)
+			throw new RuntimeException();
+		dummy.addWeek(week5);
+		
+		
+		
 		//double pick must be gb
 		GameView double_won = new GameView();
 		double_won.setWeekId(week1.getId());

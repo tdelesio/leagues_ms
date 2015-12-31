@@ -10,4 +10,5 @@ security:
 
 logging:
   level:
-    org.springframework.security: DEBUG
+    com.makeurpicks: DEBUG
+#    org.springframework.security: DEBUG

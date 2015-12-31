@@ -27,7 +27,6 @@ import com.makeurpicks.LeagueApplication;
 import com.makeurpicks.domain.League;
 import com.makeurpicks.domain.LeagueBuilder;
 import com.makeurpicks.domain.LeagueName;
-import com.makeurpicks.domain.PlayerResponse;
 import com.makeurpicks.exception.LeagueValidationException;
 import com.makeurpicks.repository.LeagueRepository;
 import com.makeurpicks.repository.LeaguesAPlayHasJoinedRespository;
@@ -53,8 +52,8 @@ public class LeagueServiceTest {
 	@Autowired
 	private PlayersInLeagueRepository playersInLeagueRepository;
 	
-	@Mock
-	private PlayerClient playerClientMock;
+//	@Mock
+//	private PlayerClient playerClientMock;
 	
 	private static ConfigurableApplicationContext server;
 	
@@ -105,7 +104,7 @@ public class LeagueServiceTest {
 		
 		String player1Id = "1";
 		
-		createPlayerMock(player1Id);
+//		createPlayerMock(player1Id);
 		
 		
 		League league = new LeagueBuilder()
@@ -120,10 +119,10 @@ public class LeagueServiceTest {
 		
 	}
 	
-	private void createPlayerMock(String playerId)
-	{
-		when(playerClientMock.getPlayerById(playerId)).thenReturn(new PlayerResponse(playerId));
-	}
+//	private void createPlayerMock(String playerId)
+//	{
+//		when(playerClientMock.getPlayerById(playerId)).thenReturn(new String(playerId));
+//	}
 	
 	private League createLeague(League league)
 	{
@@ -139,8 +138,8 @@ public class LeagueServiceTest {
 			assertTrue(leagueNames.contains(leagueName));
 			
 			//check to see that league has the player in it
-			Set<PlayerResponse> playerResponses = playersInLeagueRepository.findOne(league.getId()).getPlayers();
-			assertTrue(playerResponses.contains(new PlayerResponse(league.getAdminId())));
+			Set<String> Strings = playersInLeagueRepository.findOne(league.getId()).getPlayers();
+			assertTrue(Strings.contains(league.getAdminId()));
 			
 		} catch (LeagueValidationException e) {
 			fail(e.getMessage());
@@ -162,11 +161,11 @@ public class LeagueServiceTest {
 		String player4Id = "4";
 		String player5Id = "5";
 		
-		createPlayerMock(player1Id);
-		createPlayerMock(player2Id);
-		createPlayerMock(player3Id);
-		createPlayerMock(player4Id);
-		createPlayerMock(player5Id);
+//		createPlayerMock(player1Id);
+//		createPlayerMock(player2Id);
+//		createPlayerMock(player3Id);
+//		createPlayerMock(player4Id);
+//		createPlayerMock(player5Id);
 		
 		League league1 = new LeagueBuilder()
 		.withAdminId(player1Id)
@@ -208,23 +207,23 @@ public class LeagueServiceTest {
 		//player 5 won't join any leagues
 		
 		//league1 should have 3 players, 1, 2, 3
-		Set<PlayerResponse> playerResponses = playersInLeagueRepository.findOne(league1.getId()).getPlayers();
-		assertTrue(playerResponses.contains(new PlayerResponse(player1Id)));
-		assertTrue(playerResponses.contains(new PlayerResponse(player2Id)));
-		assertTrue(playerResponses.contains(new PlayerResponse(player3Id)));
-		assertEquals(3, playerResponses.size());
+		Set<String> Strings = playersInLeagueRepository.findOne(league1.getId()).getPlayers();
+		assertTrue(Strings.contains(new String(player1Id)));
+		assertTrue(Strings.contains(new String(player2Id)));
+		assertTrue(Strings.contains(new String(player3Id)));
+		assertEquals(3, Strings.size());
 		
 		//league2 should have 3 players, 1, 2, 4
-		playerResponses = playersInLeagueRepository.findOne(league2.getId()).getPlayers();
-		assertTrue(playerResponses.contains(new PlayerResponse(player1Id)));
-		assertTrue(playerResponses.contains(new PlayerResponse(player2Id)));
-		assertTrue(playerResponses.contains(new PlayerResponse(player4Id)));
-		assertEquals(3, playerResponses.size());
+		Strings = playersInLeagueRepository.findOne(league2.getId()).getPlayers();
+		assertTrue(Strings.contains(new String(player1Id)));
+		assertTrue(Strings.contains(new String(player2Id)));
+		assertTrue(Strings.contains(new String(player4Id)));
+		assertEquals(3, Strings.size());
 		
 		//league3 should have 1 player, 1
-		playerResponses = playersInLeagueRepository.findOne(league3.getId()).getPlayers();
-		assertTrue(playerResponses.contains(new PlayerResponse(player1Id)));
-		assertEquals(1, playerResponses.size());
+		Strings = playersInLeagueRepository.findOne(league3.getId()).getPlayers();
+		assertTrue(Strings.contains(new String(player1Id)));
+		assertEquals(1, Strings.size());
 		
 		//player 1 should be part of leagues 1,2,3
 		Set<LeagueName> leagueNames = leaguesAPlayerHasJoinedRespository.findOne(player1Id).getLeauges();
@@ -256,11 +255,11 @@ public class LeagueServiceTest {
 		leagueService.addPlayerToLeague(league1, player1Id);
 		
 		//should be same as above
-		playerResponses = playersInLeagueRepository.findOne(league1.getId()).getPlayers();
-		assertTrue(playerResponses.contains(new PlayerResponse(player1Id)));
-		assertTrue(playerResponses.contains(new PlayerResponse(player2Id)));
-		assertTrue(playerResponses.contains(new PlayerResponse(player3Id)));
-		assertEquals(3, playerResponses.size());
+		Strings = playersInLeagueRepository.findOne(league1.getId()).getPlayers();
+		assertTrue(Strings.contains(new String(player1Id)));
+		assertTrue(Strings.contains(new String(player2Id)));
+		assertTrue(Strings.contains(new String(player3Id)));
+		assertEquals(3, Strings.size());
 		
 		//should be same as above
 		leagueNames = leaguesAPlayerHasJoinedRespository.findOne(player1Id).getLeauges();

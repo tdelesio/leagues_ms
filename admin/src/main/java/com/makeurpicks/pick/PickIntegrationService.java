@@ -24,7 +24,7 @@ private Log log = LogFactory.getLog(PickIntegrationService.class);
     
     public PickView createPick(PickView pickView)
     {
-    	return secureRestTemplate.postForEntity("http://pick/picks/", pickView, PickView.class).getBody();
+    	return secureRestTemplate.postForEntity("http://pick/picks/admin", pickView, PickView.class).getBody();
     }
     
     public void createDoublePick(DoublePickView doublePickView)

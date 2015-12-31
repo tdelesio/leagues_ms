@@ -54,7 +54,7 @@ public class AdminApplication {
             http
             	.logout().and()
             	.authorizeRequests()
-                    .antMatchers("/login", "/beans", "/user").permitAll()
+                    .antMatchers("/login", "/beans", "/user", "/random").permitAll()
                     .anyRequest().hasRole("ADMIN").and()
 
                 .csrf()

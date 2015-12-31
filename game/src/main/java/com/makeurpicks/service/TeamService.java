@@ -31,7 +31,17 @@ public class TeamService {
 	}
 	
 	public Map<String, Team> getTeamMap() {
-		return teamRepository.getTeamMap();
+		Map<String, Team> teamMap = teamRepository.getTeamMap();
+		if (teamMap == null || teamMap.isEmpty())
+		{
+			createAllTeams();
+			teamMap = teamRepository.getTeamMap();
+		}
+		
+		return teamMap;
+		
+		
+		
 	}
 
 	public Team createTeam(Team team) {

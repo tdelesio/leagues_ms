@@ -16,7 +16,9 @@ import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfToken;
@@ -49,17 +51,29 @@ public class GatewayApplication {
             	.invalidateHttpSession(true)
             	 .deleteCookies("JSESSIONID")
             	 .and()
+            	 
             	.authorizeRequests()
-                    .antMatchers("/login", "/beans", "/user").permitAll()
+            	
+                    .antMatchers("/login", "/beans", "/user", "/js/**", "/css/**", "/register.html", "/img/**", "/fonts/**").permitAll()
+//                    .antMatchers(HttpMethod.POST, "/register/**")..anonymous()
                     .anyRequest().authenticated().and()
-
+             
                 .csrf()
                     .csrfTokenRepository(csrfTokenRepository()).and()
                     .addFilterBefore(new RequestContextFilter(), HeaderWriterFilter.class)
                     .addFilterAfter(csrfHeaderFilter(), CsrfFilter.class);
         }
+        
+        
 
-        private Filter csrfHeaderFilter() {
+        @Override
+		public void configure(WebSecurity web) throws Exception {
+			web.ignoring().antMatchers("/register/**");
+		}
+
+
+
+		private Filter csrfHeaderFilter() {
             return new OncePerRequestFilter() {
                 @Override
                 protected void doFilterInternal(HttpServletRequest request,

@@ -1,21 +1,25 @@
 package com.makeurpicks.repository.redis;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.makeurpicks.domain.DoublePick;
 import com.makeurpicks.repository.DoublePickRepository;
 
-import scala.remote;
-
 public class RedisDoublePlckRepository implements DoublePickRepository {
 
-	protected final HashOperations<String, String, Map<String, DoublePick>> hashOps;
+	protected final HashOperations<String, String, String> hashOps;
 	
-	public RedisDoublePlckRepository(RedisTemplate<String, Map<String, DoublePick>> redisTemplate)
+	public RedisDoublePlckRepository(RedisTemplate<String, String> redisTemplate)
 	{
 		this.hashOps = redisTemplate.opsForHash();
 	}
@@ -38,7 +42,21 @@ public class RedisDoublePlckRepository implements DoublePickRepository {
 	
 	public Map<String, DoublePick> findAllForLeagueAndWeek(String hashkey)
 	{
-		Map<String, DoublePick> doublePicks = hashOps.get(getKey(), hashkey);
+		String json = hashOps.get(getKey(), hashkey);
+		if (json == null)
+			return null;
+		
+		TypeReference<HashMap<String,DoublePick>> typeRef  = new TypeReference<HashMap<String,DoublePick>>() {};
+		Map<String, DoublePick> doublePicks;
+		try {
+			doublePicks = new ObjectMapper().readValue(json, typeRef);
+		} catch (JsonParseException e) {
+			throw new RuntimeException(e);
+		} catch (JsonMappingException e) {
+			throw new RuntimeException(e);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 		return doublePicks;
 	}
 	
@@ -74,7 +92,13 @@ public class RedisDoublePlckRepository implements DoublePickRepository {
 		
 		doublePicks.put(doublePick.getPlayerId(), doublePick);
 		
-		hashOps.put(getKey(), doublePick.getId(), doublePicks);
+		try {
+			String json = new ObjectMapper().writeValueAsString(doublePicks);
+			hashOps.put(getKey(), doublePick.getId(), json);
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
+
 	}
 }
 

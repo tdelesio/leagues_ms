@@ -468,6 +468,27 @@
 			});
 		}
 		
+		$scope.randomLeague = function () {
+			$http({
+				method : "POST",
+				url : '/admin/random',
+				contentType : "application/json",
+				dataType : "json"
+//					,
+//				data : JSON.stringify($scope.league)
+			}).success(function(res) { 
+				
+				leagueService.getLeagues().then(function(data) {
+					$scope.leagues = data;
+				});
+				
+			}).error(function(res) {
+				alert('fail');
+			});
+		}
+		
+		
+			
 	});
 	
 	app.controller('CreateWeekController', function ($scope, $http, $window, $log, leagueService) {

@@ -5,17 +5,17 @@ import java.util.Set;
 
 public class PlayersInLeague extends AbstractModel {
 
-	private Set<PlayerResponse> players;
+	private Set<String> players;
 	
-	public void addPlayer(PlayerResponse player)
+	public void addPlayer(String player)
 	{
 		if (players == null)
-			players = new HashSet<PlayerResponse>();
+			players = new HashSet<String>();
 		
 		players.add(player);
 	}
 	
-	public void removePlayer(PlayerResponse player)
+	public void removePlayer(String player)
 	{
 		if (players == null)
 			return;
@@ -23,11 +23,11 @@ public class PlayersInLeague extends AbstractModel {
 		
 	}
 
-	public Set<PlayerResponse> getPlayers() {
+	public Set<String> getPlayers() {
 		return players;
 	}
 
-	public void setPlayers(Set<PlayerResponse> players) {
+	public void setPlayers(Set<String> players) {
 		this.players = players;
 	}
 	

@@ -24,6 +24,17 @@
 					return $http.get('/picks/self/leagueid/'+leagueId+'/weekid/'+weekId).success(function(result) {
 				           return result.data;
 				     });
+				},
+				
+				loadHeader: function() {
+					
+					$log.debug("leagueService:header");
+					
+					return $http.get('/header').success(function(data) {
+						$log.debug('leagueService:loadHeader: data='+JSON.stringify(data));
+						
+						return data;
+					});
 				}
 				
 				

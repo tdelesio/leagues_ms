@@ -11,7 +11,6 @@
 //				status: "=",
 //				addgamestatus: "@"
 //					
-//			},
 //			controller: ['$scope', '$http', 'makePickPageService', function($scope, $http, makePickPageService) {
 //				makePickPageService.getPage().then(function(data) {
 //					$scope.page = data;
@@ -34,28 +33,34 @@
 	//return $http.get('/makepicks').success(function(result);
 	app.factory('makePickPageService', ['$q', '$http', function($q, $http) {
 
-		  var _deferred = $q.defer();
-
-		  $http.get('/makepicks')
-		        .success(function(data, status, headers, config) {
-		           // this callback will be called asynchronously
-		           // when the response is available
-
-		           _deferred.resolve(data);
-
-		         })
-		        .error(function(data, status, headers, config) {
-		           // called asynchronously if an error occurs
-		           // or server returns response with an error status.
-
-		           _deferred.reject("Error");
-		        });
-		    
-
+//		  var _deferred = $q.defer();
+//
+//		  $http.get('/makepicks/leagueid/'++/'weekid/'+)
+//		        .success(function(data, status, headers, config) {
+//		           // this callback will be called asynchronously
+//		           // when the response is available
+//
+//		           _deferred.resolve(data);
+//
+//		         })
+//		        .error(function(data, status, headers, config) {
+//		           // called asynchronously if an error occurs
+//		           // or server returns response with an error status.
+//
+//		           _deferred.reject("Error");
+//		        });
+//		    
+//
 		  return {
-		    getPage: function(){
-		      return _deferred.promise;
-		    },
+//		    getPage: function(){
+//		      return _deferred.promise;
+//		    },
+//		    
+//		    getPage: function(leagueid, weekid) {
+//		    	 $http.get('/makepicks/leagueid/'+leagueid+/'weekid/'+weekid).success(function (result) {
+//		    		 
+//		    	 })
+//		    },
 		    
 		    loadStatus: function(scope) {
 				var favId = scope.game.favId;
@@ -82,9 +87,11 @@
 				var doublePickId = "na";
 				var hasDoubleGameStarted = false;
 				if (scope.page.doublePick != null) {
-					daoublePickId = scope.page.doublePick.pickId;
+					doublePickId = scope.page.doublePick.pickId;
 					hasDoubleGameStarted = scope.page.doublePick.hasDoubleGameStarted
 				}
+				
+				//console.log('doublePickId='+doublePickId);
 				
 				var gamestatus, favstatus, dogstatus;
 				
@@ -258,22 +265,24 @@
 
 		}]);
 	
-	app.controller('MakePicksController', function ($scope, $rootScope, $http, $window, $log, makePickPageService) { 
+	app.controller('MakePicksController', function ($scope, $rootScope, $http, $window, $log, makePickPageService, leagueService) { 
 		
 		$scope.page = {};
 		$scope.status = {};
 		$scope.status.gamestatus = {};
 		$scope.status.teamstatus = {};
 
-		makePickPageService.getPage().then(function(data) {
-			//$log.debug('MakePickController:loadMakePicks='+JSON.stringify(data))
-			$scope.page = data;
-			$rootScope.nav = data.nav;
-			$rootScope.$broadcast('pageLoaded');
-		},
-		function (response) {
-			$scope.error = "Could not load page.  Please try again later."
+//		makePickPageService.getPage().then(function(data) {
+		leagueService.loadHeader().then(function (data) {
+			$http.get('/makepicks/leagueid/'+$rootScope.leagueId+'/weekid/'+$rootScope.weekId).success(function(data) {	
+				$log.debug('MakePickController:loadMakePicks='+JSON.stringify(data))
+				$scope.page = data;
+			})
 		});
+//			,
+//		function (response) {
+//			$scope.error = "Could not load page.  Please try again later."
+//		});
 		
 		
 		$scope.$on('weekChanged', function (events, args) {
@@ -282,7 +291,10 @@
 //			$scope.status.teamstatus = {};	
 			
 			$log.debug('weekChanged: week='+args);
-			$http.get('/makepicks/'+args)
+			
+			$rootScope.weekId = args;
+			
+			$http.get('/makepicks/leagueid/'+$rootScope.leagueId+'/weekid/'+$rootScope.weekId)
 	        .success(function(data) {
 //	        	$log.debug('MakePicksController:changeWeek='+JSON.stringify(data))
 	        	$scope.page = data;

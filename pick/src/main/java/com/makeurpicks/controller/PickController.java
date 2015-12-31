@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,6 +47,17 @@ public class PickController  {
 		return pickService.getOtherPicksByWeekAndPlayer(leagueid, weekid, playerid);
 	}
 	
+	@RequestMapping(method=RequestMethod.POST, value="/admin")
+	@PreAuthorize("hasRole('ADMIN')")
+	public @ResponseBody Pick makePick(@RequestBody Pick pick)
+	{
+//		pick.setPlayerId(user.getName());
+		pick.setAdminOverride(true);
+		
+		log.debug(pick);
+		
+		return pickService.makePick(pick);
+	}
 	
 	@RequestMapping(method=RequestMethod.POST, value="/")
 	public @ResponseBody Pick makePick(Principal user, @RequestBody Pick pick)
@@ -66,6 +78,18 @@ public class PickController  {
 		
 		return pickService.updatePick(pick);
 	}
+	
+	@RequestMapping(method=RequestMethod.PUT, value="/double/admin")
+	@PreAuthorize("hasRole('ADMIN')")
+	public @ResponseBody DoublePick makeDoublePick(@RequestBody DoublePick pick)
+	{
+		pick.setAdminOverride(true);
+		
+		log.debug(pick);
+		
+		return pickService.makeDoublePick(pick.getPickId(), "");
+	}
+	
 	
 	
 	@RequestMapping(method=RequestMethod.PUT, value="/double")

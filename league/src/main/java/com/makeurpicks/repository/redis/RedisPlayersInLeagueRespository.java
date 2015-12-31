@@ -9,7 +9,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import com.makeurpicks.domain.PlayerResponse;
 import com.makeurpicks.domain.PlayersInLeague;
 import com.makeurpicks.repository.PlayersInLeagueRepository;
 
@@ -28,9 +27,9 @@ public class RedisPlayersInLeagueRespository implements PlayersInLeagueRepositor
 
 
 	@Override
-	public void addPlayerToLeague(PlayerResponse player, String leagueId) {
+	public void addPlayerToLeague(String playerId, String leagueId) {
 		
-		log.debug("PlayerResponse="+player+" leagueId="+leagueId);
+		log.debug("playerId="+playerId+" leagueId="+leagueId);
 		
 		PlayersInLeague playersInLeague = findOne(leagueId);
 		if (playersInLeague == null)
@@ -39,17 +38,17 @@ public class RedisPlayersInLeagueRespository implements PlayersInLeagueRepositor
 			playersInLeague.setId(leagueId);
 		}
 		
-		playersInLeague.addPlayer(player);
+		playersInLeague.addPlayer(playerId);
 		save(playersInLeague);
 	}
 
 	
-	public void removePlayerFromLeague(PlayerResponse player, String leagueId) {
+	public void removePlayerFromLeague(String playerId, String leagueId) {
 		PlayersInLeague playersInLeague = findOne(leagueId);
 		if (playersInLeague == null)
 			return;
 		
-		playersInLeague.removePlayer(player);
+		playersInLeague.removePlayer(playerId);
 		
 		save(playersInLeague);
 	}

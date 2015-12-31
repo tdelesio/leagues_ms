@@ -48,6 +48,9 @@ zuul:
     game:
       path: /games/**
       stripPrefix: false
+#    player:
+#      path: /register/auth/players/**
+#      stripPrefix: true
 
             
 logging:

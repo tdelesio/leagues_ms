@@ -34,8 +34,8 @@ zuul:
       stripPrefix: false
   #    url: http://localhost:9000
     player:
-      path: /players/**
-      stripPrefix: false
+      path: /register/**
+      stripPrefix: true
     pick:
       path: /picks/**
       stripPrefix: false
@@ -57,4 +57,5 @@ zuul:
     leader:
       path: /leaders/**
       stripPrefix: false
+    
 

@@ -6,7 +6,7 @@ import org.springframework.data.repository.Repository;
 
 import com.makeurpicks.domain.DoublePick;
 
-public interface DoublePickRepository extends Repository<Map<String, DoublePick>, String> {
+public interface DoublePickRepository extends Repository<String, String> {
 
 	public Map<String, DoublePick> findAllForLeagueAndWeek(String leagueId, String weekId);
 	public DoublePick findDoubleForPlayer(String leagueId, String weekId, String playerId);

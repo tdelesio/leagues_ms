@@ -24,4 +24,9 @@ private Log log = LogFactory.getLog(LeagueIntegrationService.class);
     {
     	return secureRestTemplate.postForEntity("http://league/leagues/", leagueView, LeagueView.class).getBody();
     }
+    
+	public void addPlayerToLeague(PlayerLeagueView playerLeague)
+	{
+    	secureRestTemplate.postForEntity("http://league/leagues/player/admin", playerLeague, PlayerLeagueView.class).getBody();	
+	}
 }

@@ -1,5 +1,5 @@
 (function () {
-	var app = angular.module('app', ['ui.router', 'navigation', 'makepicks']);
+	var app = angular.module('app', ['ui.router', 'navigation', 'makepicks', 'viewpicks']);
 	
 	app.config(function($stateProvider, $urlRouterProvider) {
 		  //

@@ -35,30 +35,19 @@ public class RedisConfig {
 	}  
 	
 	@Bean
-	public RedisTemplate<String, Map<String, DoublePick>> doublePickRedisTemplate(
+	public RedisTemplate<String, String> doublePickRedisTemplate(
 			RedisConnectionFactory redisConnectionFactory) {
-		RedisTemplate<String, Map<String, DoublePick>> template = new RedisTemplate<String, Map<String,DoublePick>>();
+		RedisTemplate<String, String> template = new RedisTemplate<String, String>();
 		template.setConnectionFactory(redisConnectionFactory);
 		
 		template.setHashKeySerializer(stringRedisSerializer());
 		template.setKeySerializer(stringRedisSerializer());
-//		template.setHashValueSerializer(doublePickJsonRedisSerializer());
+		template.setHashValueSerializer(stringRedisSerializer());
 		
 		return template;
 	}
 	
-//	@Bean
-//	public RedisTemplate<String, String> stringRedisTemplte(RedisConnectionFactory redisConnectionFactory)
-//	{
-//		RedisTemplate<String, String> template = new RedisTemplate<String, String>();
-//		template.setConnectionFactory(redisConnectionFactory);
-//		
-//		template.setHashKeySerializer(stringRedisSerializer());
-//		template.setKeySerializer(stringRedisSerializer());
-//		template.setHashValueSerializer(userJsonRedisSerializer());
-//		
-//		return template;
-//	}
+
 	
 	@Bean
 	public RedisTemplate<String, Map<String, Map<String, Map<String, String>>>> picksByWeekRedisTemplate(RedisConnectionFactory redisConnectionFactory)
@@ -82,7 +71,8 @@ public class RedisConfig {
 //	@Bean
 //	public Jackson2JsonRedisSerializer<DoublePick> doublePickJsonRedisSerializer()
 //	{
-//		return new Jackson2JsonRedisSerializer<>(Map<String, DoublePick>.class);
+////		return new Jackson2JsonRedisSerializer<>(Map<String, DoublePick>.class);
+//		return new genericjack
 //	}
 	
 	@Bean

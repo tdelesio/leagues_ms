@@ -144,6 +144,13 @@ public class GameView {
 	public void setId(String id) {
 		this.id = id;
 	}
+	@Override
+	public String toString() {
+		return "GameView [id=" + id + ", spread=" + spread + ", seasonId=" + seasonId + ", favId=" + favId + ", dogId="
+				+ dogId + ", weekId=" + weekId + ", favScore=" + favScore + ", dogScore=" + dogScore + ", favHome="
+				+ favHome + ", gameStart=" + gameStart + ", favFullName=" + favFullName + ", dogFullName=" + dogFullName
+				+ ", dogShortName=" + dogShortName + ", favShortName=" + favShortName + "]";
+	}
 	
 	
 }

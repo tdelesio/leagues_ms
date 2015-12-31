@@ -6,6 +6,7 @@ public class LeagueView  {
 	private String seasonId;
 	private String adminId;
 	private String id;
+	private String password;
 
 	public String getLeagueName() {
 		return leagueName;
@@ -37,6 +38,20 @@ public class LeagueView  {
 
 	public void setAdminId(String adminId) {
 		this.adminId = adminId;
+	}
+
+	@Override
+	public String toString() {
+		return "LeagueView [leagueName=" + leagueName + ", seasonId=" + seasonId + ", adminId=" + adminId + ", id=" + id
+				+ "]";
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	
 	

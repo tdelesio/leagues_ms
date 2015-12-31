@@ -9,6 +9,7 @@ public class Pick extends AbstractModel {
 	private String gameId;
 	private boolean noPick=false;
 	private long pickLastUpdated = System.currentTimeMillis();
+	private boolean adminOverride=false;
 	
 	enum PickStatus { double_won, won, double_loss, loss, double_pick, unpicked, picked, opponent_pick};
 	
@@ -68,6 +69,18 @@ public class Pick extends AbstractModel {
 	public String toString() {
 		return "Pick [teamId=" + teamId + ", playerId=" + playerId + ", weekId=" + weekId + ", gameId=" + gameId
 				+ ", noPick=" + noPick + ", pickLastUpdated=" + pickLastUpdated + "]";
+	}
+
+	public boolean isAdminOverride() {
+		return adminOverride;
+	}
+
+	public void setAdminOverride(boolean adminOverride) {
+		this.adminOverride = adminOverride;
+	}
+
+	public void setPickLastUpdated(long pickLastUpdated) {
+		this.pickLastUpdated = pickLastUpdated;
 	}
 
 

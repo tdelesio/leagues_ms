@@ -10,33 +10,57 @@ public class NavigationView {
 	private String username;
 	private List<LeagueView> leagues;
 	private List<WeekView> weeks;
-	private String selectedSeasonId;
-	private String selectedWeekId;
-	private String selectedLeagueId;
+	
+	public String getDefaultWeekId()
+	{
+		if (weeks!=null && !weeks.isEmpty())
+			return weeks.get(0).getId();
+		else
+			return "";
+	}
+	
+	public String getDefaultLeagueId()
+	{
+		if (leagues!=null && !leagues.isEmpty())
+			return leagues.get(0).getLeagueId();
+		else
+			return "";
+	}
+	
+	public String getDefaultSeasonId()
+	{
+		if (leagues!=null && !leagues.isEmpty())
+			return leagues.get(0).getSeasonId();
+		else
+			return "";
+	}
+//	private String selectedSeasonId;
+//	private String selectedWeekId;
+//	private String selectedLeagueId;
 	
 
 
-	public String getSelectedSeasonId() {
-		return selectedSeasonId;
-	}
+//	public String getSelectedSeasonId() {
+//		return selectedSeasonId;
+//	}
+//
+//	public void setSelectedSeasonId(String selectedSeasonId) {
+//		this.selectedSeasonId = selectedSeasonId;
+//	}
 
-	public void setSelectedSeasonId(String selectedSeasonId) {
-		this.selectedSeasonId = selectedSeasonId;
-	}
-
-	public String getSelectedWeekId() {
-//		if (selectedWeekId == null)
-//			if (weeks != null && !weeks.isEmpty())
-//				return weeks.get(0).getWeekId();
-//			else
-//				return null;
-//		else
-			return selectedWeekId;
-	}
-
-	public void setSelectedWeekId(String selectedWeekId) {
-		this.selectedWeekId = selectedWeekId;
-	}
+//	public String getSelectedWeekId() {
+////		if (selectedWeekId == null)
+////			if (weeks != null && !weeks.isEmpty())
+////				return weeks.get(0).getWeekId();
+////			else
+////				return null;
+////		else
+//			return selectedWeekId;
+//	}
+//
+//	public void setSelectedWeekId(String selectedWeekId) {
+//		this.selectedWeekId = selectedWeekId;
+//	}
 	
 	
 	public String getUsername() {
@@ -58,13 +82,13 @@ public class NavigationView {
 		this.weeks = weeks;
 	}
 
-	public String getSelectedLeagueId() {
-		return selectedLeagueId;
-	}
-
-	public void setSelectedLeagueId(String selectedLeagueId) {
-		this.selectedLeagueId = selectedLeagueId;
-	}
+//	public String getSelectedLeagueId() {
+//		return selectedLeagueId;
+//	}
+//
+//	public void setSelectedLeagueId(String selectedLeagueId) {
+//		this.selectedLeagueId = selectedLeagueId;
+//	}
 	
 	
 }

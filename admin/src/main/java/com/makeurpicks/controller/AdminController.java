@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.makeurpicks.service.AdminService;
 import com.makeurpicks.service.Dummy;
+import com.makeurpicks.service.GameRandonizor;
 
 @RestController
 public class AdminController {
@@ -26,6 +27,10 @@ public class AdminController {
 	@Autowired
 	private AdminService adminService;
 	
+	@Autowired
+	private GameRandonizor randomizer;
+	
+	
 	@RequestMapping("/user")
     public Object home(Principal principal) {
 //        return restTemplate.getForObject(resourceURI, Object.class);
@@ -38,5 +43,13 @@ public class AdminController {
 	{
 		return adminService.createDummyWeeks();
 	}
+	
+	@RequestMapping(value="/random", method = RequestMethod.POST)
+	public void randomizer()
+	{
+		randomizer.createRandomLeague(17);
+	}
+	
+	
 }
 

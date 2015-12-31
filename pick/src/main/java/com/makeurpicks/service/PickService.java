@@ -276,7 +276,7 @@ public class PickService {
 			throw new PickValidationException(PickExceptions.GAME_HAS_ALREADY_STARTED);
 		}
 		
-		if (!pick.getPlayerId().equals(loggedInPlayerId))
+		if (!pick.isAdminOverride() && !pick.getPlayerId().equals(loggedInPlayerId))
 			throw new PickValidationException(PickExceptions.UNAUTHORIZED_USER);
 		
 //		Picks oldPick = getDoublePickForPlayerLeagueAndWeek(pick.getName(), pick.getLeague(), pick.getWeek());

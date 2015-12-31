@@ -10,20 +10,20 @@ import com.makeurpicks.service.pick.PickView;
 
 public class MakePicks implements Serializable {
 
-	private NavigationView nav;
+//	private NavigationView nav;
 	private List<GameView> games;
 	private Map<String, PickView> picks;
 	private DoublePickView doublePick;
 
 	private boolean hystrixFailureOnPicks = false;
 
-	public NavigationView getNav() {
-		return nav;
-	}
-
-	public void setNav(NavigationView nav) {
-		this.nav = nav;
-	}
+//	public NavigationView getNav() {
+//		return nav;
+//	}
+//
+//	public void setNav(NavigationView nav) {
+//		this.nav = nav;
+//	}
 
 	public List<GameView> getGames() {
 		return games;

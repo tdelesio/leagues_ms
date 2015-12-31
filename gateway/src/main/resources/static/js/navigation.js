@@ -1,59 +1,54 @@
 (function () {
-	var app = angular.module('navigation', []);
+	var app = angular.module('navigation', ['leagueservice']);
 
-//	app.config(function($httpProvider) {
-//		$httpProvider.interceptors.push('authInterceptor');
-//	});
 	
-//	app.factory('authInterceptor', [
-//	                                "$q", "$window", "$location", "session", function($q, $window, $location, session) {
-//	                                    return {
-//	                                      request: function(config) {
-//	                                        config.headers = config.headers || {};
-//	                                        config.headers.Authorization = 'Bearer ' + session.get('token'); // add your token from your service or whatever
-//	                                        return config;
-//	                                      },
-//	                                      response: function(response) {
-//	                                        return response || $q.when(response);
-//	                                      },
-//	                                      responseError: function(rejection) {
-//	                                        // your error handler
-//	                                      }
-//	                                    };
-//	                                  }
-//	                                ]);
-	
-	app.controller('NavigationController', function ($scope, $rootScope, $http, $window, $log, $location, makePickPageService) {
+	app.controller('NavigationController', function ($scope, $rootScope, $http, $window, $log, $location, leagueService) {
 		
 		$scope.nav = {};
 		$scope.week = {};
 		$scope.league = {};
+		$scope.headerIsLoaded = false;
 		
-		makePickPageService.getPage().then(function(data) {
-//			$log.debug('NavigationController:getPage='+JSON.stringify(data))
-			$scope.nav = data.nav; 
-			$scope.week.weekId = data.nav.selectedWeekId;
+		leagueService.loadHeader().then(function (data) {
 			
-			$log.debug('NavigationController:getPage: data.nav.selectedLeagueId='+data.nav.selectedLeagueId);
-			$scope.league.leagueId = data.nav.selectedLeagueId;
+			$log.debug('NavigationController:loadHeader:then data='+JSON.stringify(data));
+			//set values in parent scope
+			$rootScope.weekId = data.data.defaultWeekId;
+			$rootScope.leagueId = data.data.defaultLeagueId;
+			$rootScope.seasonId = data.data.defaultSeasonId;
+			
+			//initialize them for dropdown
+			$scope.week.weekId = data.data.defaultWeekId;
+			$scope.league.leagueId = data.data.defaultLeagueId;
+			
+			//set the dropdowns values
+			$scope.nav = data.data;
+			
+			$rootScope.headerIsLoaded = true;
 		});
-		
+				
 		$scope.$on('leagueChanged', function(events, args) {
 		
 			$log.debug('NavigationController:on:leagueChanged: leagueId='+args);
-			$http.get('/weeks/leagueid/'+args)
-				.success(function(result) {
+			
+			//reload the week dropdown list
+			$http.get('/weeks/leagueid/'+args).success(function(result) {
 					
-					var selectedWeek = result[0].id;
+				//get the first week in the list and set it
+				var selectedWeek = result[0].id;
 					
-					$scope.nav.weeks=result;
-//					$scope.nav.selectedSeasonId;
-					$scope.nav.selectedWeekId=selectedWeek;
-					$scope.nav.selectedLeagueId=args;
+				//set the selected values
+				$rootScope.weekId = selectedWeek;
+				$rootScope.leagueId = args;
+				
+				//change the week dropdown
+				$scope.nav.weeks=result;
+				
+				//initialize the dropdown to the right selected value
+				$scope.week.weekId = selectedWeek;
 					
-					$scope.week.weekId = selectedWeek;
-					
-		           $rootScope.$broadcast('weekChanged', selectedWeek);
+				//let everyone know week changed	
+				$rootScope.$broadcast('weekChanged', selectedWeek);
 		     });
 			
 		});

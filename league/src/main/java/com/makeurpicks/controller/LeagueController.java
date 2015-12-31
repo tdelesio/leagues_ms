@@ -5,6 +5,8 @@ import java.util.Set;
 
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,13 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.makeurpicks.domain.League;
 import com.makeurpicks.domain.LeagueName;
 import com.makeurpicks.domain.PlayerLeague;
-import com.makeurpicks.domain.PlayerResponse;
 import com.makeurpicks.service.LeagueService;
 
 @RestController
 @RequestMapping(value="/leagues")
 public class LeagueController {
 
+	private Log log = LogFactory.getLog(LeagueController.class);
+	
 	@Autowired
 	private LeagueService leagueService;
 	 
@@ -49,8 +52,10 @@ public class LeagueController {
 	@RequestMapping(method=RequestMethod.POST, value="/")
 	public @ResponseBody League createLeague(Principal user, @RequestBody League league) {
 
-		league.setAdminId(user.getName());
-			return leagueService.createLeague(league);
+		if (league != null && league.getAdminId() == null)
+			league.setAdminId(user.getName());
+		
+		return leagueService.createLeague(league);
 	
 	}
 
@@ -67,11 +72,23 @@ public class LeagueController {
 		return leagueService.getLeaguesForPlayer(id);
 	}
 	
-	
 	@RequestMapping(method=RequestMethod.POST, value="/player")
 	public void addPlayerToLeague(@RequestBody PlayerLeague playerLeague, Principal principal)
 	{
 		playerLeague.setPlayerId(principal.getName());
+		
+		log.debug("playerLeague ="+ playerLeague.toString());
+		
+		leagueService.joinLeague(playerLeague);
+	
+	}
+	
+	@RequestMapping(method=RequestMethod.POST, value="/player/admin")
+	@PreAuthorize("hasRole('ADMIN')")
+	public void addPlayerToLeague(@RequestBody PlayerLeague playerLeague)
+	{
+		log.debug("playerLeague ="+ playerLeague.toString());
+		
 		leagueService.joinLeague(playerLeague);
 	
 	}
@@ -89,7 +106,7 @@ public class LeagueController {
 	 }
 	
 	@RequestMapping(method=RequestMethod.GET, value="/player/leagueid/{leagueid}")
-	 public @ResponseBody Set<PlayerResponse> getPlayersInLeague(@PathVariable String leagueid)
+	 public @ResponseBody Set<String> getPlayersInLeague(@PathVariable String leagueid)
 	 {
 		return leagueService.getPlayersInLeague(leagueid);
 	 }

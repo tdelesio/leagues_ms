@@ -25,6 +25,10 @@ public class WeekView {
 	public void setSeasonId(String seasonId) {
 		this.seasonId = seasonId;
 	}
+	@Override
+	public String toString() {
+		return "WeekView [weekNumber=" + weekNumber + ", seasonId=" + seasonId + ", id=" + id + "]";
+	}
 	
 	
 }

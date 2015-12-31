@@ -1,26 +1,20 @@
 package com.makeurpicks.service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
 import com.makeurpicks.domain.League;
 import com.makeurpicks.domain.LeagueName;
 import com.makeurpicks.domain.PlayerLeague;
-import com.makeurpicks.domain.PlayerResponse;
-import com.makeurpicks.domain.PlayersInLeague;
 import com.makeurpicks.exception.LeagueServerException;
 import com.makeurpicks.exception.LeagueValidationException;
 import com.makeurpicks.exception.LeagueValidationException.LeagueExceptions;
 import com.makeurpicks.repository.LeagueRepository;
 import com.makeurpicks.repository.redis.RedisLeaguesPlayerHasJoinedRepository;
 import com.makeurpicks.repository.redis.RedisPlayersInLeagueRespository;
-import com.netflix.config.validation.ValidationException;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
 @Component
@@ -47,8 +41,8 @@ public class LeagueService {
 //	@Autowired
 //	private PlayerClient playerClient;
 	
-	@Autowired
-	private PlayerIntegrationService playerIntegrationService;
+//	@Autowired
+//	private PlayerIntegrationService playerIntegrationService;
 	
 	public League createLeague(League league) throws LeagueValidationException {
 		validateLeague(league);
@@ -77,7 +71,7 @@ public class LeagueService {
 		
 	}
 	
-	public Set<PlayerResponse> getPlayersInLeague(String leagueid) throws LeagueValidationException {
+	public Set<String> getPlayersInLeague(String leagueid) throws LeagueValidationException {
 		return playersInLeagueRespository.findOne(leagueid).getPlayers();
 		
 	}
@@ -104,8 +98,8 @@ public class LeagueService {
 
 	protected void joinLeague(String leagueId, String playerId, String password) throws LeagueValidationException {
 		
-		if (!isValidPlayer(playerId))
-			throw new LeagueValidationException(LeagueExceptions.PLAYER_NOT_FOUND);
+//		if (!isValidPlayer(playerId))
+//			throw new LeagueValidationException(LeagueExceptions.PLAYER_NOT_FOUND);
 		
 		League league = leagueRepository.findOne(leagueId);
 		if (league == null)
@@ -120,8 +114,8 @@ public class LeagueService {
 	
 	protected void addPlayerToLeague(League league, String playerId)
 	{
-		PlayerResponse playerResponse = getPlayer(playerId);
-		playersInLeagueRespository.addPlayerToLeague(playerResponse, league.getId());
+//		PlayerResponse playerResponse = getPlayer(playerId);
+		playersInLeagueRespository.addPlayerToLeague(playerId, league.getId());
 		leaguesPlayerHasJoinedRepository.addPlayerToLeague(league, playerId);
 	}
 
@@ -145,8 +139,8 @@ public class LeagueService {
 		if (league == null)
 			throw new LeagueValidationException(LeagueExceptions.LEAGUE_NOT_FOUND);
 		
-		PlayerResponse playerResponse = getPlayer(playerId);
-		playersInLeagueRespository.removePlayerFromLeague(playerResponse, league.getId());
+//		PlayerResponse playerResponse = getPlayer(playerId);
+		playersInLeagueRespository.removePlayerFromLeague(playerId, league.getId());
 		leaguesPlayerHasJoinedRepository.removePlayerFromLeague(league, playerId);
 	}
 
@@ -184,10 +178,10 @@ public class LeagueService {
 
 	
 //	@HystrixCommand(fallbackMethod="defaultGetPlayer")
-	protected PlayerResponse getPlayer(String playerId)
-	{
-		return playerIntegrationService.getPlayer(playerId);
-	}
+//	protected PlayerResponse getPlayer(String playerId)
+//	{
+//		return playerIntegrationService.getPlayer(playerId);
+//	}
 	
 //	protected PlayerResponse defaultGetPlayer(String playerId)
 //	{
