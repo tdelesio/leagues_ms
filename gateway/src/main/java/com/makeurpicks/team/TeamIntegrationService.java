@@ -1,4 +1,4 @@
-package GameIntegrationService;
+package com.makeurpicks.team;
 
 import java.util.Collections;
 import java.util.Map;
@@ -23,7 +23,7 @@ public class TeamIntegrationService {
     @LoadBalanced
     private OAuth2RestOperations secureRestTemplate;
 	
-	@HystrixCommand(fallbackMethod = "stubGames",
+	@HystrixCommand(fallbackMethod = "stubTeams",
             commandProperties = {
                     @HystrixProperty(name = "execution.isolation.strategy", value = "SEMAPHORE")
             }

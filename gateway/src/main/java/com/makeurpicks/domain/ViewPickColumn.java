@@ -120,7 +120,7 @@ public class ViewPickColumn {
 	public static ViewPickColumn asBlank()
 	{
 		ViewPickColumn pickColumn = new ViewPickColumn();
-		pickColumn.value = "&nbsp;";
+		pickColumn.value = "";
 		return pickColumn;
 	}
 	

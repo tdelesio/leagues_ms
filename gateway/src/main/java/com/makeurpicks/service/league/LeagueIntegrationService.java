@@ -53,7 +53,7 @@ public class LeagueIntegrationService {
         	
             	log.debug("leagueId="+id);
             	ParameterizedTypeReference<List<PlayerView>> responseType = new ParameterizedTypeReference<List<PlayerView>>() {};
-                List<PlayerView> players = secureRestTemplate.exchange("http://league/player/leagueid/{id}", HttpMethod.GET, null, responseType, id).getBody();
+                List<PlayerView> players = secureRestTemplate.exchange("http://league/leagues/player/leagueid/{id}", HttpMethod.GET, null, responseType, id).getBody();
                 return players;                             
             }
         };

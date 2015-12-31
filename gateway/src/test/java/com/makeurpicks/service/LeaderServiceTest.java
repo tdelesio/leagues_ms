@@ -17,16 +17,16 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.makeurpicks.domain.ViewPickColumn;
-import com.makeurpicks.game.GameIntegrationService;
-import com.makeurpicks.game.GameView;
-import com.makeurpicks.league.LeagueIntegrationService;
-import com.makeurpicks.league.PlayerView;
-import com.makeurpicks.pick.DoublePickView;
-import com.makeurpicks.pick.PickIntegrationService;
-import com.makeurpicks.pick.PickView;
+import com.makeurpicks.service.game.GameIntegrationService;
+import com.makeurpicks.service.game.GameView;
+import com.makeurpicks.service.league.LeagueIntegrationService;
+import com.makeurpicks.service.league.PlayerView;
+import com.makeurpicks.service.pick.DoublePickView;
+import com.makeurpicks.service.pick.PickIntegrationService;
+import com.makeurpicks.service.pick.PickView;
+import com.makeurpicks.team.TeamIntegrationService;
+import com.makeurpicks.team.TeamView;
 
-import GameIntegrationService.TeamIntegrationService;
-import GameIntegrationService.TeamView;
 import rx.Observable;
 import rx.observers.TestSubscriber;
 
@@ -34,7 +34,7 @@ public class LeaderServiceTest {
 
 	@Autowired
 	@InjectMocks
-	private LeaderService leaderService;
+	private GatewayService gatewayService;
 	
 	@Mock
 	private LeagueIntegrationService leagueClientMock;
@@ -151,7 +151,7 @@ public class LeaderServiceTest {
 		doublePick3.setGameId(game3.getId());
 		doubles.put("player3", doublePick3);
 		
-		when(pickClientMock.getDoublePickForPlayerForWeek(leagueId, weekId)).thenReturn(Observable.just(doubles));
+		when(pickClientMock.getAllDoublePickForPlayerForWeek(leagueId, weekId)).thenReturn(Observable.just(doubles));
 
 		Map<String, Map<String, PickView>> picks = new HashMap<>();
 		
@@ -256,7 +256,7 @@ public class LeaderServiceTest {
 		
 		picks.put("player4", picksByGame4);
 		
-		when(pickClientMock.getPicksForPlayerForWeek(leagueId, weekId)).thenReturn(Observable.just(picks));
+		when(pickClientMock.getPicksForAllPlayerForWeek(leagueId, weekId)).thenReturn(Observable.just(picks));
 
 		Map<String, TeamView> teamMap = new HashMap<>();
 		
@@ -323,7 +323,7 @@ public class LeaderServiceTest {
 		when(teamClientMock.getTeams()).thenReturn(Observable.just(teamMap));
 		
 		TestSubscriber<List<List<ViewPickColumn>>> testSubscriber = new TestSubscriber<>();
-		leaderService.getPlayersPlusWinsInLeague(leagueId, weekId).subscribe(testSubscriber);
+		gatewayService.getPlayersPlusWinsInLeague(leagueId, weekId).subscribe(testSubscriber);
 		
 		testSubscriber.assertNoErrors();
 		List<List<ViewPickColumn>> rows = testSubscriber.getOnNextEvents().get(0);

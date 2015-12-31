@@ -1,9 +1,8 @@
-package GameIntegrationService;
+package com.makeurpicks.team;
 
-import com.makeurpicks.domain.AbstractModel;
+public class TeamView  {
 
-public class TeamView extends AbstractModel {
-
+	private String id;
 	private String teamName;
 	private String city;
 	private String shortName;
@@ -51,6 +50,14 @@ public class TeamView extends AbstractModel {
 	{
 		return city+" "+teamName;
 	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	
+	
 }
 
 

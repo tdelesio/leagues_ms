@@ -1,4 +1,4 @@
-<div ng-controller="MakePicksController as makePicksCtrl" ui-if="headerIsLoaded">
+<div ng-controller="MakePicksController as makePicksCtrl">
 	<div ng-show="page.hystrixFailureOnPicks" class="error">Error retrieving picks.  Please try again later.</div>
 	<div ng-show="page.doublePick.hystrixFailure" class="error">Error retrieving double pick.  Please try again later.</div>
 	<div ng-show="error" class="error">{{error}}</div> 

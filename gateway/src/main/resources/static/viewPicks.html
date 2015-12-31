@@ -1,7 +1,9 @@
-<div ng-controller="ViewPicksController as viewPicksCtrl">
-	<div ng-repeat="game in page.games">	
-
-		<view-picks></view-picks>
-		
-	</div>
+<div class="col-lg-4 col-md-6 col-sm-6 col-xs-12" ng-controller="ViewPicksController as viewPicksCtrl">
+	<table class="viewpicks">
+		<tr ng-repeat="row in rows">	
+	
+			<td ng-repeat="column in row"><span class="{{column.attribute}}">{{column.value}}</span></td> 
+			
+		</tr>
+	</table>
 </div>

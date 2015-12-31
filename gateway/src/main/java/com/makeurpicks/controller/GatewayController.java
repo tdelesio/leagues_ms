@@ -21,7 +21,9 @@ import org.springframework.web.context.request.async.DeferredResult;
 
 import com.makeurpicks.domain.MakePicks;
 import com.makeurpicks.domain.NavigationView;
+import com.makeurpicks.domain.ViewPickColumn;
 import com.makeurpicks.domain.ViewPicks;
+import com.makeurpicks.service.GatewayService;
 import com.makeurpicks.service.game.GameIntegrationService;
 import com.makeurpicks.service.game.GameView;
 import com.makeurpicks.service.league.LeagueIntegrationService;
@@ -51,6 +53,9 @@ public class GatewayController {
 	private WeekIntegrationService weekIntegrationService;
 	
 	@Autowired
+	private GatewayService gatewayService;
+	
+	@Autowired
 	private DefaultTokenServices defaultTokenServices;
 	
 	@Autowired
@@ -70,6 +75,28 @@ public class GatewayController {
 	 public DeferredResult<MakePicks> makePicksByWeekId(@PathVariable String leagueid, @PathVariable String weekid, Principal principal) {
 //		return buildMakePicks(principal.getName(), weekId);
 		return toDeferredResult(buildMakePicks(principal.getName(), leagueid, weekid));
+	}
+	
+	@RequestMapping(value="/viewpicks/leagueid/{leagueid}/weekid/{weekid}")
+	public @ResponseBody DeferredResult<List<List<ViewPickColumn>>> getPlayersPlusWinsInLeague(@PathVariable String leagueid, @PathVariable String weekid) 
+	{
+		DeferredResult<List<List<ViewPickColumn>>> result = new DeferredResult<>();
+		gatewayService.getPlayersPlusWinsInLeague(leagueid, weekid).subscribe(new Observer<List<List<ViewPickColumn>>>() {
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+            }
+
+            @Override
+            public void onNext(List<List<ViewPickColumn>> weekStats) {
+                result.setResult(weekStats);
+            }
+        });
+        
+		return result;
 	}
 
 	@RequestMapping("/header")
@@ -92,82 +119,82 @@ public class GatewayController {
 //		return toNonDeferredResult(buildMakePicks(principal.getName(), null));
 //	}
 
-	@RequestMapping("/viewpicks/leagueid/{leagueid}/weekid/{weekid}")
-	public DeferredResult<ViewPicks> viewPicks(Principal principal, @PathVariable String leagueid, @PathVariable String weekid) {
-
-//		return buildMakePicks(principal.getName(), null);
-		return toViewDeferredResult(buildViewPicks(principal.getName(), leagueid, weekid));
-	}
-	
-
-	private Observable<ViewPicks> buildViewPicks(String userId, String leagueId, String weekId) {
-		
-		DeferredResult<ViewPicks> result = new DeferredResult<>();
-		ViewPicks viewPicksView = new ViewPicks();
-		
-//		emmitNavigation(userId, weekId)
-//			.subscribe(nav -> makePicksView.setNav(nav))
-//		;
-
-		
-		return Observable.zip(
-				gameIntegrationService.getGamesForWeek(weekId),
-				pickIntegrationService.getPicksForPlayerForWeek(leagueId, weekId),
-				pickIntegrationService.getDoublePickForPlayerForWeek(leagueId, weekId),
-				leagueIntegrationService.getPlayersForLeague(leagueId),
-				(games, picks, doublePick, players) -> {
-					
-					List<List<String>> rows = new ArrayList<>(17);
-					List<String> columns;
-					
-					GameView game;
-					for (int i=0; i<games.size(); i++)
-					{
-						game = games.get(i);
-						columns = new ArrayList<>(players.size());
-						
-						//put header in first row
-						if (i==0)
-						{
-							//0,0 should have a blank space
-							columns.add("&nbsp;");
-							for (PlayerView player: players)
-							{
-								columns.add(player.getId());
-							}
-							
-							rows.add(columns);
-							continue;
-						}
-						
-						if (i==1)
-						{
-							columns.add("wins");
-						}
-							
-						columns.add(new StringBuilder(game.getFavShortName()).append(" vs ").append(game.getDogShortName()).toString());
-						
-						for (PlayerView player: players)
-						{
-							if (!game.getHasGameStarted()) {
-								columns.add("-");
-							}
-							else
-							{
-								PickView pick = picks.get(player.getId());
-								if (pick == null) 
-									columns.add("-");
-							}
-						}
-						
-					}
-
-					viewPicksView.setData(rows);
-					return viewPicksView;
-				});
-			
-	}
-	
+//	@RequestMapping("/viewpicks/leagueid/{leagueid}/weekid/{weekid}")
+//	public DeferredResult<ViewPicks> viewPicks(Principal principal, @PathVariable String leagueid, @PathVariable String weekid) {
+//
+////		return buildMakePicks(principal.getName(), null);
+//		return toViewDeferredResult(buildViewPicks(principal.getName(), leagueid, weekid));
+//	}
+//	
+//
+//	private Observable<ViewPicks> buildViewPicks(String userId, String leagueId, String weekId) {
+//		
+//		DeferredResult<ViewPicks> result = new DeferredResult<>();
+//		ViewPicks viewPicksView = new ViewPicks();
+//		
+////		emmitNavigation(userId, weekId)
+////			.subscribe(nav -> makePicksView.setNav(nav))
+////		;
+//
+//		
+//		return Observable.zip(
+//				gameIntegrationService.getGamesForWeek(weekId),
+//				pickIntegrationService.getPicksForPlayerForWeek(leagueId, weekId),
+//				pickIntegrationService.getDoublePickForPlayerForWeek(leagueId, weekId),
+//				leagueIntegrationService.getPlayersForLeague(leagueId),
+//				(games, picks, doublePick, players) -> {
+//					
+//					List<List<String>> rows = new ArrayList<>(17);
+//					List<String> columns;
+//					
+//					GameView game;
+//					for (int i=0; i<games.size(); i++)
+//					{
+//						game = games.get(i);
+//						columns = new ArrayList<>(players.size());
+//						
+//						//put header in first row
+//						if (i==0)
+//						{
+//							//0,0 should have a blank space
+//							columns.add("&nbsp;");
+//							for (PlayerView player: players)
+//							{
+//								columns.add(player.getId());
+//							}
+//							
+//							rows.add(columns);
+//							continue;
+//						}
+//						
+//						if (i==1)
+//						{
+//							columns.add("wins");
+//						}
+//							
+//						columns.add(new StringBuilder(game.getFavShortName()).append(" vs ").append(game.getDogShortName()).toString());
+//						
+//						for (PlayerView player: players)
+//						{
+//							if (!game.getHasGameStarted()) {
+//								columns.add("-");
+//							}
+//							else
+//							{
+//								PickView pick = picks.get(player.getId());
+//								if (pick == null) 
+//									columns.add("-");
+//							}
+//						}
+//						
+//					}
+//
+//					viewPicksView.setData(rows);
+//					return viewPicksView;
+//				});
+//			
+//	}
+//	
 	private Observable<MakePicks> buildMakePicks(String userId, String leagueId, String weekId) {
 	
 		DeferredResult<MakePicks> result = new DeferredResult<>();

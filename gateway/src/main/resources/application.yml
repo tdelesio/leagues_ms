@@ -28,6 +28,8 @@ security:
             -----END PUBLIC KEY-----
 
 zuul:
+#  host:
+#    socket-timeout-millis: 5000
   routes:
     league:
       path: /leagues/**
@@ -57,5 +59,12 @@ zuul:
     leader:
       path: /leaders/**
       stripPrefix: false
+
+#hystrix:
+#  command:
+#    default:
+#      execution:
+#        timeout:
+#          enabled: false
     
 

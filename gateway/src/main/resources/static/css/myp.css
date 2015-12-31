@@ -158,6 +158,35 @@ MAKE PICKS
 	color:#FFFFFF;
 }	
 
+.viewpicks  {
+	height:30px; 
+	padding:0; 
+	line-height:28px; 
+	color:#FFFFFF;
+}
+
+.viewpicks .l {
+	color:#ff0000;
+}
+
+.viewpicks .w {
+	color:#00ff00;
+	text-align: center;
+}
+
+.viewpicks .dl {
+	color:#ff0000;
+	font-weight: bolder;
+	border: 2px solid #ff0000;
+}
+
+.viewpicks .dw {
+	color:#00ff00;
+	border: 2px solid #00ff00;
+	font-weight: bolder;	
+}
+
+
 /*pickable renamed to unpicked*/
 .unpicked {
 	cursor:pointer;
