@@ -4,13 +4,15 @@ server:
 security:
   oauth2:
     client:
-      access-token-uri: http://localhost:9999/auth/oauth/token
-      user-authorization-uri: http://localhost:9999/auth/oauth/authorize
+      access-token-uri: ${vcap.services.auth-token.credentials.uri:http://localhost:9999/auth/oauth/token}
+      user-authorization-uri: ${vcap.services.auth-authorize.credentials.uri:http://localhost:9999/auth/oauth/authorize}
+#      access-token-uri: http://localhost:9999/auth/oauth/token
+#      user-authorization-uri: http://localhost:9999/auth/oauth/authorize
       client-id: ui
       client-secret: secret
     resource:
       jwt:
-        key-uri: "http://localhost:9999/auth/oauth/token_key"
+        key-uri: ${vcap.services.auth-token-key.credentials.uri:http://localhost:9999/auth/oauth/token_key}
         key-value: |
             -----BEGIN PUBLIC KEY-----
             MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDNQZKqTlO/+2b4ZdhqGJzGBDlt

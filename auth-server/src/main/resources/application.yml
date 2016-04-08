@@ -22,6 +22,8 @@ spring:
 
 config:
     oauth2:
+        ui-uri: ${vcap.services.ui-service.credentials.uri:http://localhost:8080/}
+        admin-uri: ${vcap.services.admin-service.credentials.uri:http://localhost:9000/admin/}
         # openssl genrsa -out jwt.pem 2048
         # openssl rsa -in jwt.pem
         privateKey: |

@@ -53,4 +53,9 @@ public class SeasonService {
 	{
 		return seasonRepository.save(season);
 	}
+	
+	public void deleteSeason(String seasonId)
+	{
+		seasonRepository.delete(seasonId);
+	}
 }

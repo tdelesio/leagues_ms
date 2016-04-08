@@ -14,6 +14,20 @@
 		        	$scope.rows = data;
 		        });
 		});
+		
+		$scope.$on('weekChanged', function (events, args) {
+			
+			$log.debug('weekChanged: week='+args);
+			
+			$rootScope.weekId = args;
+			
+			$http.get('/viewpicks/leagueid/'+$rootScope.leagueId+'/weekid/'+$rootScope.weekId)
+	        .success(function(data) {
+
+	        	$scope.rows = data;
+	        	
+	        });
+		});
 				
 	});
 	

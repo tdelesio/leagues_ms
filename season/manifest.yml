@@ -1,0 +1,13 @@
+---
+applications:
+- name: season
+  memory: 512M 
+  instances: 1
+  host: season
+  path: ./target/season-0.0.1.jar
+  services:
+  - redis-myp
+  - amqp-myp
+  - eureka-service
+  - config-service
+  - auth-token-key

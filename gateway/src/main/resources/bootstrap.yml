@@ -1,3 +1,17 @@
 spring:
   application:
    name: gateway
+  cloud:
+    config:
+      uri: ${vcap.services.config-service.credentials.uri:http://127.0.0.1:8888}
+      
+eureka:
+  instance:
+    hostname: ${vcap.application.uris[0]:127.0.0.1}
+    nonSecurePort: ${vcap.services.eureka-service.credentials.port:${server.port}}
+    leaseRenewalIntervalInSeconds: 10
+    metadataMap:
+      instanceId: ${vcap.application.instance_id:${spring.application.name}:${random.value}}
+  client:
+    serviceUrl:
+      defaultZone: ${vcap.services.eureka-service.credentials.uri:http://127.0.0.1:8761}/eureka/

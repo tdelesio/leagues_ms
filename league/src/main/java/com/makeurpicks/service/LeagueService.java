@@ -233,4 +233,14 @@ public class LeagueService {
 //		this.playerClient = playerClient;
 //	}
 
+	public void deleteLeague(String leagueId)
+	{
+		Set<String> playerIds = getPlayersInLeague(leagueId);
+		for (String playerId:playerIds)
+		{
+			try {removePlayerFromLeagye(leagueId, playerId);} catch (Exception e) {e.getMessage();}
+		}
+		
+		leagueRepository.delete(leagueId);
+	}
 }

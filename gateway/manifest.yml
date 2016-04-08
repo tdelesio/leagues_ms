@@ -1,0 +1,13 @@
+---
+applications:
+- name: gateway
+  memory: 512M 
+  instances: 1
+  host: ui
+  path: ./target/gateway-0.0.1.jar
+  services:
+  - eureka-service
+  - config-service
+  - auth-token
+  - auth-authorize
+  - amqp-myp

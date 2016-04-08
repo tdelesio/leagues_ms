@@ -111,7 +111,13 @@ public class LeagueController {
 		return leagueService.getPlayersInLeague(leagueid);
 	 }
 	
-	
+	@RequestMapping(method=RequestMethod.DELETE, value="/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
+	public @ResponseBody boolean deleteLeague(@PathVariable String id)
+	{
+		leagueService.deleteLeague(id);
+		return true;
+	}
 	
 	
 

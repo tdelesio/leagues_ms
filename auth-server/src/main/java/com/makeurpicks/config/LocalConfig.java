@@ -31,5 +31,17 @@ public class LocalConfig {
         dataSource.setDriverClass("org.hibernate.service.jdbc.connections.internal.C3P0ConnectionProvider");
         return dataSource;
     }
+    
+//			    @Bean
+//				public String ui()
+//				{
+//					return "http://localhost:8080/";
+//				}
+//				
+//				@Bean
+//				public String admin()
+//				{
+//					return "http://localhost:9000/admin";
+//				}
 	
 }

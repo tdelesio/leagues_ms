@@ -1,0 +1,14 @@
+---
+applications:
+- name: auth-server
+  memory: 1G
+  instances: 1
+  host: auth
+  path: ./target/auth-server-0.0.1.jar
+  services:
+  - auth-mysql
+  - amqp-myp
+  - eureka-service
+  - config-service
+  - ui-service
+  - admin-service

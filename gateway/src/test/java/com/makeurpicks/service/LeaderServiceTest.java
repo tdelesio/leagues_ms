@@ -329,7 +329,7 @@ public class LeaderServiceTest {
 		List<List<ViewPickColumn>> rows = testSubscriber.getOnNextEvents().get(0);
 		
 		List<ViewPickColumn> column = rows.get(0);
-		assertEquals("&nbsp;", column.get(0).getValue());
+		assertEquals("", column.get(0).getValue());
 		assertEquals("player3(7)", column.get(1).getValue());
 		assertEquals("player4(4)", column.get(2).getValue());
 		assertEquals("player1(3)", column.get(3).getValue());
