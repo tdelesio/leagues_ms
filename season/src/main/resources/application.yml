@@ -5,7 +5,8 @@ security:
   oauth2:
     resource:
       jwt:
-        key-uri: "http://localhost:9999/auth/oauth/token_key"
+        key-uri: ${vcap.services.auth-token-key.credentials.uri:http://localhost:9999/auth/oauth/token_key}
+#        key-uri: "http://localhost:9999/auth/oauth/token_key"
         
 logging:
   level:

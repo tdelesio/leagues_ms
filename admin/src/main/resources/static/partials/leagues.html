@@ -4,6 +4,7 @@
 <thead>
 <tr>
 	<th>edit</th>
+	<td>delete</td>
 	<th>id</th>
 	<th>admin</th>
 	<th>season</th>
@@ -14,6 +15,7 @@
 
 <!-- <%if (games.gameStarted && (games.favScore !=0 || games.dogScore != 0)) {%>background-color: teal;<%}%> -->
 	<td><a href="">Edit</a></br><a href="#" ng-click="showPlayers(league.id)">Players</a> </td>
+	<td><a href="#" ng-click="deleteLeague(league.id)">Delete</a>
 	<td>{{league.id}}</td> 
 	<td>{{league.adminId}}</td>
 	<td>{{league.seasonId}}</td>

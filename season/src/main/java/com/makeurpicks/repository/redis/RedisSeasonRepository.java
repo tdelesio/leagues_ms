@@ -46,9 +46,9 @@ public class RedisSeasonRepository implements SeasonRepository {
 //		hashOps.delete(KEY, id);
 //	}
 //
-//	public void delete(Season league) {
-//		hashOps.delete(KEY, league.getId());
-//	}
+	public void delete(String seasonId) {
+		template.opsForHash().delete(KEY, seasonId);
+	}
 
 //	public void delete(Iterable<? extends Season> leagues) {
 //		for (Season league : leagues) {

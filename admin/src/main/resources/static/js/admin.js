@@ -129,6 +129,276 @@
 		});
 	});
 	
+	//***************  Season  **************************
+	app.controller('CreateSeasonController', function ($scope, $http, $window, $log, leagueService) {
+		
+		$scope.showseasons=true;
+		$scope.season={};
+		$scope.season.leagueType = "pickem";
+		$scope.season.startYear = 2016;
+		$scope.season.endYear = 2017;
+		
+		$http.get('/admin/seasons/current').success(function(data) {
+			$scope.seasons = data;
+			if (data[0] === undefined)
+				$scope.showseasons=false;
+		});
+		
+		this.deleteSeason = function(season) {
+			$log.debug("CreateSeasonController:deleteSeason: season.id="+season.id);
+			
+			if (confirm("Are yoou sure you want to delete season?")) {
+		    
+				var url = '/admin/seasons/'+season.id;
+				$http({
+					method : "DELETE",
+					url : url,
+					contentType : "application/json",
+					dataType : "json",
+				}).success(function(res) { 
+					
+					$http.get('/admin/seasons/current').success(function(data) {
+						$scope.seasons = data;
+						if (data[0] === undefined)
+							$scope.showseasons=false;
+					});
+					
+				}).error(function(res) {
+					alert('fail');
+				});
+			
+		 
+		    }
+		}
+		
+		this.addSeason = function() {
+
+		
+			$log.debug("CreateSeasonController:addSeason");
+			
+			$http({
+				method : "POST",
+				url : '/admin/seasons/',
+				contentType : "application/json",
+				dataType : "json",
+				data : JSON.stringify($scope.season)
+			}).success(function(res) { 
+				
+//				$scope.showgames = true;
+//				$http.get('/admin/seasons/current').success(function(data) {
+//					$scope.seasons = data;
+//				});
+				$window.location.href = '/admin/#/leagues';
+				
+			}).error(function(res) {
+				alert('fail');
+			});
+		}
+	});
+	
+	//***************  LEAGUES  **************************
+	app.controller('CreateLeagueController', function ($scope, $http, $window, $log, leagueService) {
+	
+		$scope.league = {};
+		$scope.season = {};
+		$scope.showgames=true;
+		$scope.hideplayers=false;
+		
+		leagueService.getLeagues().then(function(data) {
+			$scope.leagues = data;
+		});
+		
+		$http.get('/admin/seasons/current').success(function(data) {
+			$scope.seasons = data;
+			if (data[0] === undefined)
+				$scope.showgames=false;
+			$scope.league.seasonId = data[0].id;
+		});
+		
+		$scope.season.startYear = 2015;
+		$scope.season.endYear = 2016;
+		$scope.season.leagueType = "pickem";
+		
+		
+		this.addLeague = function() {
+
+			$log.debug("CreateLeagueController:addLeague");
+			
+			$http({
+				method : "POST",
+				url : '/admin/leagues/',
+				contentType : "application/json",
+				dataType : "json",
+				data : JSON.stringify($scope.league)
+			}).success(function(res) { 
+				
+				leagueService.getLeagues().then(function(data) {
+					$scope.leagues = data;
+				});
+				
+			}).error(function(res) {
+				alert('fail');
+			});
+		}
+		
+		$scope.showPlayers = function(leagueId) {
+			
+			$log.debug("CreateLeagueController:showPlayers: leagueId="+leagueId);
+			$scope.hideplayers=true;
+			
+			$http.get('/admin/leagues/player/leagueid/'+leagueId).success(function(data) {
+				$scope.players = data;
+				
+			});
+		}
+		
+	
+		
+		$scope.deleteLeague = function(leagueId) {
+			$log.debug("CreateLeagueController:deleteLeague: leagueId="+leagueId);
+			$scope.hideplayers=true;
+			
+			if (confirm("Are you sure you want to delete league?")) {
+		    
+				var url = '/admin/leagues/'+leagueId;
+				$http({
+					method : "DELETE",
+					url : url,
+					contentType : "application/json",
+					dataType : "json",
+				}).success(function(res) { 
+					
+					leagueService.getLeagues().then(function(data) {
+						$scope.leagues = data;
+					});
+					
+				}).error(function(res) {
+					alert('fail');
+				});
+			
+		 
+		    }
+		}
+		
+		$scope.dummyLeague = function () {
+			$http({
+				method : "POST",
+				url : '/admin/dummy',
+				contentType : "application/json",
+				dataType : "json"
+//					,
+//				data : JSON.stringify($scope.league)
+			}).success(function(res) { 
+				
+				leagueService.getLeagues().then(function(data) {
+					$scope.leagues = data;
+				});
+				
+			}).error(function(res) {
+				alert('fail');
+			});
+		}
+		
+		$scope.randomLeague = function () {
+			$http({
+				method : "POST",
+				url : '/admin/random',
+				contentType : "application/json",
+				dataType : "json"
+//					,
+//				data : JSON.stringify($scope.league)
+			}).success(function(res) { 
+				
+				leagueService.getLeagues().then(function(data) {
+					$scope.leagues = data;
+				});
+				
+			}).error(function(res) {
+				alert('fail');
+			});
+		}
+		
+		
+			
+	});
+	
+	//***************  WEEKS  *************************
+	app.controller('CreateWeekController', function ($scope, $http, $window, $log, leagueService) {
+		$scope.week = {};
+		$scope.weeks = {};
+//		leagueService.getLeagues().then(function(data) {
+//			$scope.leagues = data;
+//			$scope.week.seasonId = data[0].seasonId;
+//		});
+		
+		$http.get('/admin/seasons/current').success(function(data) {
+			$scope.seasons = data;
+			$scope.week.seasonId = data[0].id;
+			
+			var url = '/admin/weeks/seasonid/'+data[0].id;
+			$http.get(url).success(function(data) {
+				$scope.weeks = data;
+			});
+		});
+		
+		
+		
+		this.autoWeek = function(week) {
+			
+			if (week === undefined) {
+				week = {};
+				week.seasonId = $scope.week.seasonId;
+			}
+			
+			$log.debug('autoWeek: week='+JSON.stringify(week));
+			
+			$http({
+				method : "POST",
+//				method : "GET",
+//				beforeSend: function (request) {
+//			        request.setRequestHeader(header, token);
+//			     },
+				url : '/admin/games/autosetup',
+//				url : '/games/role',
+				contentType : "application/json",
+				dataType : "json",
+				//data : $('form').serializeObject(),
+				data : JSON.stringify(week)
+			}).success(function(res) { 
+				$window.location.href = 'index.html';
+			}).error(function(res) {
+				alert('fail');
+			});
+		}
+		
+		this.addWeek = function(week) {
+
+			$http({
+				method : "POST",
+//				beforeSend: function (request) {
+//			        request.setRequestHeader(header, token);
+//			     },
+				url : '/admin/weeks/',
+				contentType : "application/json",
+				dataType : "json",
+				//data : $('form').serializeObject(),
+				data : JSON.stringify($scope.week)
+			}).success(function(res) { 
+				
+				$scope.createWeek.$setPristine();
+				$scope.week = {};
+				$window.location.href = 'index.html';
+			}).error(function(res) {
+				alert('fail');
+			});
+		}
+		
+//		$http.get('leagues/').success(function(data) {
+//			$scope.leagues = data;
+//		});
+	});
+	
+	//***************  GAMES  **************************
 	app.controller('SetupWeekController', function ($scope, $http, $log, $window, $rootScope, leagueService) {
 		$log.debug('SetupWeekController');
 		$scope.add_game_model = {};
@@ -354,216 +624,6 @@
 	})
 	
 	
-	app.controller('CreateSeasonController', function ($scope, $http, $window, $log, leagueService) {
-		
-		$scope.showseasons=true;
-		$scope.season={};
-		$scope.season.leagueType = "pickem";
-		$scope.season.startYear = 2015;
-		$scope.season.endYear = 2016;
-		
-		$http.get('/admin/seasons/current').success(function(data) {
-			$scope.seasons = data;
-			if (data[0] === undefined)
-				$scope.showseasons=false;
-		});
-		
-		
-		this.addSeason = function() {
-
-		
-			$log.debug("CreateSeasonController:addSeason");
-			
-			$http({
-				method : "POST",
-				url : '/admin/seasons/',
-				contentType : "application/json",
-				dataType : "json",
-				data : JSON.stringify($scope.season)
-			}).success(function(res) { 
-				
-//				$scope.showgames = true;
-//				$http.get('/admin/seasons/current').success(function(data) {
-//					$scope.seasons = data;
-//				});
-				$window.location.href = '/admin/#/leagues';
-				
-			}).error(function(res) {
-				alert('fail');
-			});
-		}
-	});
 	
-	app.controller('CreateLeagueController', function ($scope, $http, $window, $log, leagueService) {
-	
-		$scope.league = {};
-		$scope.season = {};
-		$scope.showgames=true;
-		$scope.hideplayers=false;
-		
-		leagueService.getLeagues().then(function(data) {
-			$scope.leagues = data;
-		});
-		
-		$http.get('/admin/seasons/current').success(function(data) {
-			$scope.seasons = data;
-			if (data[0] === undefined)
-				$scope.showgames=false;
-			$scope.league.seasonId = data[0].id;
-		});
-		
-		$scope.season.startYear = 2015;
-		$scope.season.endYear = 2016;
-		$scope.season.leagueType = "pickem";
-		
-		
-		this.addLeague = function() {
-
-			$log.debug("CreateLeagueController:addLeague");
-			
-			$http({
-				method : "POST",
-				url : '/admin/leagues/',
-				contentType : "application/json",
-				dataType : "json",
-				data : JSON.stringify($scope.league)
-			}).success(function(res) { 
-				
-				leagueService.getLeagues().then(function(data) {
-					$scope.leagues = data;
-				});
-				
-			}).error(function(res) {
-				alert('fail');
-			});
-		}
-		
-		$scope.showPlayers = function(leagueId) {
-			
-			$log.debug("CreateLeagueController:showPlayers: leagueId="+leagueId);
-			$scope.hideplayers=true;
-			
-			$http.get('/admin/leagues/player/leagueid/'+leagueId).success(function(data) {
-				$scope.players = data;
-				
-			});
-		}
-		
-		$scope.dummyLeague = function () {
-			$http({
-				method : "POST",
-				url : '/admin/dummy',
-				contentType : "application/json",
-				dataType : "json"
-//					,
-//				data : JSON.stringify($scope.league)
-			}).success(function(res) { 
-				
-				leagueService.getLeagues().then(function(data) {
-					$scope.leagues = data;
-				});
-				
-			}).error(function(res) {
-				alert('fail');
-			});
-		}
-		
-		$scope.randomLeague = function () {
-			$http({
-				method : "POST",
-				url : '/admin/random',
-				contentType : "application/json",
-				dataType : "json"
-//					,
-//				data : JSON.stringify($scope.league)
-			}).success(function(res) { 
-				
-				leagueService.getLeagues().then(function(data) {
-					$scope.leagues = data;
-				});
-				
-			}).error(function(res) {
-				alert('fail');
-			});
-		}
-		
-		
-			
-	});
-	
-	app.controller('CreateWeekController', function ($scope, $http, $window, $log, leagueService) {
-		$scope.week = {};
-		$scope.weeks = {};
-//		leagueService.getLeagues().then(function(data) {
-//			$scope.leagues = data;
-//			$scope.week.seasonId = data[0].seasonId;
-//		});
-		
-		$http.get('/admin/seasons/current').success(function(data) {
-			$scope.seasons = data;
-			$scope.week.seasonId = data[0].id;
-			
-			var url = '/admin/weeks/seasonid/'+data[0].id;
-			$http.get(url).success(function(data) {
-				$scope.weeks = data;
-			});
-		});
-		
-		
-		
-		this.autoWeek = function(week) {
-			
-			if (week === undefined) {
-				week = {};
-				week.seasonId = $scope.week.seasonId;
-			}
-			
-			$log.debug('autoWeek: week='+JSON.stringify(week));
-			
-			$http({
-				method : "POST",
-//				method : "GET",
-//				beforeSend: function (request) {
-//			        request.setRequestHeader(header, token);
-//			     },
-				url : '/admin/games/autosetup',
-//				url : '/games/role',
-				contentType : "application/json",
-				dataType : "json",
-				//data : $('form').serializeObject(),
-				data : JSON.stringify(week)
-			}).success(function(res) { 
-				$window.location.href = 'index.html';
-			}).error(function(res) {
-				alert('fail');
-			});
-		}
-		
-		this.addWeek = function(week) {
-
-			$http({
-				method : "POST",
-//				beforeSend: function (request) {
-//			        request.setRequestHeader(header, token);
-//			     },
-				url : '/admin/weeks/',
-				contentType : "application/json",
-				dataType : "json",
-				//data : $('form').serializeObject(),
-				data : JSON.stringify($scope.week)
-			}).success(function(res) { 
-				
-				$scope.createWeek.$setPristine();
-				$scope.week = {};
-				$window.location.href = 'index.html';
-			}).error(function(res) {
-				alert('fail');
-			});
-		}
-		
-//		$http.get('leagues/').success(function(data) {
-//			$scope.leagues = data;
-//		});
-	});
 	
 })();

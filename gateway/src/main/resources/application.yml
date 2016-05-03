@@ -13,8 +13,8 @@ logging:
 security:
   oauth2:
     client:
-      access-token-uri: http://localhost:9999/auth/oauth/token
-      user-authorization-uri: http://localhost:9999/auth/oauth/authorize
+      access-token-uri: ${vcap.services.auth-token.credentials.uri:http://localhost:9999/auth/oauth/token}
+      user-authorization-uri: ${vcap.services.auth-authorize.credentials.uri:http://localhost:9999/auth/oauth/authorize}
       client-id: ui
       client-secret: secret
     resource:

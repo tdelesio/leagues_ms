@@ -5,8 +5,8 @@ server:
 security:
   oauth2:
     client:
-      access-token-uri: http://localhost:9999/auth/oauth/token
-      user-authorization-uri: http://localhost:9999/auth/oauth/authorize
+      access-token-uri: ${vcap.services.auth-token.credentials.uri:http://localhost:9999/auth/oauth/token}
+      user-authorization-uri: ${vcap.services.auth-authorize.credentials.uri:http://localhost:9999/auth/oauth/authorize}
       client-id: confidential
       client-secret: secret
     resource:
@@ -53,6 +53,7 @@ zuul:
 #      stripPrefix: true
 
             
-logging:
-  level:
-    org.springframework.security: DEBUG
+#logging:
+#  level:
+#    org.springframework.security: DEBUG
+#    org.springframework.cloud.netflix.zuul: INFO

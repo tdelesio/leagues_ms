@@ -8,5 +8,8 @@ applications:
   services:
   - redis-myp
   - amqp-myp
+  - auth-token-key
+  - eureka-service
+  - config-service
   env:
    JAVA_OPTS: -Djava.security.egd=file:///dev/urandom

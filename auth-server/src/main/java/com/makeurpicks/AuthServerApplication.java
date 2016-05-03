@@ -113,6 +113,12 @@ public class AuthServerApplication extends WebMvcConfigurerAdapter {
 
         @Autowired
         private AuthenticationManager authenticationManager;
+        
+        @Value("${config.oauth2.ui-uri}")
+    	private String ui;
+    	
+        @Value("${config.oauth2.admin-uri}")
+    	private String admin;
 
         @Bean
         public JwtAccessTokenConverter tokenEnhancer() {
@@ -170,14 +176,14 @@ public class AuthServerApplication extends WebMvcConfigurerAdapter {
                     .withClient("confidential").secret("secret")
                     .authorizedGrantTypes("client_credentials", "authorization_code", "refresh_token")
                     .scopes("read", "write")
-                    .redirectUris("http://localhost:9000/admin").autoApprove(true)
+                    .redirectUris(admin).autoApprove(true)
 
                     .and()
                     
                     .withClient("ui").secret("secret")
                     .authorizedGrantTypes("client_credentials", "authorization_code", "refresh_token")
                     .scopes("read", "write")
-                    .redirectUris("http://localhost:8080/").autoApprove(true)
+                    .redirectUris(ui).autoApprove(true)
 
                     .and()
 

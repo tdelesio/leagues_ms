@@ -1,0 +1,15 @@
+---
+applications:
+- name: admin
+  memory: 1G
+  instances: 1
+  host: admin
+  path: ./target/admin-0.0.1.jar
+  services:
+  - eureka-service
+  - config-service
+  - auth-token
+  - auth-authorize
+  - amqp-myp
+  env:
+   JAVA_OPTS: -Djava.security.egd=file:///dev/urandom
