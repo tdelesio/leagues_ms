@@ -23,24 +23,28 @@ public class TeamIntegrationService {
     @LoadBalanced
     private OAuth2RestOperations secureRestTemplate;
 	
-	@HystrixCommand(fallbackMethod = "stubTeams",
-            commandProperties = {
-                    @HystrixProperty(name = "execution.isolation.strategy", value = "SEMAPHORE")
-            }
-    )
-    public Observable<Map<String, TeamView>> getTeams() {
-        return new ObservableResult<Map<String, TeamView>>() {
-            @Override
-            public Map<String, TeamView> invoke() {
-                
-                ParameterizedTypeReference<Map<String, TeamView>> responseType = new ParameterizedTypeReference<Map<String, TeamView>>() {};
-                return secureRestTemplate.exchange("http://game/teams/", HttpMethod.GET, null, responseType).getBody();         
-            }
-        };
-    }
+	public Observable<Map<String, TeamView>> getTeams() {
+		return new TeamObservableCommand(secureRestTemplate).observe();
+	}
 
-    @SuppressWarnings("unused")
-    private Map<String, TeamView> stubTeams() {
-    	return Collections.EMPTY_MAP;
-    }
+//	@HystrixCommand(fallbackMethod = "stubTeams",
+//            commandProperties = {
+//                    @HystrixProperty(name = "execution.isolation.strategy", value = "SEMAPHORE")
+//            }
+//    )
+//    public Observable<Map<String, TeamView>> getTeams() {
+//        return new ObservableResult<Map<String, TeamView>>() {
+//            @Override
+//            public Map<String, TeamView> invoke() {
+//                
+//                ParameterizedTypeReference<Map<String, TeamView>> responseType = new ParameterizedTypeReference<Map<String, TeamView>>() {};
+//                return secureRestTemplate.exchange("http://game/teams/", HttpMethod.GET, null, responseType).getBody();         
+//            }
+//        };
+//    }
+//
+//    @SuppressWarnings("unused")
+//    private Map<String, TeamView> stubTeams() {
+//    	return Collections.EMPTY_MAP;
+//    }
 }

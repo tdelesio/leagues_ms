@@ -22,19 +22,19 @@ public class LeagueApplication {
 		SpringApplication.run(LeagueApplication.class, args);
 	}
 
-	@Configuration
-    @EnableWebSecurity
-    @EnableGlobalMethodSecurity(prePostEnabled = true)
-    protected static class SecurityConfig extends WebSecurityConfigurerAdapter {
-
-        @Override
-        protected void configure(HttpSecurity http) throws Exception {
-            http
-                    .authorizeRequests().anyRequest().authenticated()
-                    .and()
-                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
-            ;
-        }
-    }
+//	@Configuration
+//    @EnableWebSecurity
+//    @EnableGlobalMethodSecurity(prePostEnabled = true)
+//    protected static class SecurityConfig extends WebSecurityConfigurerAdapter {
+//
+//        @Override
+//        protected void configure(HttpSecurity http) throws Exception {
+//            http
+//                    .authorizeRequests().anyRequest().authenticated()
+//                    .and()
+//                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
+//            ;
+//        }
+//    }
 	
 }

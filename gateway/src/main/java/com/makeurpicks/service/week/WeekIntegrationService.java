@@ -35,30 +35,34 @@ private Log log = LogFactory.getLog(WeekIntegrationService.class);
     @LoadBalanced
     private OAuth2RestOperations secureRestTemplate;
 	
-	@HystrixCommand(fallbackMethod = "stubWeeks",
-            commandProperties = {
-                    @HystrixProperty(name = "execution.isolation.strategy", value = "SEMAPHORE")
-//                    @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "1000")
-            }
-    )
-    public Observable<List<WeekView>> getWeeksForSeason(String id) {
-        return new ObservableResult<List<WeekView>>() {
-            @Override
-            public List<WeekView> invoke() {
-            	ParameterizedTypeReference<List<WeekView>> responseType = new ParameterizedTypeReference<List<WeekView>>() {};
-            	List<WeekView> weeks = secureRestTemplate.exchange("http://game/weeks/seasonid/{id}", HttpMethod.GET, null, responseType, id).getBody();
-            	return weeks;
-//            	return Observable.just(weeks);
-                                
-            }
-        };
-    }
-
-    @SuppressWarnings("unused")
-    private List<WeekView> stubWeeks(final String weekId) {
-    	WeekView stub = new WeekView();
-    	stub.setWeekNumber(0);
-    	stub.setId(weekId);
-        return Arrays.asList(stub);
-    }
+	public Observable<List<WeekView>> getWeeksForSeason(String id) {
+		return new WeekObservableCommand(id, secureRestTemplate).observe();
+	}
+	
+//	@HystrixCommand(fallbackMethod = "stubWeeks",
+//            commandProperties = {
+//                    @HystrixProperty(name = "execution.isolation.strategy", value = "SEMAPHORE")
+////                    @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "1000")
+//            }
+//    )
+//    public Observable<List<WeekView>> getWeeksForSeason(String id) {
+//        return new ObservableResult<List<WeekView>>() {
+//            @Override
+//            public List<WeekView> invoke() {
+//            	ParameterizedTypeReference<List<WeekView>> responseType = new ParameterizedTypeReference<List<WeekView>>() {};
+//            	List<WeekView> weeks = secureRestTemplate.exchange("http://game/weeks/seasonid/{id}", HttpMethod.GET, null, responseType, id).getBody();
+//            	return weeks;
+////            	return Observable.just(weeks);
+//                                
+//            }
+//        };
+//    }
+//
+//    @SuppressWarnings("unused")
+//    private List<WeekView> stubWeeks(final String weekId) {
+//    	WeekView stub = new WeekView();
+//    	stub.setWeekNumber(0);
+//    	stub.setId(weekId);
+//        return Arrays.asList(stub);
+//    }
 }

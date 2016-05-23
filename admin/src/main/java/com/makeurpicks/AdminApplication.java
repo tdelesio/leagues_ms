@@ -58,9 +58,10 @@ public class AdminApplication {
                     .anyRequest().hasRole("ADMIN").and()
 
                 .csrf()
-                    .csrfTokenRepository(csrfTokenRepository()).and()
-                    .addFilterBefore(new RequestContextFilter(), HeaderWriterFilter.class)
-                    .addFilterAfter(csrfHeaderFilter(), CsrfFilter.class);
+                	.disable();
+//                    .csrfTokenRepository(csrfTokenRepository()).and()
+//                    .addFilterBefore(new RequestContextFilter(), HeaderWriterFilter.class)
+//                    .addFilterAfter(csrfHeaderFilter(), CsrfFilter.class);
         }
 
         private Filter csrfHeaderFilter() {

@@ -182,7 +182,7 @@ public class GameRandonizor {
 		leagueView.setLeagueName("demo "+new Random().nextInt(1000000));
 		leagueView.setSeasonId(seasonId);
 		leagueView.setAdminId(players.get(new Random().nextInt(players.size()-1)).getUsername());
-		leagueView.setPassword("password");
+		leagueView.setPassword("12345");
 		
 		leagueView = leagueIntegrationService.createLeague(leagueView);
 		
@@ -192,7 +192,7 @@ public class GameRandonizor {
 			PlayerLeagueView playerLeagueView = new PlayerLeagueView();
 			playerLeagueView.setLeagueId(leagueView.getId());
 			playerLeagueView.setPlayerId(playerView.getUsername());
-			playerLeagueView.setPassword("password");
+			playerLeagueView.setPassword("12345");
 			leagueIntegrationService.addPlayerToLeague(playerLeagueView);
 		}
 		

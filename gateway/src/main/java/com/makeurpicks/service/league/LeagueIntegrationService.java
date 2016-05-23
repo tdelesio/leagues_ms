@@ -39,60 +39,63 @@ public class LeagueIntegrationService {
 	
 	
 	
-	@HystrixCommand(fallbackMethod = "defaultGetPlayersForLeague"
-			,commandProperties = {
-                    @HystrixProperty(name = "execution.isolation.strategy", value = "SEMAPHORE")
-            }
-    )
+//	@HystrixCommand(fallbackMethod = "defaultGetPlayersForLeague"
+//			,commandProperties = {
+//                    @HystrixProperty(name = "execution.isolation.strategy", value = "SEMAPHORE")
+//            }
+//    )
     public Observable<List<PlayerView>> getPlayersForLeague(String id) {
-
+    	return new PlayersForLeagueObservableCommand(id, secureRestTemplate).observe();
 		
-		return new ObservableResult<List<PlayerView>>() {
-            @Override
-            public List<PlayerView> invoke() {
-        	
-            	log.debug("leagueId="+id);
-            	ParameterizedTypeReference<List<PlayerView>> responseType = new ParameterizedTypeReference<List<PlayerView>>() {};
-                List<PlayerView> players = secureRestTemplate.exchange("http://league/leagues/player/leagueid/{id}", HttpMethod.GET, null, responseType, id).getBody();
-                return players;                             
-            }
-        };
+//		return new ObservableResult<List<PlayerView>>() {
+//            @Override
+//            public List<PlayerView> invoke() {
+//        	
+//            	log.debug("leagueId="+id);
+//            	ParameterizedTypeReference<List<PlayerView>> responseType = new ParameterizedTypeReference<List<PlayerView>>() {};
+//                List<PlayerView> players = secureRestTemplate.exchange("http://league/leagues/player/leagueid/{id}", HttpMethod.GET, null, responseType, id).getBody();
+//                return players;                             
+//            }
+//        };
     }
 
-    @SuppressWarnings("unused")
-    public List<PlayerView> defaultGetPlayersForLeague(String id) {
-    	PlayerView stub = new PlayerView();
-    	stub.setId("ERROR");
-        return Arrays.asList(stub);
-    }
+//    @SuppressWarnings("unused")
+//    public List<PlayerView> defaultGetPlayersForLeague(String id) {
+//    	PlayerView stub = new PlayerView();
+//    	stub.setId("ERROR");
+//        return Arrays.asList(stub);
+//    }
     
     
 	
-	@HystrixCommand(fallbackMethod = "defaultGetLeaguesForPlayer"
-			,commandProperties = {
-                    @HystrixProperty(name = "execution.isolation.strategy", value = "SEMAPHORE")
-            }
-    )
+//	@HystrixCommand(fallbackMethod = "defaultGetLeaguesForPlayer"
+//			,commandProperties = {
+//                    @HystrixProperty(name = "execution.isolation.strategy", value = "SEMAPHORE")
+//            }
+//    )
     public Observable<List<LeagueView>> getLeaguesForPlayer(String id) {
-
-		
-		return new ObservableResult<List<LeagueView>>() {
-            @Override
-            public List<LeagueView> invoke() {
-        	
-            	ParameterizedTypeReference<List<LeagueView>> responseType = new ParameterizedTypeReference<List<LeagueView>>() {};
-                List<LeagueView> leagueViews = secureRestTemplate.exchange("http://league/leagues/player/{id}", HttpMethod.GET, null, responseType, id).getBody();
-                return leagueViews;                             
-            }
-        };
+    	return new LeagueObservableCommand(id, secureRestTemplate).observe();
     }
-
-    @SuppressWarnings("unused")
-    public List<LeagueView> defaultGetLeaguesForPlayer(String id) {
-    	LeagueView stub = new LeagueView();
-    	stub.setLeagueId("0");
-    	stub.setLeagueName("None");
-        return Arrays.asList(stub);
-    }
+//    public Observable<List<LeagueView>> getLeaguesForPlayer(String id) {
+//
+//		
+//		return new ObservableResult<List<LeagueView>>() {
+//            @Override
+//            public List<LeagueView> invoke() {
+//        	
+//            	ParameterizedTypeReference<List<LeagueView>> responseType = new ParameterizedTypeReference<List<LeagueView>>() {};
+//                List<LeagueView> leagueViews = secureRestTemplate.exchange("http://league/leagues/player/{id}", HttpMethod.GET, null, responseType, id).getBody();
+//                return leagueViews;                             
+//            }
+//        };
+//    }
+//
+//    @SuppressWarnings("unused")
+//    public List<LeagueView> defaultGetLeaguesForPlayer(String id) {
+//    	LeagueView stub = new LeagueView();
+//    	stub.setLeagueId("0");
+//    	stub.setLeagueName("None");
+//        return Arrays.asList(stub);
+//    }
 	
 }
