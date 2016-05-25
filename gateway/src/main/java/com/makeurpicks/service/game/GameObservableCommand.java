@@ -22,7 +22,8 @@ public class GameObservableCommand extends HystrixObservableCommand<List<GameVie
 	public GameObservableCommand(String id, OAuth2RestOperations secureRestTemplate)
 	{
 		super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("Games"))
-				.andCommandPropertiesDefaults(HystrixCommandProperties.Setter().withExecutionTimeoutInMilliseconds(5000)));
+//				.andCommandPropertiesDefaults(HystrixCommandProperties.Setter().withExecutionTimeoutInMilliseconds(5000))
+				);
 		
 		this.id = id;
 		this.secureRestTemplate = secureRestTemplate;

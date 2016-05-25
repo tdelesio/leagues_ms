@@ -20,7 +20,8 @@ public class TeamObservableCommand extends HystrixObservableCommand<Map<String, 
 	public TeamObservableCommand(OAuth2RestOperations secureRestTemplate)
 	{
 		super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("Team"))
-				.andCommandPropertiesDefaults(HystrixCommandProperties.Setter().withExecutionTimeoutInMilliseconds(5000)));
+//				.andCommandPropertiesDefaults(HystrixCommandProperties.Setter().withExecutionTimeoutInMilliseconds(5000))
+				);
 		
 		this.secureRestTemplate = secureRestTemplate;
 	}

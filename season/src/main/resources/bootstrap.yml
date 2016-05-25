@@ -1,12 +1,13 @@
 spring:
   application:
    name: season
-  cloud:
-    config:
-      uri: ${vcap.services.config-service.credentials.uri:http://127.0.0.1:8888}
+#  cloud:
+#    config:
+#      uri: ${vcap.services.config-service.credentials.uri:http://127.0.0.1:8888}
 
 eureka:
   instance:
+    prefer-ip-address: true
     hostname: ${vcap.application.uris[0]:127.0.0.1}
     nonSecurePort: ${vcap.services.eureka-service.credentials.port:${server.port}}
     leaseRenewalIntervalInSeconds: 10

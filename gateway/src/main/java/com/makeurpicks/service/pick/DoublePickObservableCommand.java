@@ -20,7 +20,8 @@ public class DoublePickObservableCommand extends HystrixObservableCommand<Double
 	public DoublePickObservableCommand(String lid, String wid, OAuth2RestOperations secureRestTemplate)
 	{
 		super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("DoublePick"))
-				.andCommandPropertiesDefaults(HystrixCommandProperties.Setter().withExecutionTimeoutInMilliseconds(5000)));
+//				.andCommandPropertiesDefaults(HystrixCommandProperties.Setter().withExecutionTimeoutInMilliseconds(5000))
+				);
 		
 		this.leagueid = lid;
 		this.weekid = wid;

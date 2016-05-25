@@ -22,7 +22,8 @@ public class WeekObservableCommand extends HystrixObservableCommand<List<WeekVie
 	public WeekObservableCommand(String id, OAuth2RestOperations secureRestTemplate)
 	{
 		super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("Week"))
-				.andCommandPropertiesDefaults(HystrixCommandProperties.Setter().withExecutionTimeoutInMilliseconds(5000)));
+//				.andCommandPropertiesDefaults(HystrixCommandProperties.Setter().withExecutionTimeoutInMilliseconds(5000))
+				);
 		
 		this.id = id;
 		this.secureRestTemplate = secureRestTemplate;

@@ -12,7 +12,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.makeurpicks.game.GameIntegrationService;
 import com.makeurpicks.game.GameView;
 import com.makeurpicks.game.WeekIntegrationService;
@@ -29,6 +28,8 @@ import com.makeurpicks.season.SeasonIntegrationService;
 import com.makeurpicks.season.SeasonView;
 import com.makeurpicks.team.TeamIntegrationService;
 import com.makeurpicks.team.TeamView;
+
+import rx.Observer;
 
 @Service
 public class GameRandonizor {
@@ -60,6 +61,8 @@ public class GameRandonizor {
 	
 	public GameView createRandomGame(WeekView week, TeamView fav, TeamView dog)
 	{
+		log.debug("createRandomGame");
+		
 		GameView game = new GameView();
 		game.setWeekId(week.getId());
 		game.setFavId(fav.getId());
@@ -86,7 +89,7 @@ public class GameRandonizor {
 			throw new RuntimeException();
 		
 		
-		log.debug("Game: "+game.toString());
+		log.debug("createRandomGame game= "+game.toString());
 		return game;
 //		dummy.addGame(game);
 	}
@@ -95,10 +98,30 @@ public class GameRandonizor {
 	{
 		weekView = weekIntegrationService.createWeek(weekView);
 		
-		log.debug("Week: "+weekView.toString());
+		log.debug("createRandomWeek Week= "+weekView.toString());
 		
 //		TestSubscriber<List<Map<String, TeamView>>> testSubscriber = new TestSubscriber<>();
-		List<TeamView> teams = new ArrayList<>(teamIntegrationService.getTeams().toBlocking().last().values());
+//		List<TeamView> teams = new ArrayList<>(teamIntegrationService.getTeams().toBlocking().single().values());
+		List<TeamView> teams = new ArrayList<>(teamIntegrationService.getTeamsSync().values());
+//		Map<String, TeamView> teamMap;
+//		teamIntegrationService.getTeams().subscribe(new Observer<Map<String, TeamView>>() {
+//			
+//            @Override
+//            public void onCompleted() {
+//            }
+//
+//            @Override
+//            public void onError(Throwable throwable) {
+//            }
+//
+//            @Override
+//            public void onNext(Map<String, TeamView> t) {
+//                teamMap = t;
+//            }
+//        });
+//		teamIntegrationService.getTeams().toBlocking().
+		
+//		List<TeamView> teams = new ArrayList<>(teamMap.values());
 		Collections.shuffle(teams);
 		
 		Map<String, Integer> doubleMap = new HashMap<>();
@@ -124,8 +147,9 @@ public class GameRandonizor {
 //			if (gameStarted)
 //				scoreEntered = new Random().nextBoolean();
 			
+			log.debug("createRandomWeek weekView="+weekView+ "fav="+fav+" dog="+dog);
 			GameView gameView = createRandomGame(weekView, fav, dog);
-			
+			 
 			if (!gameView.getHasGameStarted())
 			{	
 				for (PlayerView playerView:players)

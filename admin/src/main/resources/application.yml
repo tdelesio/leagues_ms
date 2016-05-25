@@ -53,7 +53,9 @@ zuul:
 #      stripPrefix: true
 
             
-#logging:
-#  level:
-#    org.springframework.security: DEBUG
-#    org.springframework.cloud.netflix.zuul: INFO
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.cloud.netflix.zuul: INFO
+    com.makeurpicks: DEBUG
+    com.netflix.hystrix: DEBUG

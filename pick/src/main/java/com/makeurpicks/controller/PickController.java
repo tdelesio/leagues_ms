@@ -32,7 +32,10 @@ public class PickController  {
 	@RequestMapping(method=RequestMethod.GET, value="/leagueid/{leagueid}/weekid/{weekid}")
 	public @ResponseBody Map<String, Map<String, Pick>> getPicksByWeek(@PathVariable String leagueid, @PathVariable String weekid)
 	{
-		return pickService.getPicksByWeek(leagueid, weekid);
+		
+		Map<String, Map<String, Pick>> map =pickService.getPicksByWeek(leagueid, weekid);
+		log.debug("getPicksByWeek return="+map);
+		return map;
 	}
 
 	@RequestMapping(method=RequestMethod.GET, value="/self/leagueid/{leagueid}/weekid/{weekid}")

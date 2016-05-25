@@ -22,7 +22,8 @@ public class WeeksBySeasonObservableCommand extends HystrixObservableCommand<Lis
 	public WeeksBySeasonObservableCommand(String id, OAuth2RestOperations secureRestTemplate)
 	{
 		super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("WeeksBySeason"))
-				.andCommandPropertiesDefaults(HystrixCommandProperties.Setter().withExecutionTimeoutInMilliseconds(5000)));
+//				.andCommandPropertiesDefaults(HystrixCommandProperties.Setter().withExecutionTimeoutInMilliseconds(5000))
+				);
 		
 		this.id = id;
 		this.secureRestTemplate = secureRestTemplate;

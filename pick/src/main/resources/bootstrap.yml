@@ -3,9 +3,9 @@ server:
 spring:
   application:
    name: pick
-  cloud:
-    config:
-      uri: ${vcap.services.config-service.credentials.uri:http://localhost:8888}
+#  cloud:
+#    config:
+#      uri: ${vcap.services.config-service.credentials.uri:http://localhost:8888}
   
 ---
 spring:
@@ -27,10 +27,11 @@ spring:
     config:
       uri: http://config-leagues.cfapps.io
 eureka:
-  client:
+  client:    
     serviceUrl:
       defaultZone: http://eureka-leagues.cfapps.io/eureka/
   instance:
+    prefer-ip-address: true
     hostname: league.cfapps.io
     nonSecurePort: 80
     leaseRenewalIntervalInSeconds: 10

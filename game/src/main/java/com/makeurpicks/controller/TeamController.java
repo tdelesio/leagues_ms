@@ -3,11 +3,9 @@ package com.makeurpicks.controller;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +19,8 @@ import com.makeurpicks.service.TeamService;
 @RequestMapping(value="/teams")
 @RestController
 public class TeamController {
+
+	private Log log = LogFactory.getLog(TeamController.class);
 
 	@Autowired
 	private TeamService teamService;
@@ -40,7 +40,9 @@ public class TeamController {
 	@RequestMapping(method=RequestMethod.GET, value="/")
 	public @ResponseBody Map<String, Team> getTeams()
 	{
-		return teamService.getTeamMap();
+		Map<String, Team> map= teamService.getTeamMap();
+		log.debug("getTeams="+map);
+		return map;
 	}
 	
 	@RequestMapping(method=RequestMethod.POST, value="/")

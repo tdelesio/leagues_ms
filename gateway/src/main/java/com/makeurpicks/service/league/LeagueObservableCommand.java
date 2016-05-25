@@ -28,7 +28,8 @@ public class LeagueObservableCommand extends HystrixObservableCommand<List<Leagu
 	public LeagueObservableCommand(String id, OAuth2RestOperations secureRestTemplate)
 	{
 		super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("League"))
-				.andCommandPropertiesDefaults(HystrixCommandProperties.Setter().withExecutionTimeoutInMilliseconds(5000)));
+//				.andCommandPropertiesDefaults(HystrixCommandProperties.Setter().withExecutionTimeoutInMilliseconds(5000))
+				);
 		
 		this.id = id;
 		this.secureRestTemplate = secureRestTemplate;
@@ -59,7 +60,7 @@ public class LeagueObservableCommand extends HystrixObservableCommand<List<Leagu
 		System.err.println("FAILURE");
 		
 		//fail fast
-		return Observable.error(new Throwable("cannot connect to nfl"));
+		return Observable.error(new Throwable("Cannot connect to leagues"));
 		
 		//fail silent
 //		return Observable.empty();

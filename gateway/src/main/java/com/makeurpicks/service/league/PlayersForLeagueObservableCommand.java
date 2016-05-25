@@ -22,7 +22,8 @@ public class PlayersForLeagueObservableCommand extends HystrixObservableCommand<
 	public PlayersForLeagueObservableCommand(String id, OAuth2RestOperations secureRestTemplate)
 	{
 		super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("PlayersInLeague"))
-				.andCommandPropertiesDefaults(HystrixCommandProperties.Setter().withExecutionTimeoutInMilliseconds(5000)));
+//				.andCommandPropertiesDefaults(HystrixCommandProperties.Setter().withExecutionTimeoutInMilliseconds(5000))
+				);
 		
 		this.leaugeId = id;
 		this.secureRestTemplate = secureRestTemplate;

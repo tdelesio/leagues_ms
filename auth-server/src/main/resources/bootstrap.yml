@@ -13,6 +13,7 @@ eureka:
     hostname: ${vcap.application.uris[0]:127.0.0.1}
     nonSecurePort: ${vcap.services.eureka-service.credentials.port:${server.port}}
     leaseRenewalIntervalInSeconds: 10
+    prefer-ip-address: true
     metadataMap:
       instanceId: ${vcap.application.instance_id:${spring.application.name}:${random.value}}
   client:

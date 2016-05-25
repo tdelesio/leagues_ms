@@ -27,6 +27,11 @@ public class TeamIntegrationService {
 		return new TeamsObservableCommand(secureRestTemplate).observe();
 	}
 	
+	public Map<String, TeamView> getTeamsSync() {
+		ParameterizedTypeReference<Map<String, TeamView>> responseType = new ParameterizedTypeReference<Map<String, TeamView>>() {};
+	      return secureRestTemplate.exchange("http://game/teams/", HttpMethod.GET, null, responseType).getBody();
+	}
+	
 //	@HystrixCommand(fallbackMethod = "stubTeams",
 //            commandProperties = {
 //                    @HystrixProperty(name = "execution.isolation.strategy", value = "SEMAPHORE")

@@ -7,9 +7,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.makeurpicks.controller.GatewayController;
 import com.makeurpicks.domain.PlayerWins;
 import com.makeurpicks.domain.ViewPickColumn;
 import com.makeurpicks.service.game.GameIntegrationService;
@@ -26,6 +29,9 @@ import rx.Observable;
 @Service
 public class GatewayService {
 
+
+	private Log log = LogFactory.getLog(GatewayService.class);
+	
 	@Autowired
 	private LeagueIntegrationService leagueIntegrationService;
 	
@@ -57,7 +63,12 @@ public class GatewayService {
 				teamIntegrationService.getTeams(),
 				(players, picks, doublePicks, games, teams) -> {
 					
-					
+					log.debug("getPlayersPlusWinsInLeague:zip");				
+					log.debug("players="+players);
+					log.debug("picks="+picks);
+					log.debug("doublePicks="+doublePicks);
+					log.debug("games="+games);
+					log.debug("teams="+teams);
 					
 					Map<String, PlayerWins> winsByPlayer = new HashMap<>();
 					 
