@@ -10,10 +10,13 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 import com.makeurpicks.domain.League;
 import com.makeurpicks.domain.LeaguesPlayerJoined;
 import com.makeurpicks.domain.PlayersInLeague;
+import com.makeurpicks.domain.Season;
 import com.makeurpicks.repository.LeagueRepository;
+import com.makeurpicks.repository.SeasonRepository;
 import com.makeurpicks.repository.redis.RedisLeagueRepository;
 import com.makeurpicks.repository.redis.RedisLeaguesPlayerHasJoinedRepository;
 import com.makeurpicks.repository.redis.RedisPlayersInLeagueRespository;
+import com.makeurpicks.repository.redis.RedisSeasonRepository;
 
 @Configuration
 public class RedisConfig {
@@ -94,6 +97,30 @@ public class RedisConfig {
 	public Jackson2JsonRedisSerializer<PlayersInLeague> playersInLeagueJsonRedisSerializer()
 	{
 		return new Jackson2JsonRedisSerializer<>(PlayersInLeague.class);
+	}
+	
+	@Bean
+	public Jackson2JsonRedisSerializer<Season> userJsonRedisSerializer()
+	{
+		return new Jackson2JsonRedisSerializer<>(Season.class);
+	}
+	
+	@Bean
+	public SeasonRepository seasonRespository(RedisConnectionFactory redisConnectionFactory)
+	{
+		return new RedisSeasonRepository(seasonRedisTemplate(redisConnectionFactory));
+	}
+	
+	@Bean
+	public RedisTemplate<String, Season> seasonRedisTemplate(
+			RedisConnectionFactory redisConnectionFactory) {
+		RedisTemplate<String, Season> template = new RedisTemplate<String, Season>();
+		template.setConnectionFactory(redisConnectionFactory);
+		template.setHashKeySerializer(stringRedisSerializer());
+		template.setKeySerializer(stringRedisSerializer());
+		template.setHashValueSerializer(userJsonRedisSerializer());
+//		template.setDefaultSerializer(new StringRedisSerializer());
+		return template;
 	}
 	
 	

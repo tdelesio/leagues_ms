@@ -13,8 +13,8 @@ import com.makeurpicks.exception.LeagueServerException;
 import com.makeurpicks.exception.LeagueValidationException;
 import com.makeurpicks.exception.LeagueValidationException.LeagueExceptions;
 import com.makeurpicks.repository.LeagueRepository;
-import com.makeurpicks.repository.redis.RedisLeaguesPlayerHasJoinedRepository;
-import com.makeurpicks.repository.redis.RedisPlayersInLeagueRespository;
+import com.makeurpicks.repository.LeaguesAPlayHasJoinedRespository;
+import com.makeurpicks.repository.PlayersInLeagueRepository;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
 @Component
@@ -23,26 +23,11 @@ public class LeagueService {
 	@Autowired
 	private LeagueRepository leagueRepository;
 
-//	@Autowired
-//	private RestTemplate restTemplate;
+	@Autowired
+	private PlayersInLeagueRepository playersInLeagueRespository;
 
 	@Autowired
-	private RedisPlayersInLeagueRespository playersInLeagueRespository;
-
-	@Autowired
-	private RedisLeaguesPlayerHasJoinedRepository leaguesPlayerHasJoinedRepository;
-	
-	// @Autowired
-	// private DiscoveryClient discoveryClient;
-
-//	@Autowired
-//	private LoadBalancerClient loadBalancer;
-
-//	@Autowired
-//	private PlayerClient playerClient;
-	
-//	@Autowired
-//	private PlayerIntegrationService playerIntegrationService;
+	private LeaguesAPlayHasJoinedRespository leaguesPlayerHasJoinedRepository;
 	
 	public League createLeague(League league) throws LeagueValidationException {
 		validateLeague(league);
@@ -177,17 +162,6 @@ public class LeagueService {
 	}
 
 	
-//	@HystrixCommand(fallbackMethod="defaultGetPlayer")
-//	protected PlayerResponse getPlayer(String playerId)
-//	{
-//		return playerIntegrationService.getPlayer(playerId);
-//	}
-	
-//	protected PlayerResponse defaultGetPlayer(String playerId)
-//	{
-//		throw new LeagueValidationException(LeagueExceptions.PLAYER_NOT_FOUND);
-//	}
-	
 	protected boolean isValidPlayer(String playerId) {
 		// InstanceInfo instance =
 		// discoveryClient.getNextServerFromEureka("player", false);
@@ -216,14 +190,8 @@ public class LeagueService {
 //			return false;
 
 	}
-
-	public Iterable<League> defaultLeaguesDown()
-	{
-		throw new LeagueServerException();
-	}
 	
 	
-	@HystrixCommand(fallbackMethod="defaultLeaguesDown")
 	public Iterable<League> getAllLeagues()
 	{
 		return leagueRepository.findAll();
