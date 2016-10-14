@@ -125,8 +125,8 @@ public class GameService {
 		
 		for (NFLGame nflGame:nflWeek.getGms())
 		{
-			Team home = teamService.getTeamByShortName("pickem", nflGame.getH());
-			Team away = teamService.getTeamByShortName("pickem", nflGame.getV());
+			Team home = teamService.getTeam(nflGame.getH());
+			Team away = teamService.getTeam(nflGame.getV());
 			
 			Game game = gameRepository.findByWeekIdAndFavIdAndDogId(weekId, home.getId(), away.getId());
 			if (game == null)
@@ -182,8 +182,8 @@ public class GameService {
 			//now that we have a week setup, let's create the games
 			for (NFLGame nflGame:nflWeek.getGms())
 			{
-				Team home = teamService.getTeamByShortName("pickem", nflGame.getH());
-				Team away = teamService.getTeamByShortName("pickem", nflGame.getV());
+				Team home = teamService.getTeam(nflGame.getH());
+				Team away = teamService.getTeam(nflGame.getV());
 				String day = nflGame.getD();
 				String time = nflGame.getT();
 				ZonedDateTime gameStart = ZonedDateTime.now();

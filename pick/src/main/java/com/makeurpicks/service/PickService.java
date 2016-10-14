@@ -48,20 +48,14 @@ public class PickService {
 	public Pick makePick(Pick pick)
 	{
 		//make sure all the parms are set
-		validatePick(pick, false);  
+//		validatePick(pick, false);  
 		
 		pick.setId(UUID.randomUUID().toString());
-		
-		//save pick by pick id
-		pickRepository.save(pick);
-		
-		picksByWeekRepository.createPick(pick);
-		//save the pick so it can be assessed by league and week
-//		picksByLeagueWeekRepository.addPick(pick);
-		
-		//save the pick so it can be assessed by league, week, and player
-//		picksByLeagueWeekAndPlayerRepository.addPick(pick);
-		
+//		
+//		//save pick by pick id
+//		pickRepository.save(pick);
+//		
+//		picksByWeekRepository.createPick(pick);		
 		return pick;
 	}
 
@@ -171,7 +165,7 @@ public class PickService {
 //	}
 	
 	
-	private void validatePick(Pick pick, boolean isUpdate)
+ void validatePick(Pick pick, boolean isUpdate)
 	{
 		List<PickExceptions> codes = new ArrayList<PickExceptions>();
 		
@@ -181,22 +175,19 @@ public class PickService {
 			throw new PickValidationException(PickExceptions.PICK_IS_NULL);
 		}
 		
-		if ("".equals(pick.getGameId()))
+		if (pick.getGameId()==null || "".equals(pick.getGameId()))
 			codes.add(PickExceptions.GAME_IS_NULL);
 		
-		if ("".equals(pick.getTeamId()))
+		if (pick.getTeamId()==null || "".equals(pick.getTeamId()))
 			codes.add(PickExceptions.TEAM_IS_NULL);
 		
-		if ("".equals(pick.getWeekId()))
+		if (pick.getWeekId()==null||"".equals(pick.getWeekId()))
 			codes.add(PickExceptions.WEEK_IS_NULL);
 		
-		if ("".equals(pick.getLeagueId()))
+		if (pick.getLeagueId()==null||"".equals(pick.getLeagueId()))
 			codes.add(PickExceptions.LEAGUE_IS_NULL);
-		
-//		/*if (pick.getLeagueId()==null)
-//			cod*/es.add(PickExceptions.LEAGUE_IS_NULL);
-		
-		if ("".equals(pick.getPlayerId()))
+				
+		if (pick.getPlayerId()==null||"".equals(pick.getPlayerId()))
 			codes.add(PickExceptions.PLAYER_IS_NUll);
 		
 		
@@ -204,36 +195,20 @@ public class PickService {
 //		Game game = dao.loadByPrimaryKey(Game.class, pick.getGame().getId());
 		if (game == null)
 			codes.add(PickExceptions.GAME_IS_NULL);
-		
-		//load the game to make sure that the team passed is actually playing in the game
-//		if (game.getFav().getId()!=pick.getTeam().getId() && game.getDog().getId()!=pick.getTeam().getId())
-		if (!game.getFavId().equals(pick.getTeamId()) && !game.getDogId().equals(pick.getTeamId()))
-			codes.add(PickExceptions.TEAM_NOT_PLAYING_IN_GAME);
-				
-		//check to make sure that the game hasn't started
-		if (!isUpdate && game.getHasGameStarted())
-			codes.add(PickExceptions.GAME_HAS_ALREADY_STARTED);
-		
-		//need to make sure that the user is in that league
-//		List<LeagueResponse> leagues = getLeaguesForPlayer(pick.getPlayerId());
-//		boolean playerExistsInLeague = false;
-//		for (LeagueResponse league: leagues)
-//		{
-//			if (league.getId().equals(pick.getLeagueId()))
-//			{
-//				playerExistsInLeague = true;
-//				break;
-//			}
-//		}
-		
-//		if (!playerExistsInLeague)
-//			codes.add(PickExceptions.PLAYER_NOT_IN_LEAGUE);
-		
-		//make sure the week matches the game
-//		if (game.getWeek().getId()!=pick.getWeek().getId())
-		if (!game.getWeekId().equals(pick.getWeekId()))
-			codes.add(PickExceptions.WEEK_IS_NOT_VALID);
-				
+//		
+//		//load the game to make sure that the team passed is actually playing in the game
+//		if (!game.getFavId().equals(pick.getTeamId()) && !game.getDogId().equals(pick.getTeamId()))
+//			codes.add(PickExceptions.TEAM_NOT_PLAYING_IN_GAME);
+//				
+//		//check to make sure that the game hasn't started
+//		if (!isUpdate && game.getHasGameStarted())
+//			codes.add(PickExceptions.GAME_HAS_ALREADY_STARTED);
+//		
+//		//make sure the week matches the game
+////		if (game.getWeek().getId()!=pick.getWeek().getId())
+//		if (!game.getWeekId().equals(pick.getWeekId()))
+//			codes.add(PickExceptions.WEEK_IS_NOT_VALID);
+//				
 		if (!codes.isEmpty())
 			throw new PickValidationException(codes.toArray(new PickExceptions[codes.size()]));
 	}

@@ -1,6 +1,9 @@
 package com.makeurpicks.service;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -23,8 +26,6 @@ import com.makeurpicks.repository.TeamRepository;
 @WebAppConfiguration
 public class TeamServiceTest {
 
-	@Autowired
-	private TeamRepository teamRepository;
 	
 	@Autowired
 	private TeamService teamService;
@@ -49,4 +50,28 @@ public class TeamServiceTest {
 		
 		Assert.assertEquals(32, teams.size());
 	}
+	
+	@Test
+	public void getTeamMap()
+	{
+		Map<String, Team> teams = teamService.getTeamMap();
+		Assert.assertEquals(32, teams.size());
+	}
+	
+	@Test
+	public void getTeam()
+	{
+		Map<String, Team> teams = teamService.getTeamMap();
+		Iterator<String> keys = teams.keySet().iterator();
+		while (keys.hasNext())
+		{
+			String key = keys.next();
+			Team team = teamService.getTeam(key);
+
+			Assert.assertNotNull(team);
+			Assert.assertEquals(teams.get(key), team);
+		}
+	}
+	
+
 }

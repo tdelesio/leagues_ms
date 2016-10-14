@@ -1,0 +1,42 @@
+version: "2"
+
+services:
+  app:
+    build: .
+    entrypoint: /bin/bash
+    command: -c "sleep 5 && go-wrapper run" # sleep because the postgres container isn't ready on first start
+    environment:
+      - "TITLE=Docker Demo"
+      - "DB_HOST=db"
+      - "DB_PORT=5432"
+      - "DB_NAME=demo"
+      - "DB_USER=demo"
+      - "DB_PASS=demo"
+      - "DB_SSL_MODE=disable"
+    depends_on:
+      - db
+    networks:
+      - docker-demo
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+  db:
+    image: postgres:latest
+    environment:
+      - "POSTGRES_USER=demo"
+      - "POSTGRES_PASSWORD=demo"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - docker-demo
+    expose:
+      - "5432"
+
+networks:
+  docker-demo:
+    driver: bridge
+
+volumes:
+  postgres-data:
+    driver: local

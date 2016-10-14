@@ -13,8 +13,8 @@ import com.makeurpicks.AuthServerApplication;
 import com.makeurpicks.domain.Player;
 import com.makeurpicks.domain.PlayerBuilder;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = AuthServerApplication.class)
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@SpringApplicationConfiguration(classes = AuthServerApplication.class)
 public class PlayerServiceTest {
 
 	@Autowired

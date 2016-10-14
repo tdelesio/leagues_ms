@@ -66,17 +66,17 @@ public class TeamService {
 		
 	}
 	
-	public Team getTeamByShortName(String leagueType, String sn)
-	{
-		List<Team> teams = getTeams(leagueType);
-		for (Team team:teams)
-		{ 
-			if (team.getShortName().equals(sn))
-				return team;
-		}
-		
-		throw new GameValidationException(sn, GameExceptions.TEAM_SHORT_TEAM_NOT_FOUND);
-	}
+//	public Team getTeamByShortName(String leagueType, String sn)
+//	{
+//		List<Team> teams = getTeams(leagueType);
+//		for (Team team:teams)
+//		{ 
+//			if (team.getShortName().equals(sn))
+//				return team;
+//		}
+//		
+//		throw new GameValidationException(sn, GameExceptions.TEAM_SHORT_TEAM_NOT_FOUND);
+//	}
 	
 	protected void createAllTeams()
 	{

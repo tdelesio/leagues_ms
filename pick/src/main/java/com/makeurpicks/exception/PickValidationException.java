@@ -2,6 +2,7 @@ package com.makeurpicks.exception;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -25,6 +26,17 @@ public class PickValidationException extends RuntimeException {
 	{
 		log.debug(pickExceptions);
 		exceptions = new ArrayList<PickExceptions>(Arrays.asList(pickExceptions));
+	}
+	
+	public boolean hasSpecificException(PickExceptions exception)
+	{
+		Iterator<PickExceptions> iter = exceptions.iterator();
+		while(iter.hasNext())
+		{
+			if (iter.next().equals(exception))
+				return true;
+		}
+		return false;
 	}
 	
 	public boolean hasException()
