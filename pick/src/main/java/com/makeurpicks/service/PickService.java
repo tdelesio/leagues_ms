@@ -190,19 +190,24 @@ public class PickService {
 		if (pick.getPlayerId()==null||"".equals(pick.getPlayerId()))
 			codes.add(PickExceptions.PLAYER_IS_NUll);
 		
+		if (!codes.isEmpty())
+			throw new PickValidationException(codes.toArray(new PickExceptions[codes.size()]));
 		
 		GameResponse game = gameIntegrationService.getGameById(pick.getGameId());
 //		Game game = dao.loadByPrimaryKey(Game.class, pick.getGame().getId());
 		if (game == null)
 			codes.add(PickExceptions.GAME_IS_NULL);
 //		
+		if (!codes.isEmpty())
+			throw new PickValidationException(codes.toArray(new PickExceptions[codes.size()]));
+		
 //		//load the game to make sure that the team passed is actually playing in the game
-//		if (!game.getFavId().equals(pick.getTeamId()) && !game.getDogId().equals(pick.getTeamId()))
-//			codes.add(PickExceptions.TEAM_NOT_PLAYING_IN_GAME);
+		if (!game.getFavId().equals(pick.getTeamId()) && !game.getDogId().equals(pick.getTeamId()))
+			codes.add(PickExceptions.TEAM_NOT_PLAYING_IN_GAME);
 //				
 //		//check to make sure that the game hasn't started
-//		if (!isUpdate && game.getHasGameStarted())
-//			codes.add(PickExceptions.GAME_HAS_ALREADY_STARTED);
+		if (!isUpdate && game.getHasGameStarted())
+			codes.add(PickExceptions.GAME_HAS_ALREADY_STARTED);
 //		
 //		//make sure the week matches the game
 ////		if (game.getWeek().getId()!=pick.getWeek().getId())

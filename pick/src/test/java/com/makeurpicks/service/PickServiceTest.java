@@ -3,6 +3,7 @@ package com.makeurpicks.service;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 import org.junit.Test;
@@ -158,14 +159,18 @@ public class PickServiceTest {
 		Pick pick = new Pick();
 		String gameId = UUID.randomUUID().toString();
 		pick.setGameId(gameId);
-		pick.setTeamId(UUID.randomUUID().toString());
+		String teamId = UUID.randomUUID().toString();
+		pick.setTeamId(teamId);
 		pick.setWeekId(UUID.randomUUID().toString());
 		pick.setLeagueId(UUID.randomUUID().toString());
 		pick.setPlayerId(UUID.randomUUID().toString());
 		
 		GameResponse gameResponse = new GameResponse();
 		gameResponse.setId(gameId);
-		when(gameIntegrationMock.getGameById(gameId)).thenReturn(null);
+		gameResponse.setFavId(UUID.randomUUID().toString());
+		gameResponse.setDogId(UUID.randomUUID().toString());
+		gameResponse.setGameStart(ZonedDateTime.now().plusDays(1));
+		when(gameIntegrationMock.getGameById(gameId)).thenReturn(gameResponse);
 		try
 		{
 			service.validatePick(pick, false);
@@ -173,7 +178,39 @@ public class PickServiceTest {
 		}
 		catch (PickValidationException exception)
 		{
-			assertTrue(exception.hasSpecificException(PickExceptions.GAME_IS_NULL));
+			System.out.println(exception);
+			assertTrue(exception.hasSpecificException(PickExceptions.TEAM_NOT_PLAYING_IN_GAME));
+		}
+	}
+	
+	@Test
+	public void validatePicks_GameHasNotStartedNoPicksAllowed()
+	{
+		Pick pick = new Pick();
+		String gameId = UUID.randomUUID().toString();
+		pick.setGameId(gameId);
+		String teamId = UUID.randomUUID().toString();
+		pick.setTeamId(teamId);
+		pick.setWeekId(UUID.randomUUID().toString());
+		pick.setLeagueId(UUID.randomUUID().toString());
+		pick.setPlayerId(UUID.randomUUID().toString());
+		
+		GameResponse gameResponse = new GameResponse();
+		gameResponse.setId(gameId);
+		gameResponse.setFavId(UUID.randomUUID().toString());
+		gameResponse.setDogId(UUID.randomUUID().toString());
+		gameResponse.setGameStart(ZonedDateTime.now().minusDays(1));
+		when(gameIntegrationMock.getGameById(gameId)).thenReturn(gameResponse);
+		
+		try
+		{
+			service.validatePick(pick, false);
+			fail();
+		}
+		catch (PickValidationException exception)
+		{
+			System.out.println(exception);
+			assertTrue(exception.hasSpecificException(PickExceptions.GAME_HAS_ALREADY_STARTED));
 		}
 	}
 	
