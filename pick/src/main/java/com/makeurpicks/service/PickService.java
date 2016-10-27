@@ -70,7 +70,6 @@ public class PickService {
 			throw new PickValidationException(PickExceptions.PICK_IS_NULL);
 		if (!pickFromDS.getPlayerId().equals(pick.getPlayerId()))
 			throw new PickValidationException(PickExceptions.UNAUTHORIZED_USER);
-		
 		//check to see if the pick is the existing double pick
 		DoublePick doublePick = doublePickRepository.findDoubleForPlayer(pick.getLeagueId(), pick.getWeekId(), pick.getPlayerId());
 		if (doublePick != null && doublePick.getPickId().equals(pick.getId()))
