@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.UUID;
 
 import org.apache.commons.logging.Log;
@@ -106,7 +107,9 @@ public class PickService {
 		if (map==null || map.isEmpty())
 			return Collections.emptyMap();
 		Map<String, String> games = map.get(playerId);
-		Set<String> subkeys = games.keySet();
+		Set<String> subkeys = new TreeSet<>();
+		if (games != null)
+			subkeys = games.keySet();
 		
 		Map<String, Pick> pickMap = new HashMap<>();
 		for (String gameId : subkeys)
@@ -116,7 +119,6 @@ public class PickService {
 			pickMap.put(gameId, pick);
 			
 		}
-		
 		return pickMap;
 		
 	}
