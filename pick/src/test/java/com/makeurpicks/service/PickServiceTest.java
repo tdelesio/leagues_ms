@@ -1,5 +1,6 @@
 package com.makeurpicks.service;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -345,7 +346,7 @@ public class PickServiceTest {
 	
 	
 	@Test
-	public void getPicksByWeekAndPlayerTest_mapFromDSisNull_returnEmptyMap() {
+	public void getPicksByWeekAndPlayerTest_mapFromDSNull_returnEmptyMap() {
 		
 		String leagueId = UUID.randomUUID().toString();
 		String weekId = UUID.randomUUID().toString();
@@ -363,15 +364,19 @@ public class PickServiceTest {
 		assertTrue(map.size() == 0);
 	}
 	
+	// **************************
+	// Double check if this needs another test for nulls
+	// **************************
+	
 	@Test
-	public void getPicksByWeekAndPlayerTest_mapFromDSisNul_returnEmptyMap() {
+	public void getPicksByWeekAndPlayerTest_noPicksByPlayer_returnEmptyMap() {
 		
 		String leagueId = UUID.randomUUID().toString();
 		String weekId = UUID.randomUUID().toString();
 		String playerId = UUID.randomUUID().toString();
 		String gameId = UUID.randomUUID().toString();
 		String pickId = UUID.randomUUID().toString();
-		
+		String secondPlayerId = UUID.randomUUID().toString();
 		Pick pick = new Pick();
 		pick.setId(pickId);
 		pick.setPlayerId(playerId);
@@ -382,27 +387,122 @@ public class PickServiceTest {
 		Map<String, String> gamesMap = new HashMap<>();
 		Map<String, Pick> pickMap = new HashMap<>();
 		
-		pickMap.put(gameId, pick);
+		gamesMap.put(gameId, pickId);
+		
+		playersByWeekMap.put(secondPlayerId, gamesMap);
+		
+		when(picksByWeekRepositoryMock.getPlayersByWeek(leagueId, weekId)).thenReturn(playersByWeekMap);
+		when(pickRepositoryMock.findOne(pickId)).thenReturn(pick);
+		
+		Map<String, Pick> map = service.getPicksByWeekAndPlayer(leagueId, weekId, playerId);
+		
+		assertTrue(map.size() == 0);
+	}
+	
+	@Test
+	public void getPicksByWeekAndPlayerTest_foundPicks_pass() {
+		
+		String leagueId = UUID.randomUUID().toString();
+		String weekId = UUID.randomUUID().toString();
+		String playerId = UUID.randomUUID().toString();
+		String gameId = UUID.randomUUID().toString();
+		String pickId = UUID.randomUUID().toString();
+		Pick pick = new Pick();
+		pick.setId(pickId);
+		pick.setPlayerId(playerId);
+		pick.setWeekId(weekId);
+		pick.setLeagueId(leagueId);
+		
+		Map<String, Map<String, String>> playersByWeekMap = new HashMap<>();
+		Map<String, String> gamesMap = new HashMap<>();
+		Map<String, Pick> pickMap = new HashMap<>();
+		
+		gamesMap.put(gameId, pickId);
 		
 		playersByWeekMap.put(playerId, gamesMap);
 		
 		when(picksByWeekRepositoryMock.getPlayersByWeek(leagueId, weekId)).thenReturn(playersByWeekMap);
+		when(pickRepositoryMock.findOne(pickId)).thenReturn(pick);
 		
 		Map<String, Pick> map = service.getPicksByWeekAndPlayer(leagueId, weekId, playerId);
 		
-		assertTrue(map.size() == 1);
+		assertEquals(map.get(gameId).getId(), pickId);
 	}
-//
+	
+	
+
 //	@Test
-//	public void testGetOtherPicksByWeekAndPlayer() {
+//	public void test() {
 //		fail("Not yet implemented");
 //	}
-//
-//	@Test
-//	public void testGetPicksByWeek() {
-//		fail("Not yet implemented");
-//	}
-//
+	@Test
+	public void getOtherPicksByWeekAndPlayerTest_mapFromDSisNull_returnEmptyMap() {
+		
+		String leagueId = UUID.randomUUID().toString();
+		String weekId = UUID.randomUUID().toString();
+		String playerId = UUID.randomUUID().toString();
+		
+		Pick pick = new Pick();
+		pick.setPlayerId(playerId);
+		pick.setWeekId(weekId);
+		pick.setLeagueId(leagueId);
+		
+		when(picksByWeekRepositoryMock.getPlayersByWeek(leagueId, weekId)).thenReturn(null);
+		
+		Map<String, Pick> map = service.getOtherPicksByWeekAndPlayer(leagueId, weekId, playerId);
+		
+		assertTrue(map.size() == 0);
+	}
+
+	@Test
+	public void getOtherPicksByWeekAndPlayerTest_foundPicks_pass() {
+		
+		String leagueId = UUID.randomUUID().toString();
+		String weekId = UUID.randomUUID().toString();
+		String playerId = UUID.randomUUID().toString();
+		String gameId = UUID.randomUUID().toString();
+		String pickId = UUID.randomUUID().toString();
+		Pick pick = new Pick();
+		pick.setId(pickId);
+		pick.setPlayerId(playerId);
+		pick.setWeekId(weekId);
+		pick.setLeagueId(leagueId);
+		
+		Map<String, Map<String, String>> playersByWeekMap = new HashMap<>();
+		Map<String, String> gamesMap = new HashMap<>();
+		Map<String, Pick> pickMap = new HashMap<>();
+		
+		gamesMap.put(gameId, pickId);
+		
+		playersByWeekMap.put(playerId, gamesMap);
+		
+		when(picksByWeekRepositoryMock.getPlayersByWeek(leagueId, weekId)).thenReturn(playersByWeekMap);
+		when(pickRepositoryMock.findOne(pickId)).thenReturn(pick);
+		
+		Map<String, Pick> map = service.getOtherPicksByWeekAndPlayer(leagueId, weekId, playerId);
+		
+		assertEquals(map.get(gameId).getId(), pickId);
+	}
+
+	
+	@Test
+	public void testGetPicksByWeek() {
+		String leagueId = UUID.randomUUID().toString();
+		String weekId = UUID.randomUUID().toString();
+		String playerId = UUID.randomUUID().toString();
+		
+		Pick pick = new Pick();
+		pick.setPlayerId(playerId);
+		pick.setWeekId(weekId);
+		pick.setLeagueId(leagueId);
+		
+		when(picksByWeekRepositoryMock.getPlayersByWeek(leagueId, weekId)).thenReturn(null);
+		
+		Map<String, Map<String, Pick>> map = service.getPicksByWeek(leagueId, weekId);
+		
+		assertTrue(map.size() == 0);
+	}
+
 //	@Test
 //	public void testGetDoublePick() {
 //		fail("Not yet implemented");
@@ -416,40 +516,6 @@ public class PickServiceTest {
 //	@Test
 //	public void testMakeDoublePick() {
 //		fail("Not yet implemented");
-//	}
-
-//	public class DoublePickRepositorySpy implements DoublePickRepository {
-//
-//		public boolean deleteWasCalled = false;
-//		
-//		@Override
-//		public Map<String, DoublePick> findAllForLeagueAndWeek(String leagueId, String weekId) {
-//			// TODO Auto-generated method stub
-//			return null;
-//		}
-//	
-//		@Override
-//		public DoublePick findDoubleForPlayer(String leagueId, String weekId, String playerId) {
-//			// TODO Auto-generated method stub
-//			return null;
-//		}
-//	
-//		@Override
-//		public void delete(DoublePick doublePick) {
-//			deleteWasCalled = true;
-//		}
-//	
-//		@Override
-//		public void save(DoublePick doublePick) {
-//			// TODO Auto-generated method stub
-//			
-//		}
-//	
-//		@Override
-//		public void deleteAll() {
-//			// TODO Auto-generated method stub
-//			
-//		}
 //	}
 
 }
