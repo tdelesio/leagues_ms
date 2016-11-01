@@ -486,7 +486,7 @@ public class PickServiceTest {
 
 	
 	@Test
-	public void testGetPicksByWeek() {
+	public void testGetPicksByWeek_mapFromDSisNull_returnEmptyMap() {
 		String leagueId = UUID.randomUUID().toString();
 		String weekId = UUID.randomUUID().toString();
 		String playerId = UUID.randomUUID().toString();
@@ -503,6 +503,23 @@ public class PickServiceTest {
 		assertTrue(map.size() == 0);
 	}
 
+	@Test
+	public void testGetPicksByWeek() {
+		String leagueId = UUID.randomUUID().toString();
+		String weekId = UUID.randomUUID().toString();
+		String playerId = UUID.randomUUID().toString();
+		
+		Pick pick = new Pick();
+		pick.setPlayerId(playerId);
+		pick.setWeekId(weekId);
+		pick.setLeagueId(leagueId);
+		
+		when(picksByWeekRepositoryMock.getPlayersByWeek(leagueId, weekId)).thenReturn(null);
+		
+		Map<String, Map<String, Pick>> map = service.getPicksByWeek(leagueId, weekId);
+		
+		assertTrue(map.size() == 0);
+	}
 //	@Test
 //	public void testGetDoublePick() {
 //		fail("Not yet implemented");
