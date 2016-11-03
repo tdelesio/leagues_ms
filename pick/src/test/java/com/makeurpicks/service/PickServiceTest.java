@@ -734,7 +734,6 @@ public class PickServiceTest {
 		
 		DoublePick doublePick = new DoublePick();
 		doublePick.setPickId(pickId);
-		System.out.println("ju" + originalPickId);
 		when(pickRepositoryMock.findOne(pickId)).thenReturn(pick);
 		when(gameIntegrationMock.getGameById(gameId)).thenReturn(gameResponse);
 		when(doublePickRepositoryMock.findDoubleForPlayer(leagueId, weekId, loggedInPlayerId)).thenReturn(doublePick);
