@@ -251,7 +251,6 @@ public class PickService {
 		
 		GameResponse game = gameIntegrationService.getGameById(pick.getGameId());
 		//check to see if the newly selected double has started
-		System.out.println("pawel 1");
 		if (game.getHasGameStarted())
 		{
 			//you can't change to a game that has started
@@ -271,7 +270,6 @@ public class PickService {
 			String orginalPickId = orginialDoublePick.getPickId();
 			Pick orginalPick = pickRepository.findOne(orginalPickId);
 			GameResponse orginalGame = gameIntegrationService.getGameById(orginalPick.getGameId());
-			System.out.println(orginalGame.getId());
 			if (orginalGame.getHasGameStarted())
 			{
 				throw new PickValidationException(PickExceptions.GAME_HAS_ALREADY_STARTED);
