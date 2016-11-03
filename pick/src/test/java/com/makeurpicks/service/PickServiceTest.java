@@ -389,14 +389,22 @@ public class PickServiceTest {
 		
 		gamesMap.put(gameId, pickId);
 		
-		playersByWeekMap.put(secondPlayerId, gamesMap);
-		
 		when(picksByWeekRepositoryMock.getPlayersByWeek(leagueId, weekId)).thenReturn(playersByWeekMap);
 		when(pickRepositoryMock.findOne(pickId)).thenReturn(pick);
 		
 		Map<String, Pick> map = service.getPicksByWeekAndPlayer(leagueId, weekId, playerId);
 		
 		assertTrue(map.size() == 0);
+
+		playersByWeekMap.put(secondPlayerId, gamesMap);
+		
+		when(picksByWeekRepositoryMock.getPlayersByWeek(leagueId, weekId)).thenReturn(playersByWeekMap);
+		when(pickRepositoryMock.findOne(pickId)).thenReturn(pick);
+		
+		map = service.getPicksByWeekAndPlayer(leagueId, weekId, playerId);
+		
+		assertTrue(map.size() == 0);
+		
 	}
 	
 	@Test
@@ -486,7 +494,7 @@ public class PickServiceTest {
 
 	
 	@Test
-	public void testGetPicksByWeek_mapFromDSisNull_returnEmptyMap() {
+	public void getPicksByWeekTest_mapFromDSisNullorEmpty_returnEmptyMap() {
 		String leagueId = UUID.randomUUID().toString();
 		String weekId = UUID.randomUUID().toString();
 		String playerId = UUID.randomUUID().toString();
@@ -497,42 +505,246 @@ public class PickServiceTest {
 		pick.setLeagueId(leagueId);
 		
 		when(picksByWeekRepositoryMock.getPlayersByWeek(leagueId, weekId)).thenReturn(null);
-		
 		Map<String, Map<String, Pick>> map = service.getPicksByWeek(leagueId, weekId);
+		
+		assertTrue(map.size() == 0);
+		
+		Map<String, Map<String, String>> playersByWeekMap = new HashMap<>();
+		when(picksByWeekRepositoryMock.getPlayersByWeek(leagueId, weekId)).thenReturn(playersByWeekMap);
+		map = service.getPicksByWeek(leagueId, weekId);
 		
 		assertTrue(map.size() == 0);
 	}
 
 	@Test
-	public void testGetPicksByWeek() {
+	public void getPicksByWeekTest_foundPicks_pass() {
 		String leagueId = UUID.randomUUID().toString();
 		String weekId = UUID.randomUUID().toString();
+		String gameId = UUID.randomUUID().toString();
+		String pickId = UUID.randomUUID().toString();
 		String playerId = UUID.randomUUID().toString();
 		
 		Pick pick = new Pick();
-		pick.setPlayerId(playerId);
 		pick.setWeekId(weekId);
 		pick.setLeagueId(leagueId);
 		
-		when(picksByWeekRepositoryMock.getPlayersByWeek(leagueId, weekId)).thenReturn(null);
+		Map<String, Map<String, String>> playersByWeekMap = new HashMap<>();
+		Map<String, String> gamesMap = new HashMap<>();
 		
+		gamesMap.put(gameId, pickId);
+		
+		playersByWeekMap.put(playerId, gamesMap);
+		when(picksByWeekRepositoryMock.getPlayersByWeek(leagueId, weekId)).thenReturn(playersByWeekMap);
 		Map<String, Map<String, Pick>> map = service.getPicksByWeek(leagueId, weekId);
 		
-		assertTrue(map.size() == 0);
+		assertTrue(map.size() > 0);
 	}
-//	@Test
-//	public void testGetDoublePick() {
-//		fail("Not yet implemented");
-//	}
-//
+	
+	@Test
+	public void getDoublePickForPlayerTest_noDoublePics_returnEmptyMap() {
+		
+		String playerId = UUID.randomUUID().toString();
+		String leagueId = UUID.randomUUID().toString();
+		String weekId = UUID.randomUUID().toString();
+		String doublePickId = UUID.randomUUID().toString();
+		
+		DoublePick doublePick = new DoublePick();
+		doublePick.setId(doublePickId);
+		when(doublePickRepositoryMock.findDoubleForPlayer(leagueId, weekId, playerId)).thenReturn(doublePick);
+		
+		DoublePick doublePickDS = service.getDoublePickForPlayer(leagueId, weekId, playerId);
+		
+		verify(doublePickRepositoryMock).findDoubleForPlayer(leagueId, weekId, playerId);		
+		assertEquals(doublePick.getId(), doublePickId);
+	}
+
 //	@Test
 //	public void testGetDoublePicks() {
 //		fail("Not yet implemented");
 //	}
-//
-//	@Test
-//	public void testMakeDoublePick() {
-//		fail("Not yet implemented");
-//	}
 
+	@Test
+	public void MakeDoublePickTest_noPickInDS_throwPickIsNullException() {
+		
+		expectedEx.expect(RuntimeException.class);
+	    expectedEx.expectMessage(PickExceptions.PICK_IS_NULL.toString());
+	    
+		String pickId = UUID.randomUUID().toString();
+		String loggedInPlayerId = UUID.randomUUID().toString();
+		
+		when(pickRepositoryMock.findOne(pickId)).thenReturn(null);
+		service.makeDoublePick(pickId, loggedInPlayerId);
+		verify(pickRepositoryMock).findOne(pickId);
+	}
+	
+	@Test
+	public void MakeDoublePickTest_gameHasAlreadyStarted_throwRuntimeException() {
+		
+		expectedEx.expect(RuntimeException.class);
+	    expectedEx.expectMessage(PickExceptions.GAME_HAS_ALREADY_STARTED.toString());
+		
+		String pickId = UUID.randomUUID().toString();
+		String gameId = UUID.randomUUID().toString();
+		String loggedInPlayerId = UUID.randomUUID().toString();
+		
+		Pick pick = new Pick();
+		pick.setGameId(gameId);
+		
+		GameResponse gameResponse = new GameResponse();
+		gameResponse.setId(gameId);
+		gameResponse.setGameStart(ZonedDateTime.now().minusDays(1));		
+		
+		when(pickRepositoryMock.findOne(pickId)).thenReturn(pick);
+		when(gameIntegrationMock.getGameById(gameId)).thenReturn(gameResponse);
+		service.makeDoublePick(pickId, loggedInPlayerId);
+		verify(gameIntegrationMock).getGameById(gameId);
+	}
+
+	@Test
+	public void MakeDoublePickTest_unauthorizedUser_throwRuntimeException() {
+	    
+		expectedEx.expect(RuntimeException.class);
+	    expectedEx.expectMessage(PickExceptions.UNAUTHORIZED_USER.toString());
+	    
+	    String loggedInPlayerId = UUID.randomUUID().toString();
+	    String playerId = UUID.randomUUID().toString();
+		String pickId = UUID.randomUUID().toString();
+		String gameId = UUID.randomUUID().toString();
+		
+		Pick pick = new Pick();
+		pick.setGameId(gameId);
+		pick.setPlayerId(playerId);
+		
+		GameResponse gameResponse = new GameResponse();
+		gameResponse.setId(gameId);
+		gameResponse.setGameStart(ZonedDateTime.now().plusDays(1));		
+		
+		when(pickRepositoryMock.findOne(pickId)).thenReturn(pick);
+		when(gameIntegrationMock.getGameById(gameId)).thenReturn(gameResponse);
+		service.makeDoublePick(pickId, loggedInPlayerId);
+	}
+	
+	@Test
+	public void MakeDoublePickTest_noDoublePickFound_createSaveDoublepick() {
+	    
+	    String loggedInPlayerId = UUID.randomUUID().toString();
+		String pickId = UUID.randomUUID().toString();
+		String gameId = UUID.randomUUID().toString();
+		String leagueId = UUID.randomUUID().toString();
+		String weekId = UUID.randomUUID().toString();
+		
+		Pick pick = new Pick();
+		pick.setGameId(gameId);
+		pick.setPlayerId(loggedInPlayerId);
+		pick.setLeagueId(leagueId);
+		pick.setWeekId(weekId);
+		
+		GameResponse gameResponse = new GameResponse();
+		gameResponse.setId(gameId);
+		gameResponse.setGameStart(ZonedDateTime.now().plusDays(1));		
+		
+		DoublePick doublePick = new DoublePick();
+		doublePick.setPickId(pickId);
+		doublePick.setGameId(gameId);
+		doublePick.setPickId(pickId);
+		doublePick.setPlayerId(loggedInPlayerId);
+		
+		when(pickRepositoryMock.findOne(pickId)).thenReturn(pick);
+		when(gameIntegrationMock.getGameById(gameId)).thenReturn(gameResponse);
+		when(doublePickRepositoryMock.findDoubleForPlayer(leagueId, weekId, loggedInPlayerId)).thenReturn(null);
+		
+		service.makeDoublePick(pickId, loggedInPlayerId);
+		
+		verify(doublePickRepositoryMock).save(doublePick);
+	}
+	
+	@Test
+	public void MakeDoublePickTest_originalGameHasAlreadyStarted_throwRuntimeException() {
+	    
+		expectedEx.expect(RuntimeException.class);
+	    expectedEx.expectMessage(PickExceptions.GAME_HAS_ALREADY_STARTED.toString());
+	    
+	    String loggedInPlayerId = UUID.randomUUID().toString();
+		String pickId = UUID.randomUUID().toString();
+		String gameId = UUID.randomUUID().toString();
+		String leagueId = UUID.randomUUID().toString();
+		String weekId = UUID.randomUUID().toString();
+		
+		Pick pick = new Pick();
+		pick.setGameId(gameId);
+		pick.setPlayerId(loggedInPlayerId);
+		pick.setLeagueId(leagueId);
+		pick.setWeekId(weekId);
+		
+		GameResponse gameResponse = new GameResponse();
+		gameResponse.setId(gameId);
+		gameResponse.setGameStart(ZonedDateTime.now().plusDays(1));		
+		
+		String originalPickId = UUID.randomUUID().toString();
+		
+		
+		Pick originalPpick = new Pick();
+		originalPpick.setGameId(gameId);
+		
+		GameResponse originalGameResponse = new GameResponse();
+		originalGameResponse.setId(gameId);
+		originalGameResponse.setGameStart(ZonedDateTime.now());	
+		
+		DoublePick doublePick = new DoublePick();
+		doublePick.setPickId(pickId);
+		System.out.println("ju" + originalPickId);
+		when(pickRepositoryMock.findOne(pickId)).thenReturn(pick);
+		when(gameIntegrationMock.getGameById(gameId)).thenReturn(gameResponse);
+		when(doublePickRepositoryMock.findDoubleForPlayer(leagueId, weekId, loggedInPlayerId)).thenReturn(doublePick);
+		when(pickRepositoryMock.findOne(originalPickId)).thenReturn(originalPpick);
+		when(gameIntegrationMock.getGameById(gameId)).thenReturn(originalGameResponse);
+		
+		service.makeDoublePick(pickId, loggedInPlayerId);
+		
+	}
+	
+	@Test
+	public void MakeDoublePickTest_saveNewDoblePick_Pass() {
+
+	    String loggedInPlayerId = UUID.randomUUID().toString();
+		String pickId = UUID.randomUUID().toString();
+		String gameId = UUID.randomUUID().toString();
+		String leagueId = UUID.randomUUID().toString();
+		String weekId = UUID.randomUUID().toString();
+		
+		Pick pick = new Pick();
+		pick.setGameId(gameId);
+		pick.setPlayerId(loggedInPlayerId);
+		pick.setLeagueId(leagueId);
+		pick.setWeekId(weekId);
+		
+		GameResponse gameResponse = new GameResponse();
+		gameResponse.setId(gameId);
+		gameResponse.setGameStart(ZonedDateTime.now().plusDays(1));		
+		
+		String originalPickId = UUID.randomUUID().toString();
+		String originalGameId = UUID.randomUUID().toString();
+		
+		Pick originalPpick = new Pick();
+		originalPpick.setGameId(gameId);
+		
+		GameResponse originalGameResponse = new GameResponse();
+		originalGameResponse.setId(originalGameId);
+		originalGameResponse.setGameStart(ZonedDateTime.now().plusDays(1));	
+		
+		DoublePick doublePick = new DoublePick();
+		doublePick.setPickId(pickId);
+		System.out.println("ju" + originalPickId);
+		when(pickRepositoryMock.findOne(pickId)).thenReturn(pick);
+		when(gameIntegrationMock.getGameById(gameId)).thenReturn(gameResponse);
+		when(doublePickRepositoryMock.findDoubleForPlayer(leagueId, weekId, loggedInPlayerId)).thenReturn(doublePick);
+		when(pickRepositoryMock.findOne(originalPickId)).thenReturn(originalPpick);
+		when(gameIntegrationMock.getGameById(originalGameId)).thenReturn(originalGameResponse);
+		
+		DoublePick doublePickReturned = service.makeDoublePick(pickId, loggedInPlayerId);
+		
+		verify(doublePickRepositoryMock).save(doublePick);
+		
+		assertEquals(doublePick, doublePickReturned);
+	}
 }
