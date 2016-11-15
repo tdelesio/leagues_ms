@@ -43,3 +43,4 @@ Servers/
 config-repo/
 RemoteSystemsTempFiles/
 .metadata/
+.recommenders/
