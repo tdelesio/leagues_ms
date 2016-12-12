@@ -1,0 +1,72 @@
+version: "2"
+
+services:
+  eureka:
+    image: springcloud/eureka
+    networks:
+      - myp-network
+    ports:
+      - "8761:8761"
+    expose:
+      - "8761"
+#  auth-server:
+#    build: ../auth-server/docker
+#    networks:
+#      - myp-network
+#    ports:
+#      - "9999:9999"
+#    expose:
+#      - "9999"
+#    depends_on:
+#      - auth-db
+#      - eureka
+  auth-db:  
+    image: mysql:latest
+    build: mysql/
+    environment:
+      - MYSQL_ROOT_PASSWORD=admin123
+      - MYSQL_USER=dbuser
+      - MYSQL_PASSWORD=password
+      - MYSQL_DATABASE=player
+#    volumes:
+#      - mysql-data:/home.scripts  
+#    working_dir: "/home/scripts"
+    networks:
+      - myp-network
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+  game-db:  
+    image: mysql:latest
+    build: mysql/
+    environment:
+      - MYSQL_ROOT_PASSWORD=admin123
+      - MYSQL_USER=dbuser
+      - MYSQL_PASSWORD=password
+      - MYSQL_DATABASE=game
+#    volumes:
+#      - mysql-data:/home.scripts  
+#    working_dir: "/home/scripts"
+    networks:
+      - myp-network
+    ports:
+      - "3305:3306"
+    expose:
+      - "3305"    
+  redis:
+    image: redis
+    networks:
+      - myp-network
+    ports:
+      - "6379:6379"
+    expose:
+      - "6379"
+                
+networks:
+  myp-network:
+    driver: bridge
+    
+volumes:
+  mysql-data:
+    driver: local    
