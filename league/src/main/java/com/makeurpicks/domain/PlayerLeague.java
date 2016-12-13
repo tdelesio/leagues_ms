@@ -1,12 +1,18 @@
 package com.makeurpicks.domain;
 
-public class PlayerLeague extends AbstractModel {
-
+public class PlayerLeague  {
+	private String id;
 	private String leagueId;
 	private String leagueName;
 	private String playerId;
 	private String password;
 	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	public String getLeagueId() {
 		return leagueId;
 	}

@@ -1,7 +1,8 @@
 package com.makeurpicks.domain;
 
 
-public class League extends AbstractModel {
+public class League  {
+	private String id;
 	private String leagueName;
 	private int paidFor=0;
 	private boolean money=false;
@@ -23,6 +24,12 @@ public class League extends AbstractModel {
 	
 	private String seasonId;
 	private String adminId;
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	
 	public String getLeagueName() {
 		return leagueName;

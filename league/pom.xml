@@ -22,14 +22,6 @@
 			<artifactId>spring-cloud-starter-hystrix</artifactId>
 			<version>1.2.3.RELEASE</version>
 		</dependency>
-<<<<<<< HEAD
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-netflix-hystrix-amqp</artifactId>
-		</dependency>
-
-=======
->>>>>>> bf341f89a56ff883f6f8bc3693fb994ea602156d
 		<!-- eureka/feign -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
