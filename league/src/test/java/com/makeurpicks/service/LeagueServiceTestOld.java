@@ -10,13 +10,14 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 
@@ -27,7 +28,6 @@ import com.makeurpicks.domain.LeagueName;
 import com.makeurpicks.domain.LeaguesPlayerJoined;
 import com.makeurpicks.domain.PlayersInLeague;
 import com.makeurpicks.exception.LeagueValidationException;
-import com.makeurpicks.exception.LeagueValidationException.LeagueExceptions;
 import com.makeurpicks.repository.LeagueRepository;
 import com.makeurpicks.repository.LeaguesAPlayHasJoinedRespository;
 import com.makeurpicks.repository.PlayersInLeagueRepository;
@@ -35,7 +35,7 @@ import com.makeurpicks.repository.PlayersInLeagueRepository;
 //@RunWith(SpringJUnit4ClassRunner.class)
 @RunWith(MockitoJUnitRunner.class)
 @SpringApplicationConfiguration(classes = LeagueApplication.class)
-public class LeagueServiceTest {
+public class LeagueServiceTestOld {
 	 
 	@Autowired 
 	@InjectMocks
@@ -50,8 +50,7 @@ public class LeagueServiceTest {
 	@Mock
 	private PlayersInLeagueRepository playersInLeagueRepositoryMock;
 	
-	@Rule
-	private ExpectedException expectedEx = ExpectedException.none();
+	
 //	@Before
 //	public void setup()
 //	{
@@ -65,97 +64,6 @@ public class LeagueServiceTest {
 //			server.close();
 //		}
 //	}
-	
-	@Test
-	public void validateLeague_leagueNameEmpty_throwsLeagueValidationException() {
-		
-		expectedEx.expect(RuntimeException.class);
-	    expectedEx.expectMessage(LeagueExceptions.LEAGUE_NAME_IS_NULL.toString());
-	    
-		String leagueId = UUID.randomUUID().toString();
-		
-		League league = new LeagueBuilder(leagueId)
-			.build();
-		
-		leagueService.validateLeague(league);
-		
-	}
-	
-	@Test
-	public void validateLeague_duplicateLeague_throwsLeagueValidationException() {
-		
-		expectedEx.expect(RuntimeException.class);
-	    expectedEx.expectMessage(LeagueExceptions.LEAGUE_NAME_IN_USE.toString());
-	    
-		String leagueId = UUID.randomUUID().toString();
-		
-		League league = new LeagueBuilder(leagueId)
-			.withName("pickem")
-			.build();
-		
-		when(leagueService.getLeagueByName(league.getLeagueName())).thenReturn(league);
-		
-		leagueService.validateLeague(league);
-		
-	}
-	
-	@Test
-	public void validateLeague_sessionIdNull_throwsLeagueValidationException() {
-		
-		expectedEx.expect(RuntimeException.class);
-	    expectedEx.expectMessage(LeagueExceptions.SEASON_ID_IS_NULL.toString());
-	    
-		String leagueId = UUID.randomUUID().toString();
-		
-		League league = new LeagueBuilder(leagueId)
-			.withName("pickem")
-			.build();
-		
-		when(leagueService.getLeagueByName(league.getLeagueName())).thenReturn(null);
-		
-		leagueService.validateLeague(league);
-		
-	}
-	
-	@Test
-	public void validateLeague_adminNotFound_throwsLeagueValidationException() {
-		
-		expectedEx.expect(RuntimeException.class);
-	    expectedEx.expectMessage(LeagueExceptions.ADMIN_NOT_FOUND.toString());
-	    
-		String leagueId = UUID.randomUUID().toString();
-		String seasonId = UUID.randomUUID().toString();
-		
-		League league = new LeagueBuilder(leagueId)
-			.withName("pickem")
-			.withSeasonId(seasonId)
-			.build();
-		
-		when(leagueService.getLeagueByName(league.getLeagueName())).thenReturn(null);
-		
-		leagueService.validateLeague(league);
-		
-	}
-	
-	@Test
-	public void validateLeague_adminNotFound_2_throwsLeagueValidationException() {
-		
-		expectedEx.expect(RuntimeException.class);
-	    expectedEx.expectMessage(LeagueExceptions.ADMIN_NOT_FOUND.toString());
-	    
-		String leagueId = UUID.randomUUID().toString();
-		String seasonId = UUID.randomUUID().toString();
-		
-		League league = new LeagueBuilder(leagueId)
-			.withName("pickem")
-			.withSeasonId(seasonId)
-			.build();
-		
-		when(leagueService.getLeagueByName(league.getLeagueName())).thenReturn(null);
-		
-		leagueService.validateLeague(league);
-		
-	}
 	
 	@Test
 	public void testCreateLeague() {
@@ -228,12 +136,12 @@ public class LeagueServiceTest {
 		
 		return league;
 	}
-
-	@Test
-	public void testUpdateLeague() {
-		fail("Not yet implemented");
-	}
-
+//
+////	@Test
+////	public void testUpdateLeague() {
+////		fail("Not yet implemented");
+////	}
+////
 	@Test
 	public void testGetLeaguesForPlayer() {
 		String player1Id = "1";

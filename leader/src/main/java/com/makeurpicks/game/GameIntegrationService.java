@@ -12,9 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
-import com.netflix.hystrix.contrib.javanica.command.ObservableResult;
 
-import rx.Observable;
 
 @Service
 public class GameIntegrationService {

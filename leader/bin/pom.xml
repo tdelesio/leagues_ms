@@ -3,80 +3,79 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<groupId>com.makeurpicks</groupId>
+	<version>0.0.1</version>
 	<packaging>jar</packaging>
-	<artifactId>league</artifactId>
-
-	<name>league</name>
-
+	<artifactId>leader</artifactId>
+	
+	<name>leader</name>
+	
 	<parent>
 		<groupId>com.makeurpicks</groupId>
 		<artifactId>build</artifactId>
 		<version>0.0.1</version>
 	</parent>
 
-	<dependencies>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
+	</properties>
 
+	<dependencies>
+	
 		<!-- turbine/hystix -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-hystrix</artifactId>
-			<version>1.2.3.RELEASE</version>
 		</dependency>
-<<<<<<< HEAD
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-netflix-hystrix-amqp</artifactId>
 		</dependency>
-
-=======
->>>>>>> bf341f89a56ff883f6f8bc3693fb994ea602156d
+		
 		<!-- eureka/feign -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-eureka</artifactId>
 		</dependency>
-
+		
 		<!-- production -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
-
-		<!-- datasource -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-rest</artifactId>
-		</dependency>
-
+		
+ 		<!-- datasource --> 
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.springframework.boot</groupId> -->
+<!-- 			<artifactId>spring-boot-starter-redis</artifactId> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.springframework.boot</groupId> -->
+<!-- 			<artifactId>spring-boot-starter-data-rest</artifactId> -->
+<!-- 		</dependency> -->
+		
 		<!-- test -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
-
+		
+		
 		<!-- config -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-config</artifactId>
 		</dependency>
-
+		
 		<!-- web -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
-
+		
+		
 		<!-- cloud -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -86,13 +85,12 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter</artifactId>
 		</dependency>
-
-		<!-- session -->
-		<!-- <dependency> -->
-		<!-- <groupId>org.springframework.session</groupId> -->
-		<!-- <artifactId>spring-session</artifactId> -->
-		<!-- </dependency> -->
-
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+		</dependency>
+		
+		
 		<!-- sercurity -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -106,39 +104,14 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-jwt</artifactId>
 		</dependency>
+		
+		<!-- java8 time -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+		</dependency>
 
-		<!-- <dependency> -->
-		<!-- <groupId>org.springframework.boot</groupId> -->
-		<!-- <artifactId>spring-boot-devtools</artifactId> -->
-		<!-- </dependency> -->
-		<dependency>
-			<groupId>org.scala-lang</groupId>
-			<artifactId>scala-library</artifactId>
-			<version>2.11.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.neo4j</groupId>
-			<artifactId>neo4j-cypher-compiler-2.2</artifactId>
-			<version>2.2.5</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.hadoop</groupId>
-			<artifactId>hadoop-core</artifactId>
-			<version>1.0.0</version>
-		</dependency>
 	</dependencies>
-
-	<!-- <dependencyManagement> -->
-	<!-- <dependencies> -->
-	<!-- <dependency> -->
-	<!-- <groupId>org.springframework.cloud</groupId> -->
-	<!-- <artifactId>spring-cloud-starter-parent</artifactId> -->
-	<!-- <version>Angel.SR3</version> -->
-	<!-- <type>pom</type> -->
-	<!-- <scope>import</scope> -->
-	<!-- </dependency> -->
-	<!-- </dependencies> -->
-	<!-- </dependencyManagement> -->
 
 	<build>
 		<plugins>
@@ -149,5 +122,5 @@
 		</plugins>
 	</build>
 
-
+	
 </project>

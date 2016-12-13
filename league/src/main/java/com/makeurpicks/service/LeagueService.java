@@ -21,7 +21,11 @@ public class LeagueService {
 	private LeagueRepository leagueRepository;
 
 	@Autowired
+<<<<<<< HEAD
 	private PlayerLeagueRepository playersInLeagueRespository;
+=======
+	private PlayersInLeagueRepository playersInLeagueRepository;
+>>>>>>> bf341f89a56ff883f6f8bc3693fb994ea602156d
 
 	/*@Autowired
 	private LeaguesAPlayHasJoinedRespository leaguesPlayerHasJoinedRepository;*/
@@ -54,8 +58,12 @@ public class LeagueService {
 	}
 	
 	public Set<String> getPlayersInLeague(String leagueid) throws LeagueValidationException {
+<<<<<<< HEAD
 //		return playersInLeagueRespository.findOne(leagueid).getPlayers();
 		return null;
+=======
+		return playersInLeagueRepository.findOne(leagueid).getPlayers();
+>>>>>>> bf341f89a56ff883f6f8bc3693fb994ea602156d
 		
 	}
 
@@ -98,8 +106,13 @@ public class LeagueService {
 	protected void addPlayerToLeague(League league, String playerId)
 	{
 //		PlayerResponse playerResponse = getPlayer(playerId);
+<<<<<<< HEAD
 		/*playersInLeagueRespository.addPlayerToLeague(playerId, league.getId());
 		leaguesPlayerHasJoinedRepository.addPlayerToLeague(league, playerId);*/
+=======
+		playersInLeagueRepository.addPlayerToLeague(playerId, league.getId());
+		leaguesPlayerHasJoinedRepository.addPlayerToLeague(league, playerId);
+>>>>>>> bf341f89a56ff883f6f8bc3693fb994ea602156d
 	}
 
 	public League getLeagueById(String leagueId) {
@@ -123,15 +136,20 @@ public class LeagueService {
 			throw new LeagueValidationException(LeagueExceptions.LEAGUE_NOT_FOUND);
 		
 //		PlayerResponse playerResponse = getPlayer(playerId);
+<<<<<<< HEAD
 		/*playersInLeagueRespository.removePlayerFromLeague(playerId, league.getId());
 		leaguesPlayerHasJoinedRepository.removePlayerFromLeague(league, playerId);*/
+=======
+		playersInLeagueRepository.delete(league.getId());
+		leaguesPlayerHasJoinedRepository.delete(league.getId());
+>>>>>>> bf341f89a56ff883f6f8bc3693fb994ea602156d
 	}
 
 	/*
 	 * 
 	 * 
 	 */
-	private void validateLeague(League league) throws LeagueValidationException {
+	protected void validateLeague(League league) throws LeagueValidationException {
 		if (league.getLeagueName() == null || league.getLeagueName().equals(""))
 			throw new LeagueValidationException(
 					LeagueExceptions.LEAGUE_NAME_IS_NULL);

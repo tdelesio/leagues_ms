@@ -1,27 +1,6 @@
 package com.makeurpicks.service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.makeurpicks.domain.PlayerWins;
-import com.makeurpicks.domain.ViewPickColumn;
-import com.makeurpicks.game.GameIntegrationService;
-import com.makeurpicks.game.GameView;
-import com.makeurpicks.league.LeagueIntegrationService;
-import com.makeurpicks.league.PlayerView;
-import com.makeurpicks.pick.DoublePickView;
-import com.makeurpicks.pick.PickIntegrationService;
-import com.makeurpicks.pick.PickView;
-import com.makeurpicks.team.TeamIntegrationService;
-
-import rx.Observable;
 
 @Service
 public class LeaderService {

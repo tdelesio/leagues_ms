@@ -30,16 +30,16 @@ public class RedisPicksByWeekRepository implements PicksByWeekRepository {
 		}
 	}
 	
-	public Map<String, Map<String, Map<String, String>>> getWeeksByLeague(String leagueId)
+	public Map<String, Map<String, Map<String, String>>> findWeeksByLeague(String leagueId)
 	{
 		Map<String, Map<String, Map<String, String>>> weekMap = hashOps.get(key, leagueId);
 		return weekMap;
 	}
 	//return a list of players
-	public Map<String, Map<String, String>> getPlayersByWeek(String leagueId, String weekId)
+	public Map<String, Map<String, String>> findPlayersByWeek(String leagueId, String weekId)
 	{
 	//	 Map<String, Map<String, String>> playerMap = hashOps.get(key, weekId);
-		Map<String, Map<String, Map<String, String>>> weeksByLeague = getWeeksByLeague(leagueId);
+		Map<String, Map<String, Map<String, String>>> weeksByLeague = findWeeksByLeague(leagueId);
 		if (weeksByLeague == null || weeksByLeague.isEmpty()) 
 			return Collections.EMPTY_MAP;
 		
@@ -47,18 +47,18 @@ public class RedisPicksByWeekRepository implements PicksByWeekRepository {
 		 return playerMap;
 	}
 	
-	public Map<String, String> getGamesByPlayer(String leagueId, String weekId, String playerId)
+	public Map<String, String> findGamesByPlayer(String leagueId, String weekId, String playerId)
 	{
-		Map<String, Map<String, String>> gamesByPlayer = getPlayersByWeek(leagueId, weekId);
+		Map<String, Map<String, String>> gamesByPlayer = findPlayersByWeek(leagueId, weekId);
 		if (gamesByPlayer == null || gamesByPlayer.isEmpty())
 			return Collections.EMPTY_MAP;
 		Map<String, String> gameMap = gamesByPlayer.get(playerId);
 		return gameMap;
 	}
 	
-	public String getPicksByGame(String leaugeId, String weekId, String playerId, String gameId)
+	public String findPicksByGame(String leaugeId, String weekId, String playerId, String gameId)
 	{
-		Map<String, String> picksByGame = getGamesByPlayer(leaugeId, weekId, playerId); 
+		Map<String, String> picksByGame = findGamesByPlayer(leaugeId, weekId, playerId); 
 		if (picksByGame == null || picksByGame.isEmpty())
 			return "";
 		String pickId  = picksByGame.get(gameId);
@@ -73,7 +73,7 @@ public class RedisPicksByWeekRepository implements PicksByWeekRepository {
 		String pickId = pick.getId();
 		String leagueId = pick.getLeagueId();
 		
-		Map<String, Map<String, Map<String, String>>> weekMap = getWeeksByLeague(leagueId);
+		Map<String, Map<String, Map<String, String>>> weekMap = findWeeksByLeague(leagueId);
 		if (weekMap == null)
 			weekMap = new HashMap<>();
 		
@@ -92,4 +92,5 @@ public class RedisPicksByWeekRepository implements PicksByWeekRepository {
 		hashOps.put(key, leagueId, weekMap);
 		return pick;
 	}
+
 }

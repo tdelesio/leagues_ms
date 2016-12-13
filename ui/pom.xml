@@ -141,7 +141,7 @@
 			<plugin>
 				<groupId>ro.isdc.wro4j</groupId>
 				<artifactId>wro4j-maven-plugin</artifactId>
-				<version>1.7.6</version>
+				<version>1.7.7</version>
 				<executions>
 					<execution>
 						<phase>generate-resources</phase>
