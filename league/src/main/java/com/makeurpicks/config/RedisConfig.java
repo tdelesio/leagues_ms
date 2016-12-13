@@ -1,27 +1,11 @@
 package com.makeurpicks.config;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
-
-import com.makeurpicks.domain.League;
-import com.makeurpicks.domain.LeaguesPlayerJoined;
-import com.makeurpicks.domain.PlayersInLeague;
-import com.makeurpicks.domain.Season;
-import com.makeurpicks.repository.LeagueRepository;
-import com.makeurpicks.repository.SeasonRepository;
-import com.makeurpicks.repository.redis.RedisLeagueRepository;
-import com.makeurpicks.repository.redis.RedisLeaguesPlayerHasJoinedRepository;
-import com.makeurpicks.repository.redis.RedisPlayersInLeagueRespository;
-import com.makeurpicks.repository.redis.RedisSeasonRepository;
 
 @Configuration
 public class RedisConfig {
 
-	@Bean
+	/*@Bean
 	public RedisTemplate<String, League> leagueRedisTemplate(
 			RedisConnectionFactory redisConnectionFactory) {
 		RedisTemplate<String, League> template = new RedisTemplate<String, League>();
@@ -122,6 +106,6 @@ public class RedisConfig {
 //		template.setDefaultSerializer(new StringRedisSerializer());
 		return template;
 	}
-	
+	*/
 	
 }

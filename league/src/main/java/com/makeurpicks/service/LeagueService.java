@@ -9,13 +9,10 @@ import org.springframework.stereotype.Component;
 import com.makeurpicks.domain.League;
 import com.makeurpicks.domain.LeagueName;
 import com.makeurpicks.domain.PlayerLeague;
-import com.makeurpicks.exception.LeagueServerException;
 import com.makeurpicks.exception.LeagueValidationException;
 import com.makeurpicks.exception.LeagueValidationException.LeagueExceptions;
 import com.makeurpicks.repository.LeagueRepository;
-import com.makeurpicks.repository.LeaguesAPlayHasJoinedRespository;
-import com.makeurpicks.repository.PlayersInLeagueRepository;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.makeurpicks.repository.PlayerLeagueRepository;
 
 @Component
 public class LeagueService {
@@ -24,10 +21,10 @@ public class LeagueService {
 	private LeagueRepository leagueRepository;
 
 	@Autowired
-	private PlayersInLeagueRepository playersInLeagueRespository;
+	private PlayerLeagueRepository playersInLeagueRespository;
 
-	@Autowired
-	private LeaguesAPlayHasJoinedRespository leaguesPlayerHasJoinedRepository;
+	/*@Autowired
+	private LeaguesAPlayHasJoinedRespository leaguesPlayerHasJoinedRepository;*/
 	
 	public League createLeague(League league) throws LeagueValidationException {
 		validateLeague(league);
@@ -52,12 +49,13 @@ public class LeagueService {
 	}
 
 	public Set<LeagueName> getLeaguesForPlayer(String playerId) throws LeagueValidationException {
-		return leaguesPlayerHasJoinedRepository.findOne(playerId).getLeauges();
+		return null;
 		
 	}
 	
 	public Set<String> getPlayersInLeague(String leagueid) throws LeagueValidationException {
-		return playersInLeagueRespository.findOne(leagueid).getPlayers();
+//		return playersInLeagueRespository.findOne(leagueid).getPlayers();
+		return null;
 		
 	}
 
@@ -100,8 +98,8 @@ public class LeagueService {
 	protected void addPlayerToLeague(League league, String playerId)
 	{
 //		PlayerResponse playerResponse = getPlayer(playerId);
-		playersInLeagueRespository.addPlayerToLeague(playerId, league.getId());
-		leaguesPlayerHasJoinedRepository.addPlayerToLeague(league, playerId);
+		/*playersInLeagueRespository.addPlayerToLeague(playerId, league.getId());
+		leaguesPlayerHasJoinedRepository.addPlayerToLeague(league, playerId);*/
 	}
 
 	public League getLeagueById(String leagueId) {
@@ -125,8 +123,8 @@ public class LeagueService {
 			throw new LeagueValidationException(LeagueExceptions.LEAGUE_NOT_FOUND);
 		
 //		PlayerResponse playerResponse = getPlayer(playerId);
-		playersInLeagueRespository.removePlayerFromLeague(playerId, league.getId());
-		leaguesPlayerHasJoinedRepository.removePlayerFromLeague(league, playerId);
+		/*playersInLeagueRespository.removePlayerFromLeague(playerId, league.getId());
+		leaguesPlayerHasJoinedRepository.removePlayerFromLeague(league, playerId);*/
 	}
 
 	/*

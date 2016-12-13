@@ -2,9 +2,6 @@ package com.makeurpicks.domain;
 
 
 public class League extends AbstractModel {
-
-	
-	
 	private String leagueName;
 	private int paidFor=0;
 	private boolean money=false;
