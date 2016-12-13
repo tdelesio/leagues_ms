@@ -7,6 +7,6 @@ import com.makeurpicks.domain.PlayersInLeague;
 public interface PlayersInLeagueRepository extends CrudRepository<PlayersInLeague, String>
 {
 	public void addPlayerToLeague(String playerId, String leagueId);
-	public void removePlayerFromLeague(String playerId, String leagueId);
+	public void delete(String leagueId);
 }
  

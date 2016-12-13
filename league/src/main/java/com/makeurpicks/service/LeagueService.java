@@ -24,7 +24,7 @@ public class LeagueService {
 	private LeagueRepository leagueRepository;
 
 	@Autowired
-	private PlayersInLeagueRepository playersInLeagueRespository;
+	private PlayersInLeagueRepository playersInLeagueRepository;
 
 	@Autowired
 	private LeaguesAPlayHasJoinedRespository leaguesPlayerHasJoinedRepository;
@@ -57,7 +57,7 @@ public class LeagueService {
 	}
 	
 	public Set<String> getPlayersInLeague(String leagueid) throws LeagueValidationException {
-		return playersInLeagueRespository.findOne(leagueid).getPlayers();
+		return playersInLeagueRepository.findOne(leagueid).getPlayers();
 		
 	}
 
@@ -100,7 +100,7 @@ public class LeagueService {
 	protected void addPlayerToLeague(League league, String playerId)
 	{
 //		PlayerResponse playerResponse = getPlayer(playerId);
-		playersInLeagueRespository.addPlayerToLeague(playerId, league.getId());
+		playersInLeagueRepository.addPlayerToLeague(playerId, league.getId());
 		leaguesPlayerHasJoinedRepository.addPlayerToLeague(league, playerId);
 	}
 
@@ -125,15 +125,15 @@ public class LeagueService {
 			throw new LeagueValidationException(LeagueExceptions.LEAGUE_NOT_FOUND);
 		
 //		PlayerResponse playerResponse = getPlayer(playerId);
-		playersInLeagueRespository.removePlayerFromLeague(playerId, league.getId());
-		leaguesPlayerHasJoinedRepository.removePlayerFromLeague(league, playerId);
+		playersInLeagueRepository.delete(league.getId());
+		leaguesPlayerHasJoinedRepository.delete(league.getId());
 	}
 
 	/*
 	 * 
 	 * 
 	 */
-	private void validateLeague(League league) throws LeagueValidationException {
+	protected void validateLeague(League league) throws LeagueValidationException {
 		if (league.getLeagueName() == null || league.getLeagueName().equals(""))
 			throw new LeagueValidationException(
 					LeagueExceptions.LEAGUE_NAME_IS_NULL);

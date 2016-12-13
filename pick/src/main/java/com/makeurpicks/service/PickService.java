@@ -89,7 +89,7 @@ public class PickService {
 	
 	public Map<String, Pick>getPicksByWeekAndPlayer(String leagueId, String weekId, String playerId)
 	{
-		Map<String, Map<String, String>> map = picksByWeekRepository.getPlayersByWeek(leagueId, weekId);
+		Map<String, Map<String, String>> map = picksByWeekRepository.findPlayersByWeek(leagueId, weekId);
 		return getPicksByWeekAndPlayer(map, weekId, playerId);
 	}
 	
@@ -127,7 +127,7 @@ public class PickService {
 	
 	public Map<String, Map<String, Pick>>getPicksByWeek(String leagueId, String weekId)
 	{
-		Map<String, Map<String, String>> map = picksByWeekRepository.getPlayersByWeek(leagueId, weekId);
+		Map<String, Map<String, String>> map = picksByWeekRepository.findPlayersByWeek(leagueId, weekId);
 		if (map==null)
 			return Collections.emptyMap();
 		

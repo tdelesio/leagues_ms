@@ -44,7 +44,7 @@ public class RedisLeaguesPlayerHasJoinedRepository implements LeaguesAPlayHasJoi
 	}
 
 	@Override
-	public void removePlayerFromLeague(League league, String playerId) {
+	public void delete(League league, String playerId) {
 		LeaguesPlayerJoined leaguesPlayerJoined = findOne(playerId);
 		if (leaguesPlayerJoined == null)
 			return;

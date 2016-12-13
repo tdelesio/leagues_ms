@@ -23,28 +23,28 @@ public class LeaderController {
 	@Autowired 
 	private LeaderService leaderService;
 	
-	@RequestMapping(value="/week/leagueid/{leagueid}/weekid/{weekid}")
-	public @ResponseBody DeferredResult<List<List<ViewPickColumn>>> getPlayersPlusWinsInLeague(@PathVariable String leagueid, @PathVariable String weekid)
-	{
-		DeferredResult<List<List<ViewPickColumn>>> result = new DeferredResult<>();
-		leaderService.getPlayersPlusWinsInLeague(leagueid, weekid).subscribe(new Observer<List<List<ViewPickColumn>>>() {
-            @Override
-            public void onCompleted() {
-            }
-
-            @Override
-            public void onError(Throwable throwable) {
-            }
-
-            @Override
-            public void onNext(List<List<ViewPickColumn>> weekStats) {
-                result.setResult(weekStats);
-            }
-        });
-        
-		return result;
-	
-	}
+//	@RequestMapping(value="/week/leagueid/{leagueid}/weekid/{weekid}")
+//	public @ResponseBody DeferredResult<List<List<ViewPickColumn>>> getPlayersPlusWinsInLeague(@PathVariable String leagueid, @PathVariable String weekid)
+//	{
+//		DeferredResult<List<List<ViewPickColumn>>> result = new DeferredResult<>();
+//		leaderService.getPlayersPlusWinsInLeague(leagueid, weekid).subscribe(new Observer<List<List<ViewPickColumn>>>() {
+//            @Override
+//            public void onCompleted() {
+//            }
+//
+//            @Override
+//            public void onError(Throwable throwable) {
+//            }
+//
+//            @Override
+//            public void onNext(List<List<ViewPickColumn>> weekStats) {
+//                result.setResult(weekStats);
+//            }
+//        });
+//        
+//		return result;
+//	
+//	}
 	
 	@RequestMapping(value="/winsummary/seasonid/{seasonid}")
 	public @ResponseBody List<WinSummary> getWinSummary(@PathVariable String seasonid)

@@ -12,10 +12,10 @@ import com.makeurpicks.domain.Pick;
 public interface PicksByWeekRepository extends Repository<Map<String, Map<String, Map<String, String>>>, String> {
 //extends CrudRepository<Map<String, Map<String, String>>, String>{
 
-	public Map<String, Map<String, Map<String, String>>> getWeeksByLeague(String leagueId);
-	public Map<String, Map<String, String>> getPlayersByWeek(String leagueId, String weekId);
-	public Map<String, String> getGamesByPlayer(String leagueId, String weekId, String playerId);
-	public String getPicksByGame(String leagueId, String weekId, String playerId, String gameId);
+	public Map<String, Map<String, Map<String, String>>> findWeeksByLeague(String leagueId);
+	public Map<String, Map<String, String>> findPlayersByWeek(String leagueId, String weekId);
+	public Map<String, String> findGamesByPlayer(String leagueId, String weekId, String playerId);
+	public String findPicksByGame(String leagueId, String weekId, String playerId, String gameId);
 	public Pick createPick(Pick pick);
 	public void deleteAll();
 	

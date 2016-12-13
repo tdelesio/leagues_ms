@@ -346,7 +346,7 @@ public class PickServiceTest {
 	
 	
 	@Test
-	public void getPicksByWeekAndPlayerTest_mapFromDSNull_returnEmptyMap() {
+	public void findPicksByWeekAndPlayerTest_mapFromDSNull_returnEmptyMap() {
 		
 		String leagueId = UUID.randomUUID().toString();
 		String weekId = UUID.randomUUID().toString();
@@ -357,7 +357,7 @@ public class PickServiceTest {
 		pick.setWeekId(weekId);
 		pick.setLeagueId(leagueId);
 		
-		when(picksByWeekRepositoryMock.getPlayersByWeek(leagueId, weekId)).thenReturn(null);
+		when(picksByWeekRepositoryMock.findPlayersByWeek(leagueId, weekId)).thenReturn(null);
 		
 		Map<String, Pick> map = service.getPicksByWeekAndPlayer(leagueId, weekId, playerId);
 		
@@ -369,7 +369,7 @@ public class PickServiceTest {
 	// **************************
 	
 	@Test
-	public void getPicksByWeekAndPlayerTest_noPicksByPlayer_returnEmptyMap() {
+	public void findPicksByWeekAndPlayerTest_noPicksByPlayer_returnEmptyMap() {
 		
 		String leagueId = UUID.randomUUID().toString();
 		String weekId = UUID.randomUUID().toString();
@@ -389,7 +389,7 @@ public class PickServiceTest {
 		
 		gamesMap.put(gameId, pickId);
 		
-		when(picksByWeekRepositoryMock.getPlayersByWeek(leagueId, weekId)).thenReturn(playersByWeekMap);
+		when(picksByWeekRepositoryMock.findPlayersByWeek(leagueId, weekId)).thenReturn(playersByWeekMap);
 		when(pickRepositoryMock.findOne(pickId)).thenReturn(pick);
 		
 		Map<String, Pick> map = service.getPicksByWeekAndPlayer(leagueId, weekId, playerId);
@@ -398,7 +398,7 @@ public class PickServiceTest {
 
 		playersByWeekMap.put(secondPlayerId, gamesMap);
 		
-		when(picksByWeekRepositoryMock.getPlayersByWeek(leagueId, weekId)).thenReturn(playersByWeekMap);
+		when(picksByWeekRepositoryMock.findPlayersByWeek(leagueId, weekId)).thenReturn(playersByWeekMap);
 		when(pickRepositoryMock.findOne(pickId)).thenReturn(pick);
 		
 		map = service.getPicksByWeekAndPlayer(leagueId, weekId, playerId);
@@ -408,7 +408,7 @@ public class PickServiceTest {
 	}
 	
 	@Test
-	public void getPicksByWeekAndPlayerTest_foundPicks_pass() {
+	public void findPicksByWeekAndPlayerTest_foundPicks_pass() {
 		
 		String leagueId = UUID.randomUUID().toString();
 		String weekId = UUID.randomUUID().toString();
@@ -429,7 +429,7 @@ public class PickServiceTest {
 		
 		playersByWeekMap.put(playerId, gamesMap);
 		
-		when(picksByWeekRepositoryMock.getPlayersByWeek(leagueId, weekId)).thenReturn(playersByWeekMap);
+		when(picksByWeekRepositoryMock.findPlayersByWeek(leagueId, weekId)).thenReturn(playersByWeekMap);
 		when(pickRepositoryMock.findOne(pickId)).thenReturn(pick);
 		
 		Map<String, Pick> map = service.getPicksByWeekAndPlayer(leagueId, weekId, playerId);
@@ -455,7 +455,7 @@ public class PickServiceTest {
 		pick.setWeekId(weekId);
 		pick.setLeagueId(leagueId);
 		
-		when(picksByWeekRepositoryMock.getPlayersByWeek(leagueId, weekId)).thenReturn(null);
+		when(picksByWeekRepositoryMock.findPlayersByWeek(leagueId, weekId)).thenReturn(null);
 		
 		Map<String, Pick> map = service.getOtherPicksByWeekAndPlayer(leagueId, weekId, playerId);
 		
@@ -484,7 +484,7 @@ public class PickServiceTest {
 		
 		playersByWeekMap.put(playerId, gamesMap);
 		
-		when(picksByWeekRepositoryMock.getPlayersByWeek(leagueId, weekId)).thenReturn(playersByWeekMap);
+		when(picksByWeekRepositoryMock.findPlayersByWeek(leagueId, weekId)).thenReturn(playersByWeekMap);
 		when(pickRepositoryMock.findOne(pickId)).thenReturn(pick);
 		
 		Map<String, Pick> map = service.getOtherPicksByWeekAndPlayer(leagueId, weekId, playerId);
@@ -494,7 +494,7 @@ public class PickServiceTest {
 
 	
 	@Test
-	public void getPicksByWeekTest_mapFromDSisNullorEmpty_returnEmptyMap() {
+	public void findPicksByWeekTest_mapFromDSisNullorEmpty_returnEmptyMap() {
 		String leagueId = UUID.randomUUID().toString();
 		String weekId = UUID.randomUUID().toString();
 		String playerId = UUID.randomUUID().toString();
@@ -504,20 +504,20 @@ public class PickServiceTest {
 		pick.setWeekId(weekId);
 		pick.setLeagueId(leagueId);
 		
-		when(picksByWeekRepositoryMock.getPlayersByWeek(leagueId, weekId)).thenReturn(null);
+		when(picksByWeekRepositoryMock.findPlayersByWeek(leagueId, weekId)).thenReturn(null);
 		Map<String, Map<String, Pick>> map = service.getPicksByWeek(leagueId, weekId);
 		
 		assertTrue(map.size() == 0);
 		
 		Map<String, Map<String, String>> playersByWeekMap = new HashMap<>();
-		when(picksByWeekRepositoryMock.getPlayersByWeek(leagueId, weekId)).thenReturn(playersByWeekMap);
+		when(picksByWeekRepositoryMock.findPlayersByWeek(leagueId, weekId)).thenReturn(playersByWeekMap);
 		map = service.getPicksByWeek(leagueId, weekId);
 		
 		assertTrue(map.size() == 0);
 	}
 
 	@Test
-	public void getPicksByWeekTest_foundPicks_pass() {
+	public void findPicksByWeekTest_foundPicks_pass() {
 		String leagueId = UUID.randomUUID().toString();
 		String weekId = UUID.randomUUID().toString();
 		String gameId = UUID.randomUUID().toString();
@@ -534,7 +534,7 @@ public class PickServiceTest {
 		gamesMap.put(gameId, pickId);
 		
 		playersByWeekMap.put(playerId, gamesMap);
-		when(picksByWeekRepositoryMock.getPlayersByWeek(leagueId, weekId)).thenReturn(playersByWeekMap);
+		when(picksByWeekRepositoryMock.findPlayersByWeek(leagueId, weekId)).thenReturn(playersByWeekMap);
 		Map<String, Map<String, Pick>> map = service.getPicksByWeek(leagueId, weekId);
 		
 		assertTrue(map.size() > 0);

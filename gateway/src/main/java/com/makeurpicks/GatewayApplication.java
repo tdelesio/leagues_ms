@@ -16,7 +16,6 @@ import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -28,6 +27,7 @@ import org.springframework.security.web.header.HeaderWriterFilter;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.filter.RequestContextFilter;
 import org.springframework.web.util.WebUtils;
+
 
 @EnableZuulProxy
 @EnableDiscoveryClient

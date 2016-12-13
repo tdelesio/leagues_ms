@@ -3,12 +3,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>zuul-server</artifactId>
+	<groupId>com.makeurpicks</groupId>
+	<version>0.0.1</version>
 	<packaging>jar</packaging>
-
-	<name>edge-server</name>
-	<description>Demo project for Spring Boot</description>
-
+	<artifactId>leader</artifactId>
+	
+	<name>leader</name>
+	
 	<parent>
 		<groupId>com.makeurpicks</groupId>
 		<artifactId>build</artifactId>
@@ -20,8 +21,9 @@
 		<java.version>1.8</java.version>
 	</properties>
 
-		<dependencies>
-
+	<dependencies>
+	
+		<!-- turbine/hystix -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-hystrix</artifactId>
@@ -30,32 +32,28 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-netflix-hystrix-amqp</artifactId>
 		</dependency>
-
+		
 		<!-- eureka/feign -->
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-feign</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-eureka</artifactId>
 		</dependency>
-
+		
 		<!-- production -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
-
-		<!-- datasource -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-redis</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-rest</artifactId>
-		</dependency>
+		
+ 		<!-- datasource --> 
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.springframework.boot</groupId> -->
+<!-- 			<artifactId>spring-boot-starter-redis</artifactId> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.springframework.boot</groupId> -->
+<!-- 			<artifactId>spring-boot-starter-data-rest</artifactId> -->
+<!-- 		</dependency> -->
 		
 		<!-- test -->
 		<dependency>
@@ -63,21 +61,21 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
-
+		
+		
 		<!-- config -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-config</artifactId>
 		</dependency>
-
+		
 		<!-- web -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
-
+		
+		
 		<!-- cloud -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -87,72 +85,42 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter</artifactId>
 		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-zuul</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-oauth2</artifactId>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-security</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 		</dependency>
 		
+		
+		<!-- sercurity -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security.oauth</groupId>
+			<artifactId>spring-security-oauth2</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-jwt</artifactId>
+		</dependency>
+		
+		<!-- java8 time -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.datatype</groupId>
 			<artifactId>jackson-datatype-jsr310</artifactId>
 		</dependency>
+
 	</dependencies>
 
-
-
 	<build>
-		<resources>
-			<resource>
-				<directory>${project.basedir}/src/main/resources</directory>
-			</resource>
-			<resource>
-				<directory>${project.build.directory}/generated-resources</directory>
-			</resource>
-		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			<plugin>
-				<artifactId>maven-resources-plugin</artifactId>
-				<executions>
-					<execution>
-						<!-- Serves *only* to filter the wro.xml so it can get an absolute 
-							path for the project -->
-						<id>copy-resources</id>
-						<phase>validate</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${basedir}/target/wro</outputDirectory>
-							<resources>
-								<resource>
-									<directory>src/main/wro</directory>
-									<filtering>true</filtering>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
 
+	
 </project>
