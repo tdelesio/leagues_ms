@@ -44,7 +44,7 @@ public class LeagueController {
 		}
 	 
 	 @RequestMapping(method=RequestMethod.GET, value="/{id}")
-	 public @ResponseBody League getLeagueById(@PathVariable String id)
+	 public @ResponseBody League getLeagueById(@PathVariable int id)
 	 {
 		return leagueService.getLeagueById(id);
 	 }
@@ -106,14 +106,14 @@ public class LeagueController {
 	 }
 	
 	@RequestMapping(method=RequestMethod.GET, value="/player/leagueid/{leagueid}")
-	 public @ResponseBody Set<String> getPlayersInLeague(@PathVariable String leagueid)
+	 public @ResponseBody Set<String> getPlayersInLeague(@PathVariable int leagueid)
 	 {
 		return leagueService.getPlayersInLeague(leagueid);
 	 }
 	
 	@RequestMapping(method=RequestMethod.DELETE, value="/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public @ResponseBody boolean deleteLeague(@PathVariable String id)
+	public @ResponseBody boolean deleteLeague(@PathVariable int id)
 	{
 		leagueService.deleteLeague(id);
 		return true;

@@ -68,7 +68,7 @@ public class LeagueServiceTest {
 		expectedEx.expect(RuntimeException.class);
 	    expectedEx.expectMessage(LeagueExceptions.LEAGUE_NAME_IS_NULL.toString());
 	    
-		String leagueId = UUID.randomUUID().toString();
+		int leagueId = UUID.randomUUID().hashCode();
 		
 		League league = new LeagueBuilder(leagueId)
 			.build();
@@ -83,7 +83,7 @@ public class LeagueServiceTest {
 		expectedEx.expect(RuntimeException.class);
 	    expectedEx.expectMessage(LeagueExceptions.LEAGUE_NAME_IN_USE.toString());
 	    
-		String leagueId = UUID.randomUUID().toString();
+		int leagueId = UUID.randomUUID().hashCode();
 		
 		League league = new LeagueBuilder(leagueId)
 			.withName("pickem")
@@ -101,7 +101,7 @@ public class LeagueServiceTest {
 		expectedEx.expect(RuntimeException.class);
 	    expectedEx.expectMessage(LeagueExceptions.SEASON_ID_IS_NULL.toString());
 	    
-		String leagueId = UUID.randomUUID().toString();
+		int leagueId = UUID.randomUUID().hashCode();
 		
 		League league = new LeagueBuilder(leagueId)
 			.withName("pickem")
@@ -119,7 +119,7 @@ public class LeagueServiceTest {
 		expectedEx.expect(RuntimeException.class);
 	    expectedEx.expectMessage(LeagueExceptions.ADMIN_NOT_FOUND.toString());
 	    
-		String leagueId = UUID.randomUUID().toString();
+		int leagueId = UUID.randomUUID().hashCode();
 		String seasonId = UUID.randomUUID().toString();
 		
 		League league = new LeagueBuilder(leagueId)
@@ -139,7 +139,7 @@ public class LeagueServiceTest {
 		expectedEx.expect(RuntimeException.class);
 	    expectedEx.expectMessage(LeagueExceptions.ADMIN_NOT_FOUND.toString());
 	    
-		String leagueId = UUID.randomUUID().toString();
+		int leagueId = UUID.randomUUID().hashCode();
 		String seasonId = UUID.randomUUID().toString();
 		
 		League league = new LeagueBuilder(leagueId)
@@ -157,7 +157,7 @@ public class LeagueServiceTest {
 	public void testCreateLeague() {
 		
 		String player1Id = UUID.randomUUID().toString();
-		String leagueId = UUID.randomUUID().toString();
+		int leagueId = UUID.randomUUID().hashCode();
 		String seasonId = UUID.randomUUID().toString();
 //		createPlayerMock(player1Id);
 		

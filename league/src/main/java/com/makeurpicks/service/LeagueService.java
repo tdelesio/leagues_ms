@@ -1,6 +1,6 @@
 package com.makeurpicks.service;
 
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -31,10 +31,6 @@ public class LeagueService {
 	public League createLeague(League league) throws LeagueValidationException {
 		validateLeague(league);
 
-		
-		String id = UUID.randomUUID().toString();
-		
-		league.setId(id);
 		leagueRepository.save(league);
 
 		addPlayerToLeague(league, league.getAdminId());
@@ -51,18 +47,17 @@ public class LeagueService {
 	}
 
 	public Set<LeagueName> getLeaguesForPlayer(String playerId) throws LeagueValidationException {
-		return HelperUtils.getLeagueNameFromLeagues(playerLeagueRepository.findLeaguesForPlayer(playerId));
+		return HelperUtils.getLeagueNameFromLeagues(playerLeagueRepository.findLeaguesByPlayerId(playerId));
 	}
 	
-	public Set<String> getPlayersInLeague(String leagueid) throws LeagueValidationException {
-//		return playerLeagueRepository.findOne(leagueid).getPlayers();
-		return null;
+	public Set<String> getPlayersInLeague(int leagueid) throws LeagueValidationException {
+		 return new HashSet<String> (leagueRepository.findPlayerIdsById(leagueid));
 		
 	}
 
 	public void joinLeague(PlayerLeague playerLeague)
 	{
-		if (playerLeague.getLeague() == null)
+		/*if (playerLeague.getLeague() == null)
 		{
 			if (playerLeague.getLeagueName()==null)
 			{
@@ -78,9 +73,9 @@ public class LeagueService {
 		}
 		
 //		joinLeague(playerLeague.getLeague().getId(), playerLeague.getPlayerId(), playerLeague.getPassword());
-	}
+*/	}
 
-	protected void joinLeague(String leagueId, String playerId, String password) throws LeagueValidationException {
+	protected void joinLeague(int leagueId, String playerId, String password) throws LeagueValidationException {
 		
 //		if (!isValidPlayer(playerId))
 //			throw new LeagueValidationException(LeagueExceptions.PLAYER_NOT_FOUND);
@@ -102,7 +97,7 @@ public class LeagueService {
 		leagueRepository.addPlayerToLeague(league, playerId);*/
 	}
 
-	public League getLeagueById(String leagueId) {
+	public League getLeagueById(int leagueId) {
 		return leagueRepository.findOne(leagueId);
 	}
 
@@ -117,7 +112,7 @@ public class LeagueService {
 		return null;
 	}
 
-	public void removePlayerFromLeagye(String leagueId, String playerId) {
+	public void removePlayerFromLeagye(int leagueId, String playerId) {
 		League league = leagueRepository.findOne(leagueId);
 		if (league == null)
 			throw new LeagueValidationException(LeagueExceptions.LEAGUE_NOT_FOUND);
@@ -150,7 +145,7 @@ public class LeagueService {
 					LeagueExceptions.ADMIN_NOT_FOUND);
 	}
 
-	private boolean isLeagueValid(String leagueId) {
+	private boolean isLeagueValid(int leagueId) {
 		League league = leagueRepository.findOne(leagueId);
 		if (league == null)
 			return false;
@@ -198,7 +193,7 @@ public class LeagueService {
 //		this.playerClient = playerClient;
 //	}
 
-	public void deleteLeague(String leagueId)
+	public void deleteLeague(int leagueId)
 	{
 		Set<String> playerIds = getPlayersInLeague(leagueId);
 		for (String playerId:playerIds)
