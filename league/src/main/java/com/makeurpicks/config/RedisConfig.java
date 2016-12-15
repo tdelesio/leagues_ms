@@ -16,7 +16,7 @@ public class RedisConfig {
 		
 		return template;
 	}
-	
+/*	
 	@Bean
 	public RedisTemplate<String, LeaguesPlayerJoined> leaguesPlayerJoinedRedisTemplate(
 			RedisConnectionFactory redisConnectionFactory) {

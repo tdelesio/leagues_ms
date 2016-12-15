@@ -1,8 +1,17 @@
 package com.makeurpicks.domain;
 
+import java.util.Collection;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+
+@Entity
 public class PlayerLeague  {
+	@Id
 	private String id;
-	private String leagueId;
+	@ManyToMany(mappedBy = "playersLeague")
+	private  Collection<League> league;
 	private String leagueName;
 	private String playerId;
 	private String password;
@@ -13,11 +22,11 @@ public class PlayerLeague  {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public String getLeagueId() {
-		return leagueId;
+	public Collection<League> getLeague() {
+		return league;
 	}
-	public void setLeagueId(String leagueId) {
-		this.leagueId = leagueId;
+	public void setLeague(Collection<League> league) {
+		this.league = league;
 	}
 	public String getPlayerId() {
 		return playerId;

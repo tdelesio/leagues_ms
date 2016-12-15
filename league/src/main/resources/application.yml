@@ -1,7 +1,19 @@
 server:
   port: 8081
 #  context-path: /leagues
-
+spring:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+  datasource:
+    url: jdbc:mysql://192.168.99.100:3304/league
+    username: root
+    password: admin123
+    driver-class-name: com.mysql.jdbc.Driver
 security:
   oauth2:
     resource:

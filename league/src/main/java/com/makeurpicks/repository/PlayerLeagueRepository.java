@@ -10,9 +10,9 @@ import com.makeurpicks.domain.PlayerLeague;
 
 public interface PlayerLeagueRepository extends CrudRepository<PlayerLeague, String> {
 
-	@Query(value="select League from PlayerLeague pl inner join League l on pl.leagueId = l.id where pl.playerId = ?")
+	@Query(value="select pl.league from PlayerLeague pl  join pl.league  where pl.playerId = ?")
 	public List<League> findLeaguesForPlayer(String playerId);
 	
-	@Query(value="select id from PlayerLeague pl where pl.leagueId = ?")
+	@Query(value="select id from PlayerLeague pl where pl.league.id = ?")
 	public List<String> findPlayersForLeague(String playerId);
 }

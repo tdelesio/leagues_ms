@@ -102,7 +102,7 @@ public class LeagueController {
 	@RequestMapping(method=RequestMethod.DELETE, value="/player")
 	 public void removePlayerFromLeagye(@RequestBody PlayerLeague playerLeague)
 	 {
-		leagueService.removePlayerFromLeagye(playerLeague.getLeagueId(), playerLeague.getPlayerId());
+//		leagueService.removePlayerFromLeagye(playerLeague.getLeague().getId(), playerLeague.getPlayerId());
 	 }
 	
 	@RequestMapping(method=RequestMethod.GET, value="/player/leagueid/{leagueid}")

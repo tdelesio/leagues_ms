@@ -1,5 +1,6 @@
 package com.makeurpicks.service;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -13,6 +14,7 @@ import com.makeurpicks.exception.LeagueValidationException;
 import com.makeurpicks.exception.LeagueValidationException.LeagueExceptions;
 import com.makeurpicks.repository.LeagueRepository;
 import com.makeurpicks.repository.PlayerLeagueRepository;
+import com.makeurpicks.utils.HelperUtils;
 
 @Component
 public class LeagueService {
@@ -20,9 +22,11 @@ public class LeagueService {
 	@Autowired
 	private LeagueRepository leagueRepository;
 
+	@Autowired
+	private PlayerLeagueRepository playerLeagueRepository;
 
 	/*@Autowired
-	private LeaguesAPlayHasJoinedRespository leaguesPlayerHasJoinedRepository;*/
+	private LeagueRepository leagueRepository;*/
 	
 	public League createLeague(League league) throws LeagueValidationException {
 		validateLeague(league);
@@ -47,19 +51,18 @@ public class LeagueService {
 	}
 
 	public Set<LeagueName> getLeaguesForPlayer(String playerId) throws LeagueValidationException {
-		return null;
-		
+		return HelperUtils.getLeagueNameFromLeagues(playerLeagueRepository.findLeaguesForPlayer(playerId));
 	}
 	
 	public Set<String> getPlayersInLeague(String leagueid) throws LeagueValidationException {
-//		return playersInLeagueRespository.findOne(leagueid).getPlayers();
+//		return playerLeagueRepository.findOne(leagueid).getPlayers();
 		return null;
 		
 	}
 
 	public void joinLeague(PlayerLeague playerLeague)
 	{
-		if (playerLeague.getLeagueId() == null)
+		if (playerLeague.getLeague() == null)
 		{
 			if (playerLeague.getLeagueName()==null)
 			{
@@ -70,11 +73,11 @@ public class LeagueService {
 				League league = getLeagueByName(playerLeague.getLeagueName());
 				if (league == null)
 					throw new LeagueValidationException(LeagueExceptions.LEAGUE_NOT_FOUND);
-				playerLeague.setLeagueId(league.getId());
+//				playerLeague.setLeague(league);
 			}
 		}
 		
-		joinLeague(playerLeague.getLeagueId(), playerLeague.getPlayerId(), playerLeague.getPassword());
+//		joinLeague(playerLeague.getLeague().getId(), playerLeague.getPlayerId(), playerLeague.getPassword());
 	}
 
 	protected void joinLeague(String leagueId, String playerId, String password) throws LeagueValidationException {
@@ -95,9 +98,8 @@ public class LeagueService {
 	
 	protected void addPlayerToLeague(League league, String playerId)
 	{
-//		PlayerResponse playerResponse = getPlayer(playerId);
-		/*playersInLeagueRespository.addPlayerToLeague(playerId, league.getId());
-		leaguesPlayerHasJoinedRepository.addPlayerToLeague(league, playerId);*/
+		/*playerLeagueRepository.addPlayerToLeague(playerId, league.getId());
+		leagueRepository.addPlayerToLeague(league, playerId);*/
 	}
 
 	public League getLeagueById(String leagueId) {
@@ -120,9 +122,8 @@ public class LeagueService {
 		if (league == null)
 			throw new LeagueValidationException(LeagueExceptions.LEAGUE_NOT_FOUND);
 		
-//		PlayerResponse playerResponse = getPlayer(playerId);
-		/*playersInLeagueRespository.removePlayerFromLeague(playerId, league.getId());
-		leaguesPlayerHasJoinedRepository.removePlayerFromLeague(league, playerId);*/
+		/*playerLeagueRepository.removePlayerFromLeague(playerId, league.getId());
+		leagueRepository.removePlayerFromLeague(league, playerId);*/
 	}
 
 	/*
