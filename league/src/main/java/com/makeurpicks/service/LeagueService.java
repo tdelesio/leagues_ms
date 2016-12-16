@@ -1,6 +1,7 @@
 package com.makeurpicks.service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -25,16 +26,12 @@ public class LeagueService {
 	@Autowired
 	private PlayerLeagueRepository playerLeagueRepository;
 
-	/*@Autowired
-	private LeagueRepository leagueRepository;*/
-	
 	public League createLeague(League league) throws LeagueValidationException {
 		validateLeague(league);
-
+		/*String id = UUID.randomUUID().toString();
+		league.set(id);*/
 		leagueRepository.save(league);
-
 		addPlayerToLeague(league, league.getAdminId());
-		
 		return league;
 	}
 
@@ -47,17 +44,18 @@ public class LeagueService {
 	}
 
 	public Set<LeagueName> getLeaguesForPlayer(String playerId) throws LeagueValidationException {
-		return HelperUtils.getLeagueNameFromLeagues(playerLeagueRepository.findLeaguesByPlayerId(playerId));
+		List<League> leagues = leagueRepository.findAll(playerLeagueRepository.findLeagueIdsByPlayerId(playerId));
+		return HelperUtils.getLeagueNameFromLeagues(leagues);
 	}
 	
-	public Set<String> getPlayersInLeague(int leagueid) throws LeagueValidationException {
-		 return new HashSet<String> (leagueRepository.findPlayerIdsById(leagueid));
+	public Set<String> getPlayersInLeague(String leagueid) throws LeagueValidationException {
+		 return new HashSet<String> (playerLeagueRepository.findPlayerIdsByLeagueId(leagueid));
 		
 	}
 
 	public void joinLeague(PlayerLeague playerLeague)
 	{
-		/*if (playerLeague.getLeague() == null)
+		if (playerLeague.getLeagueId() == null)
 		{
 			if (playerLeague.getLeagueName()==null)
 			{
@@ -68,40 +66,58 @@ public class LeagueService {
 				League league = getLeagueByName(playerLeague.getLeagueName());
 				if (league == null)
 					throw new LeagueValidationException(LeagueExceptions.LEAGUE_NOT_FOUND);
-//				playerLeague.setLeague(league);
+				playerLeague.setLeagueId(league.getId());
 			}
 		}
 		
-//		joinLeague(playerLeague.getLeague().getId(), playerLeague.getPlayerId(), playerLeague.getPassword());
-*/	}
+		joinLeague(playerLeague.getLeagueId(), playerLeague.getPlayerId(), playerLeague.getPassword());
+	
+	}
 
-	protected void joinLeague(int leagueId, String playerId, String password) throws LeagueValidationException {
-		
-//		if (!isValidPlayer(playerId))
-//			throw new LeagueValidationException(LeagueExceptions.PLAYER_NOT_FOUND);
-		
+	protected void joinLeague(Integer leagueId, String playerId, String password) throws LeagueValidationException {
+
+		// if (!isValidPlayer(playerId))
+		// throw new
+		// LeagueValidationException(LeagueExceptions.PLAYER_NOT_FOUND);
+
 		League league = leagueRepository.findOne(leagueId);
 		if (league == null)
 			throw new LeagueValidationException(LeagueExceptions.LEAGUE_NOT_FOUND);
-		
-		if (league.getPassword()!=null&&!"".equals(league.getPassword())&& !league.getPassword().equals(password))
+
+		if (league.getPassword() != null && !"".equals(league.getPassword()) && !league.getPassword().equals(password))
 			throw new LeagueValidationException(LeagueExceptions.INVALID_LEAGUE_PASSWORD);
-		
+
 		addPlayerToLeague(league, playerId);
 
 	}
 	
 	protected void addPlayerToLeague(League league, String playerId)
 	{
-		/*playerLeagueRepository.addPlayerToLeague(playerId, league.getId());
-		leagueRepository.addPlayerToLeague(league, playerId);*/
+		//TODO: need to create playerleague builder
+		PlayerLeague playerLeague = new PlayerLeague();
+		playerLeague.setLeagueId(league.getId());
+		playerLeague.setLeagueName(league.getLeagueName());
+		playerLeague.setPassword(league.getPassword());
+		playerLeague.setPlayerId(playerId);
+		playerLeagueRepository.save(playerLeague);
 	}
 
 	public League getLeagueById(int leagueId) {
 		return leagueRepository.findOne(leagueId);
 	}
+	
+	public League getLeagueById(String leagueId) {
+		Integer id = Integer.valueOf(leagueId);
+		if (id==null)
+			throw new LeagueValidationException(LeagueExceptions.INVALID_LEAGUE_ID);
+		return leagueRepository.findOne(id);
+	}
+	
+	public League getLeagueByName(String leagueName) {
+		return leagueRepository.findByLeagueName(leagueName);
+	}
 
-	public League getLeagueByName(String name) {
+	/*public League getLeagueByName(String name) {
 		Iterable<League> leagues = leagueRepository.findAll();
 		for (League league:leagues)
 		{
@@ -110,17 +126,18 @@ public class LeagueService {
 		}
 		
 		return null;
-	}
+	}*/
 
-	public void removePlayerFromLeagye(int leagueId, String playerId) {
-		League league = leagueRepository.findOne(leagueId);
+	public void removePlayerFromLeague(Integer leagueId, String playerId) {
+		League league = getLeagueById(leagueId);
 		if (league == null)
 			throw new LeagueValidationException(LeagueExceptions.LEAGUE_NOT_FOUND);
+		PlayerLeague playerLeague = playerLeagueRepository.findByLeagueIdAndPlayerId(league.getId(),playerId);
+		if(playerLeague!=null)
+			playerLeagueRepository.delete(playerLeague);
 		
-		/*playerLeagueRepository.removePlayerFromLeague(playerId, league.getId());
-		leagueRepository.removePlayerFromLeague(league, playerId);*/
 	}
-
+	
 	/*
 	 * 
 	 * 
@@ -145,8 +162,8 @@ public class LeagueService {
 					LeagueExceptions.ADMIN_NOT_FOUND);
 	}
 
-	private boolean isLeagueValid(int leagueId) {
-		League league = leagueRepository.findOne(leagueId);
+	private boolean isLeagueValid(String leagueId) {
+		League league = getLeagueById(leagueId);
 		if (league == null)
 			return false;
 		else
@@ -193,14 +210,19 @@ public class LeagueService {
 //		this.playerClient = playerClient;
 //	}
 
-	public void deleteLeague(int leagueId)
+	public void deleteLeague(String leagueId)
 	{
+		Integer id = Integer.valueOf(leagueId);
+		if (id==null)
+			throw new LeagueValidationException(LeagueExceptions.INVALID_LEAGUE_ID);
 		Set<String> playerIds = getPlayersInLeague(leagueId);
 		for (String playerId:playerIds)
 		{
-			try {removePlayerFromLeagye(leagueId, playerId);} catch (Exception e) {e.getMessage();}
+			try {removePlayerFromLeague(id, playerId);} catch (Exception e) {e.getMessage();}
 		}
 		
-		leagueRepository.delete(leagueId);
+		leagueRepository.delete(id);
 	}
+	
+	
 }

@@ -89,9 +89,9 @@ public class LeagueControllerTest {
 				allLeagues.add(league3);
 				
 				when(leagueService.getAllLeagues()).thenReturn(allLeagues);
-				when(leagueService.getLeagueById(league1.getId())).thenReturn(league1);
-				when(leagueService.getLeagueById(league2.getId())).thenReturn(league2);
-				when(leagueService.getLeagueById(league3.getId())).thenReturn(league3);
+				when(leagueService.getLeagueByName(league1.getLeagueName())).thenReturn(league1);
+				when(leagueService.getLeagueByName(league2.getLeagueName())).thenReturn(league2);
+				when(leagueService.getLeagueByName(league3.getLeagueName())).thenReturn(league3);
 				
 	}
 	 

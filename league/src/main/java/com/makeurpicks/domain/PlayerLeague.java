@@ -1,34 +1,31 @@
 package com.makeurpicks.domain;
 
-import java.util.Set;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 
 @Entity
 public class PlayerLeague  {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int id;
-	@ManyToMany(mappedBy = "playersleague")
-	private  Set<League> league;
+	private Integer id;
+	private Integer leagueId;
+	private String leagueName;
 	private String playerId;
 	private String password;
 	
+	public Integer getLeagueId() {
+		return leagueId;
+	}
+	public void setLeagueId(Integer leagueId) {
+		this.leagueId = leagueId;
+	}
 	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
 		this.id = id;
-	}
-	public Set<League> getLeague() {
-		return league;
-	}
-	public void setLeague(Set<League> league) {
-		this.league = league;
 	}
 	public String getPlayerId() {
 		return playerId;
@@ -41,6 +38,12 @@ public class PlayerLeague  {
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public String getLeagueName() {
+		return leagueName;
+	}
+	public void setLeagueName(String leagueName) {
+		this.leagueName = leagueName;
 	}
 	
 	

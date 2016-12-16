@@ -10,7 +10,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5Dialect
   datasource:
-    url: jdbc:mysql://192.168.99.100:3304/league
+    url: jdbc:mysql://localhost:3304/league
     username: root
     password: admin123
     driver-class-name: com.mysql.jdbc.Driver

@@ -1,21 +1,14 @@
 package com.makeurpicks.domain;
 
-import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = "leagueName")})
+@Table
 public class League {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -41,14 +34,7 @@ public class League {
 
 	private String seasonId;
 	private String adminId;
-	@ElementCollection(targetClass=PlayerLeague.class)
-	@ManyToMany( cascade = CascadeType.ALL)
-	@JoinTable(name = "LeaguePlayerBridge", joinColumns = @JoinColumn(name = "league_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "player_id", referencedColumnName = "id"))
-	private Set<PlayerLeague> playersleague  ;
 
-	public Set<PlayerLeague> getPlayersLeague() {
-		return playersleague;
-	}
 
 	public int getId() {
 		return id;
