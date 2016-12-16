@@ -20,48 +20,61 @@ services:
 #    depends_on:
 #      - auth-db
 #      - eureka
-  auth-db:  
+#  auth-db:  
+#    image: mysql:latest
+##    build: mysql/
+#    environment:
+#      - MYSQL_ROOT_PASSWORD=admin123
+#      - MYSQL_USER=dbuser
+#      - MYSQL_PASSWORD=password
+#      - MYSQL_DATABASE=player
+##    volumes:
+##      - mysql-data:/home.scripts  
+##    working_dir: "/home/scripts"
+#    networks:
+#      - myp-network
+#    ports:
+#      - "3306:3306"
+#    expose:
+#      - "3306"
+#  game-db:  
+#    image: mysql:latest
+##    build: mysql/
+#    environment:
+#      - MYSQL_ROOT_PASSWORD=admin123
+#      - MYSQL_USER=dbuser
+#      - MYSQL_PASSWORD=password
+#      - MYSQL_DATABASE=game
+##    volumes:
+##      - mysql-data:/home.scripts  
+##    working_dir: "/home/scripts"
+#    networks:
+#      - myp-network
+#    ports:
+#      - "3305:3306"
+#    expose:
+#      - "3305"    
+  league-db:  
     image: mysql:latest
-    build: mysql/
     environment:
       - MYSQL_ROOT_PASSWORD=admin123
       - MYSQL_USER=dbuser
       - MYSQL_PASSWORD=password
-      - MYSQL_DATABASE=player
-#    volumes:
-#      - mysql-data:/home.scripts  
-#    working_dir: "/home/scripts"
+      - MYSQL_DATABASE=league
     networks:
       - myp-network
     ports:
-      - "3306:3306"
+      - "3304:3306"
     expose:
-      - "3306"
-  game-db:  
-    image: mysql:latest
-    build: mysql/
-    environment:
-      - MYSQL_ROOT_PASSWORD=admin123
-      - MYSQL_USER=dbuser
-      - MYSQL_PASSWORD=password
-      - MYSQL_DATABASE=game
-#    volumes:
-#      - mysql-data:/home.scripts  
-#    working_dir: "/home/scripts"
-    networks:
-      - myp-network
-    ports:
-      - "3305:3306"
-    expose:
-      - "3305"    
-  redis:
-    image: redis
-    networks:
-      - myp-network
-    ports:
-      - "6379:6379"
-    expose:
-      - "6379"
+      - "3304"    
+#  redis:
+#    image: redis
+#    networks:
+#      - myp-network
+#    ports:
+#      - "6379:6379"
+#    expose:
+#      - "6379"
                 
 networks:
   myp-network:
