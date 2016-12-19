@@ -3,7 +3,6 @@ package com.makeurpicks.service;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,12 +19,15 @@ import com.makeurpicks.utils.HelperUtils;
 @Component
 public class LeagueService {
 
-	@Autowired
 	private LeagueRepository leagueRepository;
-
-	@Autowired
 	private PlayerLeagueRepository playerLeagueRepository;
-
+	public LeagueService() {}
+	@Autowired
+	public LeagueService(LeagueRepository leagueRepository,PlayerLeagueRepository playerLeagueRepository) {
+		this.leagueRepository=leagueRepository;
+		this.playerLeagueRepository=playerLeagueRepository;
+		
+	}
 	public League createLeague(League league) throws LeagueValidationException {
 		validateLeague(league);
 		/*String id = UUID.randomUUID().toString();
@@ -37,14 +39,19 @@ public class LeagueService {
 
 	public League updateLeague(League league) throws LeagueValidationException {
 		validateLeague(league);
-
+		League leagueDS = leagueRepository.findOne(league.getId());
+		if (leagueDS == null)
+			throw new LeagueValidationException(LeagueExceptions.LEAGUE_NOT_FOUND);
 		leagueRepository.save(league);
-		
 		return league;
 	}
 
 	public Set<LeagueName> getLeaguesForPlayer(String playerId) throws LeagueValidationException {
-		List<League> leagues = leagueRepository.findAll(playerLeagueRepository.findLeagueIdsByPlayerId(playerId));
+		List<Integer> leagueIds = playerLeagueRepository.findLeagueIdsByPlayerId(playerId);
+		if(leagueIds==null||leagueIds.size()==0) {
+			return new HashSet<LeagueName>();
+		}
+		List<League> leagues = leagueRepository.findAll(leagueIds);
 		return HelperUtils.getLeagueNameFromLeagues(leagues);
 	}
 	
@@ -91,7 +98,7 @@ public class LeagueService {
 
 	}
 	
-	protected void addPlayerToLeague(League league, String playerId)
+	private void addPlayerToLeague(League league, String playerId)
 	{
 		//TODO: need to create playerleague builder
 		PlayerLeague playerLeague = new PlayerLeague();
@@ -149,11 +156,10 @@ public class LeagueService {
 		if (getLeagueByName(league.getLeagueName()) != null)
 			throw new LeagueValidationException(
 					LeagueExceptions.LEAGUE_NAME_IN_USE);
-		if (league.getSeasonId().isEmpty())
+		if (league.getSeasonId()==null||league.getSeasonId().isEmpty())
 			throw new LeagueValidationException(
 					LeagueExceptions.SEASON_ID_IS_NULL);
-
-		if (league.getAdminId().isEmpty())
+		if (league.getAdminId()==null || league.getAdminId().isEmpty())
 			throw new LeagueValidationException(
 					LeagueExceptions.ADMIN_NOT_FOUND);
 

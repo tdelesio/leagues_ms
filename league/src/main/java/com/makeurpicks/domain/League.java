@@ -12,7 +12,7 @@ import javax.persistence.UniqueConstraint;
 public class League {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
 	private String leagueName;
 	private int paidFor = 0;
 	private boolean money = false;
@@ -36,7 +36,7 @@ public class League {
 	private String adminId;
 
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 

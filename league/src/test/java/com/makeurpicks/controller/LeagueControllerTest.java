@@ -1,7 +1,9 @@
 package com.makeurpicks.controller;
 
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,23 +14,20 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import com.makeurpicks.LeagueApplication;
 import com.makeurpicks.domain.League;
 import com.makeurpicks.domain.LeagueBuilder;
 import com.makeurpicks.service.LeagueService;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
-
+@SpringBootTest
+@DataJpaTest
 @WebAppConfiguration
-@SpringApplicationConfiguration(classes = LeagueApplication.class)
 @RunWith(SpringJUnit4ClassRunner.class)
 public class LeagueControllerTest {
 
