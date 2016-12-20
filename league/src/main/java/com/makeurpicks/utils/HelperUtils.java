@@ -14,7 +14,6 @@ public class HelperUtils {
 		leagues.forEach(e-> {
 			leagueNames.add(new LeagueName(e));
 		});
-		leagueNames.add(new LeagueName());
 		return leagueNames;
 	}
 }

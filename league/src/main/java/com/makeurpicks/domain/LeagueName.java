@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class LeagueName implements Serializable {
 
 	private String leagueName;
-	private Integer leagueId;
+	private String leagueId;
 	private String seasonId;
 	
 	public LeagueName()
@@ -42,10 +42,10 @@ public class LeagueName implements Serializable {
 	public void setLeagueName(String leagueName) {
 		this.leagueName = leagueName;
 	}
-	public int getLeagueId() {
+	public String getLeagueId() {
 		return leagueId;
 	}
-	public void setLeagueId(int leagueId) {
+	public void setLeagueId(String leagueId) {
 		this.leagueId = leagueId;
 	}
 

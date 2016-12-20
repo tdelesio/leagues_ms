@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public class LeagueBuilder {
 
-	private int id;
+	private String id;
 	private String leagueName;
 	private String adminId;
 	private boolean spreads;
@@ -16,7 +16,7 @@ public class LeagueBuilder {
 	{
 	}
 	
-	public LeagueBuilder(int id)
+	public LeagueBuilder(String id)
 	{
 		this.id = id;
 	}

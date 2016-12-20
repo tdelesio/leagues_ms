@@ -14,7 +14,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 
 @SpringBootApplication
 @EnableEurekaClient
-@EnableResourceServer
+//@EnableResourceServer
 @EnableJpaRepositories
 public class LeagueApplication {
 	
@@ -30,11 +30,35 @@ public class LeagueApplication {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http
-                    .authorizeRequests().anyRequest().authenticated()
-                    .and()
+                    .authorizeRequests().anyRequest().permitAll()
+                    .and().csrf().disable()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
             ;
         }
     }
+	/*@Autowired
+	LeagueService leagueService;
+	@Bean 
+	public CommandLineRunner populateDb() {
+		return args->{
+			String player1Id = UUID.randomUUID().toString();
+//			int leagueId = UUID.randomUUID().hashCode();
+			String seasonId = UUID.randomUUID().toString();
+			League league = new LeagueBuilder()
+					.withAdminId(player1Id)
+					.withName("pickem")
+					.withPassword("football")
+					.withSeasonId(seasonId).withNoSpreads()
+					.build();
+			leagueService.createLeague(league);
+			PlayerLeague playerLeague = new PlayerLeague(new PlayerLeagueId(league.getId(),player1Id));
+			playerLeague.setLeagueId(league.getId());
+			playerLeague.setLeagueName(league.getLeagueName());
+			playerLeague.setPassword(league.getPassword());
+			playerLeague.setPlayerId(player1Id);
+			leagueService.joinLeague(playerLeague);
+			
+		};
+	};*/
 	
 }

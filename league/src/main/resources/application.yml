@@ -1,6 +1,7 @@
 server:
   port: 8081
 #  context-path: /leagues
+security.user.password: testme
 spring:
   jpa:
     show-sql: true

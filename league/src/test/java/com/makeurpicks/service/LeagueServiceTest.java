@@ -25,6 +25,7 @@ import com.makeurpicks.domain.League;
 import com.makeurpicks.domain.LeagueBuilder;
 import com.makeurpicks.domain.LeagueName;
 import com.makeurpicks.domain.PlayerLeague;
+import com.makeurpicks.domain.PlayerLeagueId;
 import com.makeurpicks.exception.LeagueValidationException;
 import com.makeurpicks.exception.LeagueValidationException.LeagueExceptions;
 import com.makeurpicks.repository.LeagueRepository;
@@ -62,7 +63,7 @@ public class LeagueServiceTest {
 		expectedEx.expect(RuntimeException.class);
 	    expectedEx.expectMessage(LeagueExceptions.LEAGUE_NAME_IS_NULL.toString());
 	    
-		int leagueId = UUID.randomUUID().hashCode();
+		String leagueId = UUID.randomUUID().toString();
 		
 		League league = new LeagueBuilder(leagueId)
 			.build();
@@ -77,7 +78,7 @@ public class LeagueServiceTest {
 		expectedEx.expect(RuntimeException.class);
 	    expectedEx.expectMessage(LeagueExceptions.LEAGUE_NAME_IN_USE.toString());
 	    
-		int leagueId = UUID.randomUUID().hashCode();
+	    String leagueId = UUID.randomUUID().toString();
 		
 		League league = new LeagueBuilder(leagueId)
 			.withName("pickem")
@@ -93,8 +94,7 @@ public class LeagueServiceTest {
 		expectedEx.expect(RuntimeException.class);
 	    expectedEx.expectMessage(LeagueExceptions.SEASON_ID_IS_NULL.toString());
 	    
-		int leagueId = UUID.randomUUID().hashCode();
-		
+	    String leagueId = UUID.randomUUID().toString();
 		League league = new LeagueBuilder(leagueId)
 			.withName("pickem")
 			.build();
@@ -108,7 +108,7 @@ public class LeagueServiceTest {
 	@Test
 	public void validateLeague_adminNotFound_throwsLeagueValidationException() {
 		expectedEx.expect(LeagueValidationException.class);
-		int leagueId = UUID.randomUUID().hashCode();
+		String leagueId = UUID.randomUUID().toString();
 		String seasonId = UUID.randomUUID().toString();
 		
 		League league = new LeagueBuilder(leagueId)
@@ -124,7 +124,7 @@ public class LeagueServiceTest {
 	public void validateLeague_adminNotFound_2_throwsLeagueValidationException() {
 		expectedEx.expect(RuntimeException.class);
 	    expectedEx.expectMessage(LeagueExceptions.ADMIN_NOT_FOUND.toString());
-		int leagueId = UUID.randomUUID().hashCode();
+	    String leagueId = UUID.randomUUID().toString();
 		String seasonId = UUID.randomUUID().toString();
 		
 		League league = new LeagueBuilder(leagueId)
@@ -139,7 +139,7 @@ public class LeagueServiceTest {
 	@Test
 	public void createLeagueShouldCallSaveOnLeagueRepository() {
 		String player1Id = UUID.randomUUID().toString();
-		int leagueId = UUID.randomUUID().hashCode();
+		String leagueId = UUID.randomUUID().toString();
 		String seasonId = UUID.randomUUID().toString();
 		League league = new LeagueBuilder(leagueId)
 				.withAdminId(player1Id)
@@ -154,29 +154,30 @@ public class LeagueServiceTest {
 	@Test
 	public void createLeagueShouldAddaPlayerLeague() {
 		String player1Id = UUID.randomUUID().toString();
-		int leagueId = UUID.randomUUID().hashCode();
+		String leagueId = UUID.randomUUID().toString();
 		String seasonId = UUID.randomUUID().toString();
-		/*League league = new LeagueBuilder(leagueId)
+		League league = new LeagueBuilder(leagueId)
 				.withAdminId(player1Id)
 				.withName("pickem")
 				.withPassword("football")
 				.withSeasonId(seasonId).withNoSpreads()
 				.build();
 		when(leagueRepositoryMock.findOne(leagueId)).thenReturn(league);
-		PlayerLeague playerLeague = new PlayerLeague();
+		/*PlayerLeague playerLeague = new PlayerLeague();
 		playerLeague.setLeagueId(league.getId());
 		playerLeague.setLeagueName(league.getLeagueName());
 		playerLeague.setPassword(league.getPassword());
-		playerLeague.setPlayerId(player1Id);
+		playerLeague.setPlayerId(player1Id);*/
+//		when(leagueService.addPlayerToLeague(league, player1Id)).thenReturn(playerLeague);
 		leagueService.createLeague(league);
-		verify(playerLeagueRepository).save(playerLeague);*/
+		
 	}
 	
 
 	@Test
 	public void updateLeagueShouldCallSaveOnLeagueRepository() {
 		String player1Id = UUID.randomUUID().toString();
-		int leagueId = UUID.randomUUID().hashCode();
+		String leagueId = UUID.randomUUID().toString();
 		String seasonId = UUID.randomUUID().toString();
 		League league = new LeagueBuilder(leagueId)
 				.withAdminId(player1Id)
@@ -192,7 +193,7 @@ public class LeagueServiceTest {
 	@Test
 	public void getLeaguesForPlayerNoleaguesForGivenPlayerGivesEmptyLeagueSet() {
 		String playerId = UUID.randomUUID().toString();
-		when(playerLeagueRepository.findLeagueIdsByPlayerId(playerId)).thenReturn(null);
+		when(playerLeagueRepository.findIdLeagueIdsByIdPlayerId(playerId)).thenReturn(null);
 		Set<LeagueName> set = leagueService.getLeaguesForPlayer(playerId);
 		assertTrue(set.size() == 0);
 	}
@@ -201,7 +202,7 @@ public class LeagueServiceTest {
 	public void updateLeagueOnNonExistingLeagueThrowsLeagueValidationExceptionLeagueNotFound() {
 		expectedEx.expect(LeagueValidationException.class);
 		String player1Id = UUID.randomUUID().toString();
-		int leagueId = UUID.randomUUID().hashCode();
+		String leagueId = UUID.randomUUID().toString();
 		String seasonId = UUID.randomUUID().toString();
 		League league = new LeagueBuilder(leagueId)
 				.withAdminId(player1Id)
@@ -217,7 +218,7 @@ public class LeagueServiceTest {
 	public void removePlayerFromLeagueOnInvalidLeagueThrowsLeagueValidationLeagueNotFound() {
 		expectedEx.expect(LeagueValidationException.class);
 		String player1Id = UUID.randomUUID().toString();
-		int leagueId = UUID.randomUUID().hashCode();
+		String leagueId = UUID.randomUUID().toString();
 		when(leagueRepositoryMock.findOne(leagueId)).thenReturn(null);
 		leagueService.removePlayerFromLeague(leagueId, player1Id);
 	}
@@ -225,7 +226,7 @@ public class LeagueServiceTest {
 	@Test
 	public void removePlayerFromLeagueOnExecutionShouldCalldeleteOnPlayerLeaguerepository() {
 		String player1Id = UUID.randomUUID().toString();
-		int leagueId = UUID.randomUUID().hashCode();
+		String leagueId = UUID.randomUUID().toString();
 		String seasonId = UUID.randomUUID().toString();
 		League league = new LeagueBuilder(leagueId)
 				.withAdminId(player1Id)
@@ -233,13 +234,13 @@ public class LeagueServiceTest {
 				.withPassword("football")
 				.withSeasonId(seasonId).withNoSpreads()
 				.build();
-		PlayerLeague playerLeague = new PlayerLeague();
+		PlayerLeague playerLeague = new PlayerLeague(new PlayerLeagueId(league.getId(),player1Id));
 		playerLeague.setLeagueId(league.getId());
 		playerLeague.setLeagueName(league.getLeagueName());
 		playerLeague.setPassword(league.getPassword());
 		playerLeague.setPlayerId(player1Id);
 		when(leagueRepositoryMock.findOne(leagueId)).thenReturn(league);
-		when(playerLeagueRepository.findByLeagueIdAndPlayerId(league.getId(),player1Id)).thenReturn(playerLeague);
+		when(playerLeagueRepository.findByIdLeagueIdAndIdPlayerId(league.getId(),player1Id)).thenReturn(playerLeague);
 		leagueService.removePlayerFromLeague(leagueId, player1Id);
 		verify(playerLeagueRepository).delete(playerLeague);
 	}

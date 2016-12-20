@@ -1,5 +1,6 @@
 package com.makeurpicks.domain;
 
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -7,31 +8,31 @@ import javax.persistence.Id;
 
 @Entity
 public class PlayerLeague  {
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Integer id;
-	private Integer leagueId;
+	@EmbeddedId
+	private PlayerLeagueId id;
 	private String leagueName;
-	private String playerId;
 	private String password;
-	
-	public Integer getLeagueId() {
-		return leagueId;
+	private PlayerLeague() {}
+	public PlayerLeague(PlayerLeagueId playerLeagueId) {
+		id = playerLeagueId;
 	}
-	public void setLeagueId(Integer leagueId) {
-		this.leagueId = leagueId;
+	public String getLeagueId() {
+		return id.getLeagueId();
 	}
-	public int getId() {
+	public void setLeagueId(String leagueId) {
+		this.id.setLeagueId(leagueId); 
+	}
+	public PlayerLeagueId getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(PlayerLeagueId id) {
 		this.id = id;
 	}
 	public String getPlayerId() {
-		return playerId;
+		return id.getPlayerId();
 	}
 	public void setPlayerId(String playerId) {
-		this.playerId = playerId;
+		this.id.setPlayerId(playerId);
 	}
 	public String getPassword() {
 		return password;
