@@ -168,9 +168,8 @@ public class LeagueServiceTest {
 		playerLeague.setLeagueName(league.getLeagueName());
 		playerLeague.setPassword(league.getPassword());
 		playerLeague.setPlayerId(player1Id);*/
-//		when(leagueService.addPlayerToLeague(league, player1Id)).thenReturn(playerLeague);
+		//when(leagueService.addPlayerToLeague(league, player1Id)).thenReturn(playerLeague);
 		leagueService.createLeague(league);
-		
 	}
 	
 
