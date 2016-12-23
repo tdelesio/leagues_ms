@@ -24,7 +24,7 @@ import com.makeurpicks.domain.PlayerLeague;
 import com.makeurpicks.service.LeagueService;
 
 @RestController
-@RequestMapping(value = "/api/leagues")
+@RequestMapping(value = "")
 public class LeagueController {
 
 	private Log log = LogFactory.getLog(LeagueController.class);

@@ -15,7 +15,7 @@ public class LocalConfig {
 	
 
  
-    @Bean
+   /* @Bean
     public ComboPooledDataSource dataSource() throws PropertyVetoException {
         ComboPooledDataSource dataSource = new ComboPooledDataSource();
         
@@ -30,7 +30,7 @@ public class LocalConfig {
         dataSource.setUser("root");
         dataSource.setDriverClass("org.hibernate.service.jdbc.connections.internal.C3P0ConnectionProvider");
         return dataSource;
-    }
+    }*/
     
 //			    @Bean
 //				public String ui()

@@ -95,7 +95,7 @@ public class AuthServerApplication extends WebMvcConfigurerAdapter {
         }
 		@Override
 		public void configure(WebSecurity web) throws Exception {
-			web.ignoring().antMatchers("/players/");
+			web.ignoring().antMatchers(new String[] {"/players/","/passwordutil/**"});
 		}
         
         

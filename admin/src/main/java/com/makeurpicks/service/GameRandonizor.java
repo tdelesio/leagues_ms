@@ -202,10 +202,12 @@ public class GameRandonizor {
 		List<PlayerView> players = createUsers(new Random().nextInt(10)+5);
 		
 		String seasonId = seasons.get(0).getId();
+//		String seasonId = "seasonrandom";
 		LeagueView leagueView = new LeagueView();
 		leagueView.setLeagueName("demo "+new Random().nextInt(1000000));
 		leagueView.setSeasonId(seasonId);
 		leagueView.setAdminId(players.get(new Random().nextInt(players.size()-1)).getUsername());
+//		leagueView.setAdminId("adminrandom");
 		leagueView.setPassword("12345");
 		
 		leagueView = leagueIntegrationService.createLeague(leagueView);

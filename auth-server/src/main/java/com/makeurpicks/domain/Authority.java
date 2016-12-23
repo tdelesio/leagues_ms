@@ -1,20 +1,19 @@
 package com.makeurpicks.domain;
 
-import java.util.UUID;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 
 @Entity
 public class Authority implements GrantedAuthority{
-
-	@GeneratedValue
 	@Id
+	@GeneratedValue(generator = "uuid")
+	@GenericGenerator(name = "uuid", strategy = "uuid2")
 	private String id;
 	
 	private String authority;

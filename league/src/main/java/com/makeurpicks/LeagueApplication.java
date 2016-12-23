@@ -14,7 +14,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 
 @SpringBootApplication
 @EnableEurekaClient
-//@EnableResourceServer
+@EnableResourceServer
 @EnableJpaRepositories
 public class LeagueApplication {
 	
@@ -30,9 +30,8 @@ public class LeagueApplication {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http
-                    .authorizeRequests().anyRequest().permitAll()
-                    .and().csrf().disable()
-                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
+                    .authorizeRequests().anyRequest().authenticated()
+                    .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
             ;
         }
     }

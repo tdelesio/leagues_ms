@@ -1,7 +1,8 @@
 server:
   port: 8081
-#  context-path: /leagues
+  context-path: /leagues
 security.user.password: testme
+#security.user.password: dinesh
 spring:
   jpa:
     show-sql: true
@@ -20,7 +21,7 @@ security:
     resource:
       jwt:
         key-uri: ${vcap.services.auth-token-key.credentials.uri:http://localhost:9999/auth/oauth/token_key}
-
+#      userInfoUri: http://localhost:9999/auth/user
 logging:
   level:
     com.makeurpicks: DEBUG
