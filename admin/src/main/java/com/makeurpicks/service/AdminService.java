@@ -1,6 +1,7 @@
 package com.makeurpicks.service;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -35,6 +36,13 @@ public class AdminService {
 	@Autowired
 	private PickIntegrationService pickIntegrationService;
 	
+	public List<SeasonView> getSeasons() {
+		return seasonIntegrationService.getCurrentSeasons();
+	}
+	
+	public List<SeasonView> getCurrentSeasons() {
+		return seasonIntegrationService.getCurrentSeasons();
+	}
 	
 	public Dummy createDummyWeeks()
 	{

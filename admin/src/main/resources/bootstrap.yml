@@ -1,21 +1,26 @@
 spring:
   application:
    name: admin
+  profiles:
+    active: dev   
   cloud:
     config:
-      uri: ${vcap.services.config-service.credentials.uri:http://127.0.0.1:8888}
-      
-eureka:
-  instance:
-    prefer-ip-address: true
-    hostname: ${vcap.application.uris[0]:127.0.0.1}
-    nonSecurePort: ${vcap.services.eureka-service.credentials.port:${server.port}}
-    leaseRenewalIntervalInSeconds: 10
-    metadataMap:
-      instanceId: ${vcap.application.instance_id:${spring.application.name}:${random.value}}
-  client:
-    serviceUrl:
-      defaultZone: ${vcap.services.eureka-service.credentials.uri:http://localhost:8761}/eureka/
+      uri: ${vcap.services.config-service.uri:http://localhost:8888/config}
+      username: ${vcap.mypick.config.server.username:admin}
+      password: '{cipher}1ea2fca4cdf446e96a71330de9f15e29faa6a7072f8101003cb601baf9943f61' #watchit
+encrypt:
+  key: ${ENCRYPT_KEY:defaultkey} 
+#eureka:
+#  instance:
+#    prefer-ip-address: true
+#    hostname: ${vcap.application.uris[0]:127.0.0.1}
+#    nonSecurePort: ${vcap.services.eureka-service.credentials.port:${server.port}}
+#    leaseRenewalIntervalInSeconds: 10
+#    metadataMap:
+#      instanceId: ${vcap.application.instance_id:${spring.application.name}:${random.value}}
+#  client:
+#    serviceUrl:
+#      defaultZone: ${vcap.services.eureka-service.credentials.uri:http://localhost:8761}/eureka/
 #eureka:
 #  client:
 #    serviceUrl:

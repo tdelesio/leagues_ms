@@ -1,6 +1,7 @@
 package com.makeurpicks.controller;
 
 import java.nio.charset.Charset;
+import java.security.Principal;
 import java.util.Base64;
 import java.util.Set;
 
@@ -12,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -51,9 +51,9 @@ public class LeagueController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/")
-	public @ResponseBody League createLeague(@RequestHeader("Authorization") String authorization,
+	public @ResponseBody League createLeague(Principal user,
 			@RequestBody League league) {
-		if (league != null && league.getAdminId() == null) {
+		/*if (league != null && league.getAdminId() == null) {
 			if (authorization != null && authorization.startsWith("Basic")) {
 				// Authorization: Basic base64credentials
 				String base64Credentials = authorization.substring("Basic".length()).trim();
@@ -63,8 +63,8 @@ public class LeagueController {
 				final String[] values = credentials.split(":", 2);
 				league.setAdminId(values[0]);
 			}
-		}
-
+		}*/
+		league.setAdminId(user.getName());
 		return leagueService.createLeague(league);
 
 	}
@@ -80,8 +80,8 @@ public class LeagueController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/player")
-	public void addPlayerToLeague(@RequestHeader("Authorization") String authorization,@RequestBody PlayerLeague playerLeague) {
-		if (authorization != null && authorization.startsWith("Basic")) {
+	public void addPlayerToLeague(Principal user,@RequestBody PlayerLeague playerLeague) {
+		/*if (authorization != null && authorization.startsWith("Basic")) {
 			// Authorization: Basic base64credentials
 			String base64Credentials = authorization.substring("Basic".length()).trim();
 			String credentials = new String(Base64.getDecoder().decode(base64Credentials),
@@ -89,7 +89,8 @@ public class LeagueController {
 			// credentials = username:password
 			final String[] values = credentials.split(":", 2);
 			playerLeague.setPlayerId(values[0]);
-		}
+		}*/
+		playerLeague.setPlayerId(user.getName());
 		leagueService.joinLeague(playerLeague);
 	}
 

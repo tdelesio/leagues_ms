@@ -1,15 +1,15 @@
 package com.makeurpicks.controller;
 
 import java.security.Principal;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.oauth2.client.OAuth2RestOperations;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.makeurpicks.season.SeasonView;
 import com.makeurpicks.service.AdminService;
 import com.makeurpicks.service.Dummy;
 import com.makeurpicks.service.GameRandonizor;
@@ -49,6 +49,18 @@ public class AdminController {
 	{
 		randomizer.createRandomLeague(17);
 	}
+	
+	/*@RequestMapping(value="/seasons", method = RequestMethod.GET)
+	public List<SeasonView> getSeasons()
+	{
+		return adminService.getSeasons();
+	}
+	
+	@RequestMapping(value="/seasons/current", method = RequestMethod.GET)
+	public List<SeasonView> getCurrentSeason()
+	{
+		return adminService.getCurrentSeasons();
+	}*/
 	
 	
 }

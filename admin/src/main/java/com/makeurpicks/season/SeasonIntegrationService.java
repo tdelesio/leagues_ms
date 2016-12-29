@@ -26,13 +26,13 @@ private Log log = LogFactory.getLog(SeasonIntegrationService.class);
     
     public SeasonView createSeason(SeasonView seasonView)
     {
-    	return secureRestTemplate.postForEntity("http://season/seasons/", seasonView, SeasonView.class).getBody();
+    	return secureRestTemplate.postForEntity("http://league/leagues/seasons/", seasonView, SeasonView.class).getBody();
     }
     
     public List<SeasonView> getCurrentSeasons()
     {
     	ParameterizedTypeReference<List<SeasonView>> responseType = new ParameterizedTypeReference<List<SeasonView>>() {};
-    	List<SeasonView> seasons = secureRestTemplate.exchange("http://season/seasons/current", HttpMethod.GET, null, responseType).getBody();
+    	List<SeasonView> seasons = secureRestTemplate.exchange("http://league/leagues/seasons/current", HttpMethod.GET, null, responseType).getBody();
     	return seasons;
     }
 }

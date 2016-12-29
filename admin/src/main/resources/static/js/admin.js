@@ -138,7 +138,7 @@
 		$scope.season.startYear = 2016;
 		$scope.season.endYear = 2017;
 		
-		$http.get('/admin/seasons/current').success(function(data) {
+		$http.get('/admin/leagues/seasons/current').success(function(data) {
 			$scope.seasons = data;
 			if (data[0] === undefined)
 				$scope.showseasons=false;
@@ -149,7 +149,7 @@
 			
 			if (confirm("Are yoou sure you want to delete season?")) {
 		    
-				var url = '/admin/seasons/'+season.id;
+				var url = '/admin/leagues/seasons/'+season.id;
 				$http({
 					method : "DELETE",
 					url : url,
@@ -157,7 +157,7 @@
 					dataType : "json",
 				}).success(function(res) { 
 					
-					$http.get('/admin/seasons/current').success(function(data) {
+					$http.get('/admin/leagues/seasons/current').success(function(data) {
 						$scope.seasons = data;
 						if (data[0] === undefined)
 							$scope.showseasons=false;
@@ -178,14 +178,14 @@
 			
 			$http({
 				method : "POST",
-				url : '/admin/seasons/',
+				url : '/admin/leagues/seasons/',
 				contentType : "application/json",
 				dataType : "json",
 				data : JSON.stringify($scope.season)
 			}).success(function(res) { 
 				
 //				$scope.showgames = true;
-//				$http.get('/admin/seasons/current').success(function(data) {
+//				$http.get('/admin/leagues/seasons/current').success(function(data) {
 //					$scope.seasons = data;
 //				});
 				$window.location.href = '/admin/#/leagues';
@@ -208,7 +208,7 @@
 			$scope.leagues = data;
 		});
 		
-		$http.get('/admin/seasons/current').success(function(data) {
+		$http.get('/admin/leagues/seasons/current').success(function(data) {
 			$scope.seasons = data;
 			if (data[0] === undefined)
 				$scope.showgames=false;
@@ -331,7 +331,7 @@
 //			$scope.week.seasonId = data[0].seasonId;
 //		});
 		
-		$http.get('/admin/seasons/current').success(function(data) {
+		$http.get('/admin/leagues/seasons/current').success(function(data) {
 			$scope.seasons = data;
 			$scope.week.seasonId = data[0].id;
 			
@@ -427,7 +427,7 @@
 		$scope.add_game_model.favHome = true;
 		
 //		leagueService.getLeagues().then(function(data) {
-		$http.get('/admin/seasons/current').success(function(data) {
+		$http.get('/admin/leagues/seasons/current').success(function(data) {
 			$scope.seasons = data;
 			
 			$log.debug('SetupController:Leagues=' +JSON.stringify(data));

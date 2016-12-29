@@ -74,7 +74,7 @@ public class AdminApplication {
             http
             	.logout().and()
             	.authorizeRequests()
-                    .antMatchers("/login", "/beans", "/user", "/random").permitAll()
+                    .antMatchers("/login", "/beans", "/user", "/random","/seasons/**").permitAll()
                     .anyRequest().hasRole("ADMIN").and()
 
                 .csrf()
