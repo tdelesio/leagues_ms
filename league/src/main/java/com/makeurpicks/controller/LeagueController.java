@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.makeurpicks.domain.League;
 import com.makeurpicks.domain.LeagueName;
+import com.makeurpicks.domain.LeagueType;
 import com.makeurpicks.domain.PlayerLeague;
 import com.makeurpicks.service.LeagueService;
 
@@ -42,6 +43,12 @@ public class LeagueController {
 	@RequestMapping(method = RequestMethod.GET, value = "/")
 	public @ResponseBody Iterable<League> getAllLeague() {
 		return leagueService.getAllLeagues();
+
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/types")
+	public @ResponseBody LeagueType[] getLeagueTypes() {
+		return LeagueType.values();
 
 	}
 

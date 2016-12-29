@@ -135,6 +135,7 @@
 		$scope.showseasons=true;
 		$scope.season={};
 		$scope.season.leagueType = "pickem";
+		$scope.season.leagueTypes="pickem";
 		$scope.season.startYear = 2016;
 		$scope.season.endYear = 2017;
 		
@@ -142,6 +143,11 @@
 			$scope.seasons = data;
 			if (data[0] === undefined)
 				$scope.showseasons=false;
+		});
+		
+		$http.get('/admin/leagues/types').success(function(data) {
+			if (data[0] )
+				$scope.season.leagueTypes=data;
 		});
 		
 		this.deleteSeason = function(season) {
