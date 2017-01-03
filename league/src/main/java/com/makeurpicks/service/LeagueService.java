@@ -22,7 +22,6 @@ public class LeagueService {
 
 	private LeagueRepository leagueRepository;
 	private PlayerLeagueRepository playerLeagueRepository;
-	public LeagueService() {}
 	@Autowired
 	public LeagueService(LeagueRepository leagueRepository,PlayerLeagueRepository playerLeagueRepository) {
 		this.leagueRepository=leagueRepository;

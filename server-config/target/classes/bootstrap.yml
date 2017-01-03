@@ -3,7 +3,20 @@ spring:
    name: config-server
   profiles:
     active: local, cloud
-
+  cloud:
+    config:
+      enabled: true
+      server:
+          git: 
+            uri: https://github.com/dinesh210/centralconfig
+            username: dinesh210
+            password: be@happy10
+            searchPaths: /admin**,/league**
+          prefix: /config          
+encrypt:
+  key: ${ENCRYPT_KEY:defaultkey} 
+server:
+  port: 8888
 #---
 #spring:
 #  profiles: local

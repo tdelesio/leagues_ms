@@ -34,9 +34,9 @@ services:
     networks:
       - myp-network
     ports:
-      - "3306:3306"
+      - "3303:3306"
     expose:
-      - "3306"
+      - "3303"
   game-db:  
     image: mysql:latest
 #    build: mysql/

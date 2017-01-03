@@ -1,56 +1,46 @@
 package com.makeurpicks.controller;
 
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.makeurpicks.domain.League;
 import com.makeurpicks.domain.LeagueBuilder;
 import com.makeurpicks.service.LeagueService;
 
-@SpringBootTest
-@DataJpaTest
-@WebAppConfiguration
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
+@AutoConfigureMockMvc
 public class LeagueControllerTest {
 
-	@InjectMocks
-	private LeagueController leagueController;
+	@Autowired
+	MockMvc mockMvc;
 	
-	@Mock
+	@MockBean
 	private LeagueService leagueService;
 	
-	private MockMvc mockMvc;
+	@Test
+	public void getAllleaguesWithoutAccessTokenShouldRespondUnauthorized() throws Exception {
+		this.mockMvc.perform(get("/leagues/").accept(MediaType.APPLICATION_JSON))
+		.andExpect(status().isUnauthorized());
+	}
 	
 	private League league1;
 	private League league2;
 	private League league3;
-	@Before
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
- 
-        mockMvc = MockMvcBuilders.standaloneSetup(leagueController).build();
- 
-        stubData();
-//        when(validator.supports(any(Class.class))).thenReturn(true);
-    }
 	
 	private void stubData()
 	{
@@ -87,24 +77,15 @@ public class LeagueControllerTest {
 				allLeagues.add(league2);
 				allLeagues.add(league3);
 				
-				when(leagueService.getAllLeagues()).thenReturn(allLeagues);
-				when(leagueService.getLeagueByName(league1.getLeagueName())).thenReturn(league1);
-				when(leagueService.getLeagueByName(league2.getLeagueName())).thenReturn(league2);
-				when(leagueService.getLeagueByName(league3.getLeagueName())).thenReturn(league3);
+//				when(leagueService.getAllLeagues()).thenReturn(allLeagues);
+//				when(leagueService.getLeagueByName(league1.getLeagueName())).thenReturn(league1);
+//				when(leagueService.getLeagueByName(league2.getLeagueName())).thenReturn(league2);
+//				when(leagueService.getLeagueByName(league3.getLeagueName())).thenReturn(league3);
 				
 	}
 	 
-	 //"/"
-	 @Test
-	public void getAllLeague() throws Exception {
-
-		 mockMvc.perform(get("/leagues/"))
-         .andExpect(status().isOk())
-//         .andExpect(jsonPath("$.id", containsString(league1.getId())))
-         .andDo(print());
-         
-		
-	}
+	 
+	 
 	 
 //	 @RequestMapping(method=RequestMethod.GET, value="/{id}")
 //	 public @ResponseBody League getLeagueById(@PathVariable String id)
