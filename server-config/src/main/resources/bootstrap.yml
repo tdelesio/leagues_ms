@@ -8,11 +8,14 @@ spring:
       enabled: true
       server:
           git: 
-            uri: https://github.com/dinesh210/centralconfig
-            username: dinesh210
-            password: be@happy10
+            uri: https://github.com/tdelesio/config-repo
+            username: ${vcap.mypick.config.repo.username:dinesh-techolution}
+            password: '{cipher}ccbf1e4f5a0ec0a311df3375cb132fab316ebc856f66160ff48938ab51d323c1'
             searchPaths: /admin**,/league**
-          prefix: /config          
+          prefix: /config    
+security:
+  user:
+    password: '{cipher}1ea2fca4cdf446e96a71330de9f15e29faa6a7072f8101003cb601baf9943f61'      
 encrypt:
   key: ${ENCRYPT_KEY:defaultkey} 
 server:

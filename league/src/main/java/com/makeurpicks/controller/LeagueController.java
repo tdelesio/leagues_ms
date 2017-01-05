@@ -60,17 +60,6 @@ public class LeagueController {
 	@RequestMapping(method = RequestMethod.POST, value = "/")
 	public @ResponseBody League createLeague(Principal user,
 			@RequestBody League league) {
-		/*if (league != null && league.getAdminId() == null) {
-			if (authorization != null && authorization.startsWith("Basic")) {
-				// Authorization: Basic base64credentials
-				String base64Credentials = authorization.substring("Basic".length()).trim();
-				String credentials = new String(Base64.getDecoder().decode(base64Credentials),
-						Charset.forName("UTF-8"));
-				// credentials = username:password
-				final String[] values = credentials.split(":", 2);
-				league.setAdminId(values[0]);
-			}
-		}*/
 		league.setAdminId(user.getName());
 		return leagueService.createLeague(league);
 
