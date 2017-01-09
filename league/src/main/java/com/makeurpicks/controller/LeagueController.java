@@ -1,11 +1,8 @@
 package com.makeurpicks.controller;
 
-import java.nio.charset.Charset;
 import java.security.Principal;
-import java.util.Base64;
 import java.util.Set;
 
-import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -99,7 +96,7 @@ public class LeagueController {
 
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/name/{name}", produces = MediaType.APPLICATION_JSON)
+	@RequestMapping(method = RequestMethod.GET, value = "/name/{name}")
 	public @ResponseBody League getLeagueByName(@PathVariable String name) {
 		return leagueService.getLeagueByName(name);
 	}

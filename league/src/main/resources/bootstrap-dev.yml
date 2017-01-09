@@ -8,7 +8,7 @@ spring:
             fail-fast: true
             uri: ${vcap.mypick.config.server.uri:http://localhost:8888/config}
             username: ${vcap.mypick.config.server.username:admin}
-            password: '{cipher}1ea2fca4cdf446e96a71330de9f15e29faa6a7072f8101003cb601baf9943f61'
+            password: watchit
             # name of the config server's property source (file.yml) that we want to use
             name: league
             profile: dev # profile(s) of the property source
