@@ -2,8 +2,6 @@
 spring:
   application:
    name: league
-  profiles:
-    active: dev
 encrypt:
   key: ${ENCRYPT_KEY:defaultkey} 
 #  cloud:

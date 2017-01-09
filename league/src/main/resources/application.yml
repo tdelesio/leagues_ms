@@ -26,3 +26,18 @@ logging:
   level:
     com.makeurpicks: DEBUG
 #    org.springframework.security: DEBUG
+---    
+spring:
+  profiles: container
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+  datasource:
+    url: jdbc:mysql://${MYSQL_PORT_3306_TCP_ADDR:league-db}:${MYSQL_PORT_3306_TCP_PORT:3306}/${MYSQL_ENV_MYSQL_DATABASE:league}
+    username: ${MYSQL_USER:dbuser}
+    password: ${MYSQL_PASSWORD:password}
+    driver-class-name: com.mysql.jdbc.Driver     

@@ -64,6 +64,7 @@ services:
       - eureka
       - auth-server
       - config-server
+    restart: always
   league:
     build: ../league/
     networks:
@@ -77,28 +78,28 @@ services:
       - eureka:eureka
       - auth-server:auth-server
       - config-server:config-server
+      - league-db:league-db
     depends_on:
       - eureka
       - auth-server
       - config-server
       - league-db
-  game-db:  
-    image: mysql:latest
-#    build: mysql/
-    environment:
-      - MYSQL_ROOT_PASSWORD=admin123
-      - MYSQL_USER=dbuser
-      - MYSQL_PASSWORD=password
-      - MYSQL_DATABASE=game
-#    volumes:
-#      - mysql-data:/home.scripts  
-#    working_dir: "/home/scripts"
-    networks:
-      - myp-network
-    ports:
-      - "3305:3306"
-    expose:
-      - "3305"    
+#  game-db:  
+#    image: mysql:latest
+#    environment:
+#      - MYSQL_ROOT_PASSWORD=admin123
+#      - MYSQL_USER=dbuser
+#      - MYSQL_PASSWORD=password
+#      - MYSQL_DATABASE=game
+##    volumes:
+##      - mysql-data:/home.scripts  
+##    working_dir: "/home/scripts"
+#    networks:
+#      - myp-network
+#    ports:
+#      - "3305:3306"
+#    expose:
+#      - "3305"    
   league-db:  
     image: mysql:latest
     environment:
