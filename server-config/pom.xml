@@ -13,6 +13,7 @@
 	<parent>
 		<groupId>com.makeurpicks</groupId>
 		<artifactId>build</artifactId>
+		<relativePath>../build</relativePath>
 		<version>0.0.1</version>
 	</parent>
 

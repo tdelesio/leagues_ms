@@ -15,7 +15,8 @@ spring:
           prefix: /config    
 security:
   user:
-    password: '{cipher}1ea2fca4cdf446e96a71330de9f15e29faa6a7072f8101003cb601baf9943f61'      
+    password: watchit
+    name: admin     
 encrypt:
   key: ${ENCRYPT_KEY:defaultkey} 
 server:

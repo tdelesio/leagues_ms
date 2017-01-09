@@ -1,13 +1,11 @@
 spring:
   application:
    name: admin
-  profiles:
-    active: dev   
   cloud:
     config:
       uri: ${vcap.services.config-service.uri:http://localhost:8888/config}
       username: ${vcap.mypick.config.server.username:admin}
-      password: '{cipher}1ea2fca4cdf446e96a71330de9f15e29faa6a7072f8101003cb601baf9943f61' #watchit
+      password: watchit
 encrypt:
   key: ${ENCRYPT_KEY:defaultkey} 
 #eureka:

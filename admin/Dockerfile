@@ -1,6 +1,3 @@
-FROM java:8
-VOLUME /tmp
-ADD app.jar app.jar
-RUN bash -c 'touch /app.jar'
-EXPOSE 8080
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
+FROM davidcaste/alpine-java-unlimited-jce:jdk8
+ADD target/* /target/
+CMD ["java","-Dspring.profiles.active=container", "-jar", "/target/admin-0.0.1.jar"]

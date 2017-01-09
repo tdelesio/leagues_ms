@@ -3,14 +3,16 @@
 # ===================================================================
 
 spring:
-    cloud:
-        config:
-            fail-fast: true
-            uri: ${vcap.mypick.config.server.uri:http://localhost:8888/config}
-            username: ${vcap.mypick.config.server.username:admin}
-            password: '{cipher}1ea2fca4cdf446e96a71330de9f15e29faa6a7072f8101003cb601baf9943f61'
-            # name of the config server's property source (file.yml) that we want to use
-            name: admin
-            profile: dev # profile(s) of the property source
-            label: master # toggle to switch to a different version of the configuration as stored in git
-            # it can be set to any label, branch or commit of the config source git repository
+  cloud:
+      config:
+          fail-fast: true
+          uri: ${vcap.mypick.config.server.uri:http://localhost:8888/config}
+          username: ${vcap.mypick.config.server.username:admin}
+          password: '{cipher}1ea2fca4cdf446e96a71330de9f15e29faa6a7072f8101003cb601baf9943f61'
+          # name of the config server's property source (file.yml) that we want to use
+          name: admin
+          profile: dev # profile(s) of the property source
+          label: master # toggle to switch to a different version of the configuration as stored in git
+          # it can be set to any label, branch or commit of the config source git repository
+  profiles:
+    active: dev    

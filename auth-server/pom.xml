@@ -6,6 +6,7 @@
 	<parent>
 		<groupId>com.makeurpicks</groupId>
 		<artifactId>build</artifactId>
+		<relativePath>../build</relativePath>
 		<version>0.0.1</version>
 	</parent>
 
@@ -69,6 +70,7 @@
 			<artifactId>mysql-connector-java</artifactId>
 <!-- 			<version>5.1.6</version> -->
 		</dependency>
+		
 		<dependency>
 	       <groupId>org.hibernate</groupId>
 	       <artifactId>hibernate-c3p0</artifactId>

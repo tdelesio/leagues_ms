@@ -12,6 +12,7 @@
 		<groupId>com.makeurpicks</groupId>
 		<artifactId>build</artifactId>
 		<version>0.0.1</version>
+		<relativePath>../build</relativePath>
 	</parent>
 
 	<dependencies>
