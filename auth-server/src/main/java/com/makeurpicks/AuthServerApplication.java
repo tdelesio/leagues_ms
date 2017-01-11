@@ -67,8 +67,7 @@ public class AuthServerApplication extends WebMvcConfigurerAdapter {
 //        @Override
 //        @Autowired // <-- This is crucial otherwise Spring Boot creates its own
 //        protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//           why
-//		log.info("Defining inMemoryAuthentication (2 users)");
+//            log.info("Defining inMemoryAuthentication (2 users)");
 //            auth
 //                    .inMemoryAuthentication()
 //
