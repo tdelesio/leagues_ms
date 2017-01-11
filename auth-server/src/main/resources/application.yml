@@ -12,8 +12,8 @@ spring:
         dialect: org.hibernate.dialect.MySQL5Dialect
   datasource:
     url: jdbc:mysql://localhost:3303/player
-    username: dbuser
-    password: password
+    username: ${vcap.services.cleardb.[0].credentials.username:dbuser}
+    password: ${vcap.services.cleardb.[0].credentials.password:password}
     driver-class-name: com.mysql.jdbc.Driver
 
 # IMPORTANT NOTICE: 
