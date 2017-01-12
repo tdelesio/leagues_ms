@@ -3,7 +3,7 @@ applications:
 - name: league
   memory: 512M 
   instances: 1
-  host: league
+  host: league-myp
   path: ./target/league-0.0.1.jar
   services:
   - eureka-service
