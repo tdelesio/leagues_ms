@@ -8,8 +8,7 @@ applications:
   services:
   - eureka-service
   - config-service
-  - auth-token
   - auth-authorize
-  - amqp-myp
+  - league-service
   env:
-   JAVA_OPTS: -Djava.security.egd=file:///dev/urandom
+   JAVA_OPTS: -Djava.security.egd=file:///dev/urandom -Dspring.profiles.active=pcf
