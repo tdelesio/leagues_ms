@@ -4,13 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -22,23 +22,25 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import com.makeurpicks.domain.Player;
+import com.makeurpicks.domain.PlayerBuilder;
 import com.makeurpicks.service.PlayerService;
 
 @SpringBootApplication
 @EnableEurekaClient
 @EnableJpaRepositories
 //@EnableResourceServer
-public class AuthServerApplication extends WebMvcConfigurerAdapter {
+public class AuthServerApplication extends WebMvcConfigurerAdapter implements CommandLineRunner {
 
 	private static final Logger log = LoggerFactory.getLogger(AuthServerApplication.class);
-    
+	@Autowired
+    private PlayerService playerServices;
 	public static void main(String[] args) {
         SpringApplication.run(AuthServerApplication.class, args);
     }
@@ -118,7 +120,8 @@ public class AuthServerApplication extends WebMvcConfigurerAdapter {
     	private String ui;
     	
         @Value("${config.oauth2.admin-uri}")
-    	private String admin;
+        private String admin;
+        
 
         @Bean
         public JwtAccessTokenConverter tokenEnhancer() {
@@ -205,4 +208,13 @@ public class AuthServerApplication extends WebMvcConfigurerAdapter {
         }
 
     }
+
+	@Override
+	public void run(String... arg0) throws Exception {
+		PlayerBuilder playerBuilder = new PlayerBuilder("admin", "dinesh.challa@techolution.com", "admin");
+		playerBuilder.adAdmin();
+		Player admin =playerBuilder.build();
+		playerServices.createPlayer(admin);
+		
+	}
 }
