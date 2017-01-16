@@ -59,6 +59,7 @@ logging:
     org.springframework.cloud.netflix: INFO
     com.netflix.zuul: INFO
     com.makeurpicks: DEBUG
+    
 ---    
 spring:
   profiles: container
