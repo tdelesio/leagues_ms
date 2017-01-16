@@ -4,6 +4,8 @@ server:
 security.user.password: testme
 #security.user.password: dinesh
 spring:
+  profiles:
+    active: pcf
   jpa:
     show-sql: true
     hibernate:
@@ -52,7 +54,22 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5Dialect
   datasource:
-    url: jdbc:mysql://${vcap.services.cleardb.[0].credentials.hostname:localhost}:${vcap.services.cleardb.[0].credentials.port:3306}/${vcap.services.cleardb.[0].credentials.name:league}
-    username: ${vcap.services.cleardb.[0].credentials.username:dbuser}
-    password: ${vcap.services.cleardb.[0].credentials.password:password}
-    driver-class-name: com.mysql.jdbc.Driver     
+    url: jdbc:mysql://${vcap.services.cleardb.[0].credentials.hostname:us-cdbr-iron-east-04.cleardb.net}:${vcap.services.cleardb.[0].credentials.port:3306}/${vcap.services.cleardb.[0].credentials.name:ad_0a9d6cd28f39fb9}
+    username: ${vcap.services.cleardb.[0].credentials.username:bca48c59fd4f13}
+    password: ${vcap.services.cleardb.[0].credentials.password:91b56d17}
+    driver-class-name: com.mysql.jdbc.Driver
+---    
+spring:
+  profiles: testpcf
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+  datasource:
+    url: jdbc:mysql://${vcap.services.cleardb.[0].credentials.hostname:us-cdbr-iron-east-04.cleardb.net}:${vcap.services.cleardb.[0].credentials.port:3306}/${vcap.services.cleardb.[0].credentials.name:ad_0a9d6cd28f39fb9}
+    username: ${vcap.services.cleardb.[0].credentials.username:bca48c59fd4f13}
+    password: ${vcap.services.cleardb.[0].credentials.password:91b56d17}
+    driver-class-name: com.mysql.jdbc.Driver    
