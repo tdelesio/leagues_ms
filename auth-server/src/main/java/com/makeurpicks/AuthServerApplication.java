@@ -204,7 +204,22 @@ public class AuthServerApplication extends WebMvcConfigurerAdapter implements Co
                     .authorizedGrantTypes("client_credentials", "password", "authorization_code", "refresh_token")
                     .scopes("read", "write")
                     .redirectUris("http://localhost:9000/").autoApprove(true)
-            ;
+                    .and()
+
+					// Public client where client secret is vulnerable (e.g.
+					// mobile apps, browsers)
+					.withClient("public") // No secret!
+					.authorizedGrantTypes("client_credentials", "implicit").scopes("read")
+					.redirectUris("http://admin-myp.cfapps.io/").autoApprove(true)
+
+					.and()
+
+					// Trusted client: similar to confidential client but also
+					// allowed to handle user password
+					.withClient("trusted").secret("secret").authorities("ROLE_TRUSTED_CLIENT")
+					.authorizedGrantTypes("client_credentials", "password", "authorization_code", "refresh_token")
+					.scopes("read", "write").redirectUris("http://admin-myp.cfapps.io/").autoApprove(true);
+            
         }
 
     }
