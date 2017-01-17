@@ -1,7 +1,7 @@
 ---
 applications:
 - name: league
-  memory: 512M 
+  memory: 1G 
   instances: 1
   host: league-myp
   path: ./target/league-0.0.1.jar
