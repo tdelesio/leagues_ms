@@ -116,6 +116,7 @@ config:
    oauth2:
         ui-uri: ${vcap.services.ui-service.credentials.uri:https://league-myp.cfapps.io/}
         admin-uri: ${vcap.services.admin-service.credentials.uri:http://admin-myp.cfapps.io/admin/}
+        localadmin-uri: ${vcap.services.admin-service.credentials.uri:http://localhost:9000/admin/}
         privateKey: |
             -----BEGIN RSA PRIVATE KEY-----
             MIICXQIBAAKBgQDNQZKqTlO/+2b4ZdhqGJzGBDltb5PZmBz1ALN2YLvt341pH6i5
