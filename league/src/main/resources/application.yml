@@ -23,10 +23,6 @@ security:
     resource:
       jwt:
         key-uri: ${vcap.services.auth-token-key.credentials.uri:http://localhost:9999/auth/oauth/token_key}
-  basic:
-    enabled: false
-  user:
-    name: admin
 #      userInfoUri: http://localhost:9999/auth/user
 logging:
   level:
