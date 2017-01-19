@@ -48,12 +48,24 @@
 		};
 	});
 	
+	
+	
 	app.directive('createLeague', function() {
 		return {
 			restrict: 'E',
 			templateUrl: 'partials/createLeague.html'
 		};
 	});
+	
+
+	app.directive('filterSeason', function() {
+		return {
+			restrict: 'E',
+			templateUrl: 'partials/filterSeason.html'
+		};
+	});
+	
+	
 	
 	app.directive('createSeason', function() {
 		return {
@@ -123,11 +135,27 @@
 		return service;
 	});
 	
-	app.controller('ChromeController', function ($http, $scope) {
+	app.controller('ChromeController', function ($http, $scope,$location) {
 		$http.get('/admin/user').success(function(data) {
 			$scope.user = data.name;
 		});
+		
+		
+		$scope.logout = function () {
+			console.log("I am here"+JSON.stringify($location));
+			//$http.post('/admin/logout', {}).success(function() {
+			$http.post('http://localhost:9999/auth/logout', {}).success(function() {
+				console.log("I am here success");
+		      }).error(function(data) {
+		        console.log("Logout failed");
+		        
+		      });
+			
+			}
+		
+		
 	});
+	
 	
 	//***************  Season  **************************
 	app.controller('CreateSeasonController', function ($scope, $http, $window, $log, leagueService) {
@@ -213,6 +241,27 @@
 		leagueService.getLeagues().then(function(data) {
 			$scope.leagues = data;
 		});
+		
+		$http.get('/admin/leagues/types').success(function(data) {
+			if (data[0] )
+				$scope.league.leagueTypes=data;
+		});
+		
+		
+		$scope.refreshSeason = function()
+		{
+			$http.get('/admin/leagues/seasons/leagueType/'+$scope.league.leagueType).success(function(data) {
+				
+				console.log("success "+JSON.stringify(data));
+				if (data[0] === undefined)
+					$scope.showgames=false;
+				else 
+				 $scope.league.seasons = data;
+			}).error(function(res) {
+				console.log('fail'+res);
+			});;
+		}
+		
 		
 		$http.get('/admin/leagues/seasons/current').success(function(data) {
 			$scope.seasons = data;

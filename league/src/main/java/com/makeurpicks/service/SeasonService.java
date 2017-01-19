@@ -39,6 +39,16 @@ public class SeasonService {
 		return s;
 	}
 	
+	public List<Season> getSeasonsByLeague(String league)
+	{
+		System.out.println(league+" in Season Services");
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(System.currentTimeMillis());
+		int currentYear = calendar.get(Calendar.YEAR);
+		
+		return seasonRepository.getSeasonsByLeagueType(league);
+	}
+	
 	public Season createSeason(Season season)
 	{
 	
