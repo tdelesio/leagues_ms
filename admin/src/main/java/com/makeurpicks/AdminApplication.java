@@ -8,6 +8,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.ext.Provider;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -21,12 +23,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestOperations;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
-import org.springframework.security.oauth2.client.token.AccessTokenRequest;
-import org.springframework.security.oauth2.client.token.DefaultAccessTokenRequest;
 import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfToken;
@@ -36,12 +35,17 @@ import org.springframework.security.web.header.HeaderWriterFilter;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.filter.RequestContextFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.util.WebUtils;
 
 @SpringBootApplication
 @EnableEurekaClient
 @EnableCircuitBreaker
 @EnableZuulProxy
+//@Profile("testpcf")
+//@RibbonClient(name = "league", configuration = LeagueConfiguration.class)
 public class AdminApplication {
 
 	public static void main(String[] args) {
@@ -64,6 +68,15 @@ public class AdminApplication {
 		return new OAuth2RestTemplate(oAuth2ProtectedResourceDetails, oAuth2ClientContext);
 	}
 	
+	@Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurerAdapter() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**").allowedOrigins("*").allowedHeaders("*").allowedMethods("*");
+            }
+        };
+    }
 	
 	@Configuration
 	@EnableOAuth2Sso 
@@ -72,7 +85,7 @@ public class AdminApplication {
         @Override
         public void configure(HttpSecurity http) throws Exception {
             http
-            	.logout().and()
+            	.logout().logoutSuccessUrl("/").and()
             	.authorizeRequests()
                     .antMatchers("/login", "/beans", "/user", "/random","/seasons/**").permitAll()
                     .anyRequest().hasRole("ADMIN").and()

@@ -26,6 +26,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import com.makeurpicks.domain.Player;
@@ -45,6 +46,12 @@ public class AuthServerApplication extends WebMvcConfigurerAdapter implements Co
         SpringApplication.run(AuthServerApplication.class, args);
     }
 	
+	
+	 @Override
+     public void addCorsMappings(CorsRegistry registry) {
+		 super.addCorsMappings(registry);
+		 registry.addMapping("/**").allowedOrigins("*").allowedHeaders("*").allowedMethods("*");
+     }
 	@Configuration
     @EnableWebSecurity
     @EnableGlobalMethodSecurity(prePostEnabled = true)

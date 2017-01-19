@@ -127,6 +127,17 @@
 		$http.get('/admin/user').success(function(data) {
 			$scope.user = data.name;
 		});
+		
+		$scope.logout = function () {
+//			   console.log("I am here"+JSON.stringify($location));
+			   $http.post('/admin/logout', {}).success(function() {
+				   				console.log("logout sucess...");
+			        }).error(function(data) {
+			          console.log("Logout failed");
+			          
+			        });
+			   
+			    }
 	});
 	
 	//***************  Season  **************************

@@ -5,7 +5,9 @@
 				<div class="text-center" ng-controller="ChromeController"> 
 					<h2 class=brand>MYP Admin</h2>
 					<h3>{{user}}</h3><br/>  
+					<a ng-click ="logout()">Logout</a>
 				</div> 
+				
 				<ul class="nav nav-sidebar"> 
 					<li ng-class="{active: $state.includes('seasons')}"><a ui-sref="seasons">Seasons</a></li> 
 					<li ng-class="{active: $state.includes('leagues')}"><a ui-sref="leagues">Leagues</a></li>

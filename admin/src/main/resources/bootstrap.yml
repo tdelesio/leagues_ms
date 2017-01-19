@@ -6,6 +6,8 @@ spring:
       uri: ${vcap.services.config-service.uri:http://localhost:8888/config}
       username: ${vcap.mypick.config.server.username:admin}
       password: watchit
+  profiles:
+    active: testpcf
 encrypt:
   key: ${ENCRYPT_KEY:defaultkey} 
 #eureka:

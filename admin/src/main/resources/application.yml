@@ -1,6 +1,9 @@
 server:
   port: 9000
   context-path: /admin
+#  tomcat:
+#    remote_ip_header: x-forwarded-for
+#    protocol_header: x-forwarded-proto
 
 security:
   oauth2:
@@ -51,8 +54,6 @@ zuul:
 #    player:
 #      path: /register/auth/players/**
 #      stripPrefix: true
-
-            
 logging:
   level:
     org.springframework.security: DEBUG
