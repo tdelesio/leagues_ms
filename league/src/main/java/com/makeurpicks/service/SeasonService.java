@@ -8,8 +8,11 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.makeurpicks.domain.League;
 import com.makeurpicks.domain.LeagueType;
 import com.makeurpicks.domain.Season;
+import com.makeurpicks.exception.LeagueValidationException;
+import com.makeurpicks.exception.LeagueValidationException.LeagueExceptions;
 import com.makeurpicks.repository.SeasonRepository;
 
 @Component
@@ -51,11 +54,26 @@ public class SeasonService {
 	
 	public Season updateSeason(Season season)
 	{
-		return seasonRepository.save(season);
+		Season seasonValue = seasonRepository.findOne(season.getId());
+		if (seasonValue == null)
+			throw new LeagueValidationException(LeagueExceptions.SEASON_NOT_FOUND);
+		seasonRepository.save(season);
+		return season;
 	}
 	
 	public void deleteSeason(String seasonId)
 	{
+		Season seasonValue = seasonRepository.findOne(seasonId);
+		if (seasonValue == null)
+			throw new LeagueValidationException(LeagueExceptions.SEASON_NOT_FOUND);
 		seasonRepository.delete(seasonId);
+	}
+
+	public Season getSeasonById(String id) {
+		return seasonRepository.findOne(id);
+	}
+
+	public List<Season> getSeasonsByLeagueType(String leagueType) {
+		return seasonRepository.findByLeagueType(leagueType);
 	}
 }

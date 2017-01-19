@@ -1,8 +1,12 @@
 <div> 
-	<h2>Create League</h2> 
+	
 	<div class=jumbotron> 
 		<div class=container ng-controller="CreateLeagueController as createLeagueCtrl"> 
+		    <h2>List Leagues based on season selected</h2> 
+		    
+			<listleagues-onseason ng-show="showgames"></listleagues-onseason>
 			
+			<h2>Create League</h2> 
 			<create-league ng-show="showgames"></create-league>
 		
 			<leagues ng-show="showgames"></leagues>
