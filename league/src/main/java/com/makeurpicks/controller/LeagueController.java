@@ -1,6 +1,7 @@
 package com.makeurpicks.controller;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Set;
 
 
@@ -53,7 +54,12 @@ public class LeagueController {
 	public @ResponseBody League getLeagueById(@PathVariable String id) {
 		return leagueService.getLeagueById(id);
 	}
-
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/seasons/{seasonId}")
+	public @ResponseBody List<League> getLeagueBySeasonId(@PathVariable String seasonId) {
+		return leagueService.getLeagueBySeasonId(seasonId);
+	}
+	
 	@RequestMapping(method = RequestMethod.POST, value = "/")
 	public @ResponseBody League createLeague(Principal user,
 			@RequestBody League league) {

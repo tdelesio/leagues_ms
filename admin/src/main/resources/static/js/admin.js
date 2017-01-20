@@ -143,8 +143,8 @@
 		
 		$scope.logout = function () {
 			console.log("I am here"+JSON.stringify($location));
-			//$http.post('/admin/logout', {}).success(function() {
-			$http.post('http://localhost:9999/auth/logout', {}).success(function() {
+			$http.post('/admin/logout', {}).success(function() {
+			//$http.post('http://localhost:9999/auth/logout', {}).success(function() {
 				console.log("I am here success");
 		      }).error(function(data) {
 		        console.log("Logout failed");
@@ -247,22 +247,38 @@
 				$scope.league.leagueTypes=data;
 		});
 		
-		
 		$scope.refreshSeason = function()
 		{
-			$http.get('/admin/leagues/seasons/leagueType/'+$scope.league.leagueType).success(function(data) {
-				
-				console.log("success "+JSON.stringify(data));
-				if (data[0] === undefined)
-					$scope.showgames=false;
-				else 
-				 $scope.league.seasons = data;
-			}).error(function(res) {
-				console.log('fail'+res);
-			});;
+			if($scope.league.leagueType)
+			{
+				$http.get('/admin/leagues/seasons/leagueType/'+$scope.league.leagueType).success(function(data) {
+					
+					console.log("success "+JSON.stringify(data));
+					if (data[0] === undefined)
+						$scope.showgames=false;
+					else 
+					 $scope.league.seasons = data;
+				}).error(function(res) {
+					console.log('fetching  seasons failed'+res);
+				});
+			}
 		}
 		
-		
+		$scope.refreshLeagues = function()
+		{
+			if($scope.league.seasons)
+			{
+				$http.get('/admin/leagues/seasons/'+$scope.league.seasons).success(function(data) {
+					
+					if (data[0] === undefined)
+						$scope.showgames=false;
+					else 
+					 $scope.league.leagues = data;
+				}).error(function(res) {
+					console.log('falied'+res);
+				});
+			}
+		}
 		$http.get('/admin/leagues/seasons/current').success(function(data) {
 			$scope.seasons = data;
 			if (data[0] === undefined)

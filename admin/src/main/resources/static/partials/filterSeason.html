@@ -18,9 +18,22 @@
 				class="col-lg-2 control-label">Season</label>
 			<div class="col-lg-10">
 			
-			<select ng-model="league.seasons" required id="season-select" class="form-control">
+			<select ng-model="league.seasons" required id="season-select" class="form-control" ng-change="refreshLeagues()">
 				<option ng-repeat="season in league.seasons" value="{{season.id}}">
 					 {{season.startYear}} - {{season.endYear}}
+				</option>
+			</select>
+			<!-- <input ng-model="season.leagueType" required id="leaguetype-input" class="form-control" value="pickem"/> -->
+		</div>
+	</div>
+	
+	<div class="form-group">
+			 <label for="leaguetype-input"
+				class="col-lg-2 control-label">League</label>
+			<div class="col-lg-10">
+			<select ng-model="league.leagues" required id="leagues-input" class="form-control">
+			<option ng-repeat="league in league.leagues" value="{{league.id}}">
+					 {{league.leagueName}}
 				</option>
 			</select>
 			<!-- <input ng-model="season.leagueType" required id="leaguetype-input" class="form-control" value="pickem"/> -->

@@ -6,6 +6,8 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.makeurpicks.domain.League;
 import com.makeurpicks.domain.LeagueName;
@@ -219,6 +221,8 @@ public class LeagueService {
 		
 		leagueRepository.delete(leagueId);
 	}
-	
+	public List<League> getLeagueBySeasonId(String seasonId) {
+		return leagueRepository.findLeagueBySeasonId(seasonId);
+	}
 	
 }
