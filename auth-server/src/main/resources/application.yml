@@ -3,6 +3,8 @@ server:
     context-path: /auth
 
 spring:
+  profiles:
+    active: dev
   jpa:
     show-sql: true
     hibernate:
@@ -115,6 +117,7 @@ eureka:
 config:
    oauth2:
         ui-uri: ${vcap.services.ui-service.credentials.uri:https://league-myp.cfapps.io/}
+        admin-ssluri: ${vcap.services.admin-service.credentials.uri:https://admin-myp.cfapps.io/admin/}
         admin-uri: ${vcap.services.admin-service.credentials.uri:http://admin-myp.cfapps.io/admin/}
         localadmin-uri: ${vcap.services.admin-service.credentials.uri:http://localhost:9000/admin/}
         privateKey: |
