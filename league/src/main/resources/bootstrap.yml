@@ -4,6 +4,7 @@ spring:
    name: league
 encrypt:
   key: ${ENCRYPT_KEY:defaultkey} 
+  
 #  cloud:
 #    config:
 #      uri: ${vcap.services.config-service.credentials.uri:http://127.0.0.1:8888}
