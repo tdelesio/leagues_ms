@@ -3,6 +3,7 @@ package com.makeurpicks.service;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
@@ -185,6 +186,7 @@ public class GameServiceTest {
 	    
 	    gameService.validateGame(game);
 	}
+	
 	@Test
 	public void createGame_FavTeamNull_Exception()
 	{
@@ -327,7 +329,7 @@ public class GameServiceTest {
 	    
 	    when(gameRepository.findOne(game.getId())).thenReturn(game);
 	    
-	    gameService.updateGameScore(game);
+	    verify(gameService).updateGameScore(game);
 	}
 	
 	@Test
@@ -351,14 +353,14 @@ public class GameServiceTest {
 	   Game game1=new Game();
 	    game1.setFavId(UUID.randomUUID().toString());
 	    game1.setDogId(UUID.randomUUID().toString());
-	    game1.setWeekId(UUID.randomUUID().toString());
+	    game1.setWeekId(weekId);
 	    game1.setGameStart(ZonedDateTime.now());
 	    game1.setId(UUID.randomUUID().toString());
 	    
 	    Game game2=new Game();
 	    game2.setFavId(UUID.randomUUID().toString());
 	    game2.setDogId(UUID.randomUUID().toString());
-	    game2.setWeekId(UUID.randomUUID().toString());
+	    game2.setWeekId(weekId);
 	    game2.setGameStart(ZonedDateTime.now());
 	    game2.setId(UUID.randomUUID().toString());
 	    
@@ -368,7 +370,7 @@ public class GameServiceTest {
 	    
 	    when(gameRepository.findByWeekId(weekId)).thenReturn(games);
 	    
-	    gameService.getGamesByWeek(weekId);
+	   verify(gameService).getGamesByWeek(weekId);
 	}
 	
 	/*@Test 
