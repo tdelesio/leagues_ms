@@ -45,10 +45,19 @@ public class GameService {
 		
 		Team fav = teamService.getTeam(game.getFavId());
 		Team dog = teamService.getTeam(game.getDogId());
+		if(null==fav)
+			throw new GameValidationException(GameExceptions.FAVORITE_TEAM_IS_NULL);
+		else{
+			game.setFavShortName(fav.getShortName());
+			game.setFavFullName(fav.getFullTeamName());
+		}
+			
+		if(null==dog)
+			throw new GameValidationException(GameExceptions.DOG_TEAM_IS_NULL);
+		else{	
 		game.setDogShortName(dog.getShortName());
-		game.setFavShortName(fav.getShortName());
-		game.setFavFullName(fav.getFullTeamName());
 		game.setDogFullName(dog.getFullTeamName());
+		}
 		
 		return gameRepository.save(game);
 	}
@@ -59,6 +68,8 @@ public class GameService {
 		
 		//allow only certain fields to be updated
 		Game gameFromDS = gameRepository.findOne(game.getId());
+		if(gameFromDS==null)
+			throw new GameValidationException(GameExceptions.UPDATE_GAME_IS_NULL);
 		gameFromDS.setGameStart(game.getGameStart());
 		gameFromDS.setSpread(game.getSpread());
 		gameFromDS.setFavHome(game.isFavHome());
@@ -70,7 +81,13 @@ public class GameService {
 	
 	public Game updateGameScore(Game game)
 	{
+		if(null==game)
+			throw new GameValidationException(GameExceptions.UPDATE_GAME_SCORE_IS_NULL);
+		
 		Game gameFromDS = gameRepository.findOne(game.getId());
+		
+		if(null==gameFromDS)
+			throw new GameValidationException(GameExceptions.UPDATE_GAME_SCORE_VALUE_IS_NULL);
 		gameFromDS.setFavScore(game.getFavScore());
 		gameFromDS.setDogScore(game.getDogScore());
 		return gameRepository.save(gameFromDS);
@@ -79,6 +96,9 @@ public class GameService {
 	public List<Game> getGamesByWeek(String weekId)
 	{
 		List<Game> games = gameRepository.findByWeekId(weekId);
+		
+		if(games==null)
+			throw new GameValidationException(GameExceptions.GET_GAMES_BY_WEEK_IS_NULL);
 		
 		Collections.sort(games, (g1, g2)-> g1.getGameStart().compareTo(g2.getGameStart()));
 		return games;
@@ -91,22 +111,21 @@ public class GameService {
 		return game;
 	}
 	
-	private void validateGame(Game game)
+	public void validateGame(Game game)
 	{
 		if (game==null)
 			throw new GameValidationException(GameExceptions.GAME_IS_NULL);
-		if ("".equals(game.getFavId()))
+		if ("".equals(game.getFavId()) || null==game.getFavId())
 			throw new GameValidationException(GameExceptions.FAVORITE_IS_NULL);
-		if ("".equals(game.getDogId()))
+		if ("".equals(game.getDogId()) || null==game.getDogId())
 			throw new GameValidationException(GameExceptions.DOG_IS_NULL);
-		if ("".equals(game.getWeekId()))
+		if ("".equals(game.getWeekId()) || null==game.getWeekId())
 			throw new GameValidationException(GameExceptions.WEEK_IS_NULL);
-		if (game.getGameStart() == null)
+		if (game.getGameStart() == null || null==game.getGameStart())
 			throw new GameValidationException(GameExceptions.GAMESTART_IS_NULL);
 		
 		if (game.getFavId().equals(game.getDogId()))
 			throw new GameValidationException(GameExceptions.TEAM_CANNOT_PLAY_ITSELF);
-		
 		
 	}
 	

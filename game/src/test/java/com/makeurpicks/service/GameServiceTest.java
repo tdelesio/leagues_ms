@@ -190,7 +190,8 @@ public class GameServiceTest {
 	@Test
 	public void createGame_FavTeamNull_Exception()
 	{
-		expectedEx.expect(NullPointerException.class);
+		expectedEx.expect(GameValidationException.class);
+	    expectedEx.expectMessage(GameExceptions.FAVORITE_TEAM_IS_NULL.toString());
 	    
 	    Game game=new Game();
 	    game.setFavId(UUID.randomUUID().toString());
@@ -206,7 +207,8 @@ public class GameServiceTest {
 	@Test
 	public void createGame_DogTeamNull_Exception()
 	{
-		expectedEx.expect(NullPointerException.class);
+		expectedEx.expect(GameValidationException.class);
+	    expectedEx.expectMessage(GameExceptions.DOG_TEAM_IS_NULL.toString());
 	    
 	    Game game=new Game();
 	    game.setFavId(UUID.randomUUID().toString());
@@ -256,7 +258,8 @@ public class GameServiceTest {
 	@Test
 	public void updateGame_FindFromDsNull_Exception()
 	{
-		expectedEx.expect(NullPointerException.class);
+		expectedEx.expect(GameValidationException.class);
+	    expectedEx.expectMessage(GameExceptions.UPDATE_GAME_IS_NULL.toString());
 	    
 	    Game game=new Game();
 	    game.setFavId(UUID.randomUUID().toString());
@@ -292,7 +295,8 @@ public class GameServiceTest {
 	@Test
 	public void updateGameScore_gameNull_Exception()
 	{
-		expectedEx.expect(NullPointerException.class);
+		expectedEx.expect(GameValidationException.class);
+	    expectedEx.expectMessage(GameExceptions.UPDATE_GAME_SCORE_IS_NULL.toString());
 	    
 	    gameService.updateGameScore(null);
 	}
@@ -300,7 +304,8 @@ public class GameServiceTest {
 	@Test
 	public void updateGameScore_findFromDsNull_Exception()
 	{
-		expectedEx.expect(NullPointerException.class);
+		expectedEx.expect(GameValidationException.class);
+	    expectedEx.expectMessage(GameExceptions.UPDATE_GAME_SCORE_VALUE_IS_NULL.toString());
 	    
 	    Game game=new Game();
 	    game.setFavId(UUID.randomUUID().toString());
@@ -337,7 +342,8 @@ public class GameServiceTest {
 	@Test
 	public void getGamesByWeek_gamesNull_Exception()
 	{
-		expectedEx.expect(NullPointerException.class);
+		expectedEx.expect(GameValidationException.class);
+	    expectedEx.expectMessage(GameExceptions.GET_GAMES_BY_WEEK_IS_NULL.toString());
 	    
 	   String weekId=UUID.randomUUID().toString();
 	    
