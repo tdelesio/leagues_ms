@@ -173,7 +173,7 @@ eureka:
 #      defaultZone: ${vcap.services.eureka-service.credentials.uri:http://eureka-leagues-myp.apps.techolution.com}/eureka/
   instance:
     prefer-ip-address: true
-    hostname: auth-server-myp.cfapps.io
+    hostname: auth-server-myp.apps.techolution.com
     nonSecurePort: 9999
     leaseRenewalIntervalInSeconds: 10
     metadataMap:
