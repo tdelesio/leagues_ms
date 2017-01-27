@@ -12,3 +12,4 @@ applications:
   - league-service
   env:
    JAVA_OPTS: -Djava.security.egd=file:///dev/urandom -Dspring.profiles.active=techopcf
+   
