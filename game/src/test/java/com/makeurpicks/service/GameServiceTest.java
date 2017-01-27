@@ -329,7 +329,9 @@ public class GameServiceTest {
 	    
 	    when(gameRepository.findOne(game.getId())).thenReturn(game);
 	    
-	    verify(gameService).updateGameScore(game);
+	    when(gameRepository.save(game)).thenReturn(game);
+	    
+	    assertNotNull(gameService.updateGameScore(game));
 	}
 	
 	@Test
@@ -370,7 +372,7 @@ public class GameServiceTest {
 	    
 	    when(gameRepository.findByWeekId(weekId)).thenReturn(games);
 	    
-	   verify(gameService).getGamesByWeek(weekId);
+	   assertNotNull(gameService.getGamesByWeek(weekId));
 	}
 	
 	/*@Test 
