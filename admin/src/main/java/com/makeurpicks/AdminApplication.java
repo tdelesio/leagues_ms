@@ -8,8 +8,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.ext.Provider;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -35,9 +33,6 @@ import org.springframework.security.web.header.HeaderWriterFilter;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.filter.RequestContextFilter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.util.WebUtils;
 
 @SpringBootApplication
@@ -67,16 +62,20 @@ public class AdminApplication {
 	public OAuth2RestOperations securerestTemplate() {
 		return new OAuth2RestTemplate(oAuth2ProtectedResourceDetails, oAuth2ClientContext);
 	}
-	
-	@Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurerAdapter() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("*").allowedHeaders("*").allowedMethods("*");
-            }
-        };
-    }
+	 
+	/* @Bean
+		public FilterRegistrationBean corsFilter() {
+			UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+			CorsConfiguration config = new CorsConfiguration();
+			config.setAllowCredentials(true);
+			config.addAllowedOrigin("*");
+			config.addAllowedHeader("*");
+			config.addAllowedMethod("*");
+			source.registerCorsConfiguration("/**", config);
+			FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
+			bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
+			return bean;
+		}*/
 	
 	@Configuration
 	@EnableOAuth2Sso 
