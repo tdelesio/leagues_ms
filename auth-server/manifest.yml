@@ -8,4 +8,4 @@ applications:
   services:
   - auth-mysql
   env:
-   JAVA_OPTS: -Djava.security.egd=file:///dev/urandom -Dspring.profiles.active=pcf
+   JAVA_OPTS: -Djava.security.egd=file:///dev/urandom -Dspring.profiles.active=techopcf

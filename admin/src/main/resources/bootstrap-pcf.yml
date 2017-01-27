@@ -6,7 +6,7 @@ spring:
   cloud:
     config:
         fail-fast: true
-        uri: ${vcap.mypick.config.server.uri:https://config-leagues-myp.cfapps.io/config}
+        uri: ${vcap.mypick.config.server.uri:https://config-leagues-myp.apps.techolution.com/config}
         username: ${vcap.mypick.config.server.username:admin}
         password: watchit
         # name of the config server's property source (file.yml) that we want to use

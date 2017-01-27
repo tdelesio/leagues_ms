@@ -22,9 +22,9 @@ security:
             hL9dSAZuA8xExjlPmQIDAQAB
             -----END PUBLIC KEY-----
 
-hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 50000
-eureka.client.eureka-server-read-timeout-seconds: 250
-eureka.client.eureka-server-connect-timeout-seconds: 250
+hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 190000
+eureka.client.eureka-server-read-timeout-seconds: 5450
+eureka.client.eureka-server-connect-timeout-seconds: 5450
 config:
   oauth2:
     resourceURI: http://localhost:8081/leagues/user
