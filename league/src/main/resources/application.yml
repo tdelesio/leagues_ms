@@ -14,7 +14,10 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5Dialect
   datasource:
-    url: jdbc:mysql://localhost:3304/league
+#    url: jdbc:mysql://localhost:3304/league
+#    username: root
+#    password: admin123
+    url: jdbc:mysql://localhost:3306/cf_0619e413_5337_476d_98b7_2e1d996aa224
     username: root
     password: admin123
     driver-class-name: com.mysql.jdbc.Driver
@@ -57,7 +60,7 @@ spring:
       time-between-eviction-runs-millis: 3600000
 ---    
 spring:
-  profiles: pcf
+  profiles: techopcf
   jpa:
     show-sql: true
     hibernate:
@@ -69,6 +72,29 @@ spring:
     url: jdbc:mysql://${vcap.services.cleardb.[0].credentials.hostname:us-cdbr-iron-east-04.cleardb.net}:${vcap.services.cleardb.[0].credentials.port:3306}/${vcap.services.cleardb.[0].credentials.name:ad_0a9d6cd28f39fb9}?autoReconnect=true
     username: ${vcap.services.cleardb.[0].credentials.username:bca48c59fd4f13}
     password: ${vcap.services.cleardb.[0].credentials.password:91b56d17}
+    driver-class-name: com.mysql.jdbc.Driver
+    dbcp:
+      max-active:  5
+      initial-size: 5
+      max-idle: 2
+      min-idle: 1
+      test-on-borrow: true
+      validation-query: SELECT 1
+      time-between-eviction-runs-millis: 3600000
+---    
+spring:
+  profiles: pcf
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+  datasource:
+    url: jdbc:mysql://40.121.212.183:${vcap.services.p-mysql.[0].credentials.port:3306}/${vcap.services.p-mysql.[0].credentials.name:cf_0619e413_5337_476d_98b7_2e1d996aa224}?autoReconnect=true
+    username: ${vcap.services.p-mysql.[0].credentials.username:v3UBiVC4yFOPqQRX}
+    password: ${vcap.services.p-mysql.[0].credentials.password:6Hma540BY1h5R1i6}
     driver-class-name: com.mysql.jdbc.Driver
     dbcp:
       max-active:  5
