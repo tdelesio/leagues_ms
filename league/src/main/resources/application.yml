@@ -89,7 +89,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5Dialect
   datasource:
-    url: jdbc:mysql://40.121.212.183:${vcap.services.p-mysql.[0].credentials.port:3306}/${vcap.services.p-mysql.[0].credentials.name:cf_0619e413_5337_476d_98b7_2e1d996aa224}
+    url: jdbc:mysql://40.121.212.183:${vcap.services.p-mysql.[0].credentials.port:3306}/${vcap.services.p-mysql.[0].credentials.name:cf_0619e413_5337_476d_98b7_2e1d996aa224}?autoReconnect=true
     username: ${vcap.services.p-mysql.[0].credentials.username:v3UBiVC4yFOPqQRX}
     password: ${vcap.services.p-mysql.[0].credentials.password:6Hma540BY1h5R1i6}
     driver-class-name: com.mysql.jdbc.Driver    
