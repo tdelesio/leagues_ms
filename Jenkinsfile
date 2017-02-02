@@ -18,6 +18,4 @@ node {
   bat "${mvnHome}/bin/mvn -DreleaseVersion=${version} -DdevelopmentVersion=${pom.version} -DpushChanges=false -DlocalCheckout=true -DpreparationGoals=initialize release:prepare release:perform -B"
   // Now we have a step to decide if we should publish to production 
   // (we just use a simple publish step here)
-  input 'Publish?'
-  stage 'Publish
 }
