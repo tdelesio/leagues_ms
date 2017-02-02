@@ -6,7 +6,7 @@ node {
   git url: '...'
   // Clean any locally modified files and ensure we are actually on origin/master
   // as a failed release could leave the local workspace ahead of origin/master
-  bat "git clean -f && git reset --hard origin/master"
+  bat "git clean -f && git reset --hard origin/feature-myp-12"
   def mvnHome = tool 'maven-3.3.9'
   // we want to pick up the version from the pom
   def pom = readMavenPom file: '/server-eureka/pom.xml'
