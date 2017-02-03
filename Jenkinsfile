@@ -13,6 +13,10 @@ node {
  //  def version = pom.version.replace("-SNAPSHOT", ".${currentBuild.number}")
   // Mark the code build 'stage'....
   stage 'Build'
+  
+  echo "sh pwd"
+  
+  sh pwd
   // Run the maven build this is a release that keeps the development version 
   // unchanged and uses Jenkins to provide the version number uniqueness
   sh "${mvnHome}/bin/mvn clean intall /server-eureka/pom.xml"
