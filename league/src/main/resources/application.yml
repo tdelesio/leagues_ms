@@ -60,7 +60,7 @@ spring:
       time-between-eviction-runs-millis: 3600000
 ---    
 spring:
-  profiles: pcf
+  profiles: techopcf
   jpa:
     show-sql: true
     hibernate:
@@ -83,7 +83,7 @@ spring:
       time-between-eviction-runs-millis: 3600000
 ---    
 spring:
-  profiles: techopcf
+  profiles: pcf
   jpa:
     show-sql: true
     hibernate:
