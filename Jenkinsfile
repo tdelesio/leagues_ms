@@ -15,7 +15,7 @@ node {
   stage 'Build'
   // Run the maven build this is a release that keeps the development version 
   // unchanged and uses Jenkins to provide the version number uniqueness
-  sh "${mvnHome}/bin/mvn clean intall /server-eureka/pom.xml
+  sh "${mvnHome}/bin/mvn clean intall /server-eureka/pom.xml"
   // Now we have a step to decide if we should publish to production 
   // (we just use a simple publish step here)
 }
