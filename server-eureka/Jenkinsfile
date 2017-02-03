@@ -8,9 +8,13 @@ node {
   // as a failed release could leave the local workspace ahead of origin/master
   bat "git clean -f && git reset --hard origin/feature-myp-12"
   def mvnHome = tool 'maven-3.3.9'
+  
+  echo mvnHome
   // we want to pick up the version from the pom
   def pom = readMavenPom file: 'pom.xml'
   def version = pom.version.replace("-SNAPSHOT", ".${currentBuild.number}")
+  echo pom
+  echo version
   // Mark the code build 'stage'....
   stage 'Build'
   // Run the maven build this is a release that keeps the development version 
