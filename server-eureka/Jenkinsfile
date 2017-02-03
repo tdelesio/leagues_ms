@@ -6,7 +6,7 @@ node {
   git url: '...'
   // Clean any locally modified files and ensure we are actually on origin/master
   // as a failed release could leave the local workspace ahead of origin/master
-  bat "git clean -f && git reset --hard feature-myp-12"
+  bat "git clean -f && git reset --hard origin/master"
   def mvnHome = tool 'maven-3.3.9'
   
   echo mvnHome
