@@ -5,7 +5,7 @@ node {
   git url: 'https://github.com/tdelesio/leagues_ms/'
   // Clean any locally modified files and ensure we are actually on origin/master
   // as a failed release could leave the local workspace ahead of origin/master
-  bat "git clean -f && git reset --hard origin/feature-myp-12"
+  sh "git clean -f && git reset --hard origin/feature-myp-12"
   def mvnHome = tool 'maven-3.3.9'
   echo mvnHome
   // we want to pick up the version from the pom
@@ -15,7 +15,7 @@ node {
   stage 'Build'
   // Run the maven build this is a release that keeps the development version 
   // unchanged and uses Jenkins to provide the version number uniqueness
-  bat "${mvnHome}/bin/mvn -DreleaseVersion=${version} -DdevelopmentVersion=${pom.version} -DpushChanges=false -DlocalCheckout=true -DpreparationGoals=initialize release:prepare release:perform -B"
+  sh "${mvnHome}/bin/mvn -DreleaseVersion=${version} -DdevelopmentVersion=${pom.version} -DpushChanges=false -DlocalCheckout=true -DpreparationGoals=initialize release:prepare release:perform -B"
   // Now we have a step to decide if we should publish to production 
   // (we just use a simple publish step here)
 }
