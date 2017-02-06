@@ -238,6 +238,12 @@
 		});
 		});
 		
+		$scope.$watch('leaguesBySeason.seasonId', function (newValue, oldValue, scope) {
+			$http.get('/admin/leagues/seasonid/'+$scope.leaguesBySeason.seasonId).success(function(data) {
+				$scope.seasonalLeagues = data;
+			});
+			});
+		
 //		$scope.$watch('league.seasonId', function (newValue, oldValue, scope) {
 //			$http.get('/admin/leagues/seasons/'+$scope.league.seasonId).success(function(data) {
 //				$scope.leaguesBySeason.leagueTypes = [];

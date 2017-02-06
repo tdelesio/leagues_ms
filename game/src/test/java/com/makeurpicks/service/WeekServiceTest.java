@@ -1,27 +1,23 @@
 package com.makeurpicks.service;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.jboss.util.id.GUID;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.makeurpicks.GameApplication;
 import com.makeurpicks.domain.LeagueView;
@@ -29,127 +25,128 @@ import com.makeurpicks.domain.Week;
 import com.makeurpicks.domain.WeekBuilder;
 import com.makeurpicks.repository.WeekRepository;
 
-
 @RunWith(MockitoJUnitRunner.class)
 @SpringApplicationConfiguration(classes = GameApplication.class)
 public class WeekServiceTest {
 
 	@Mock
-	private WeekRepository weekRepository;
-	
+	private WeekRepository weekRepositoryMock;
+
 	@Mock
 	private LeagueIntegrationService leagueIntServiceMock;
-	
+
 	@Autowired
 	@InjectMocks
 	private WeekService weekService;
-	
-	
-	@Test
-	public void testGetWeeksBySeason() {
-		String s2015 = UUID.randomUUID().toString();
-		String s2016 = UUID.randomUUID().toString();
-		
-		
-		Week week1 = createWeek(s2015, 1);
-		Week week2 = createWeek(s2015, 2);
-		Week week3 = createWeek(s2015, 3);
-		
-		Week weeka = createWeek(s2016, 1);
-		Week weekb = createWeek(s2016, 2);
-		
-		when(weekRepository.save(week1)).thenReturn(week1);
-		when(weekRepository.save(week2)).thenReturn(week2);
-		when(weekRepository.save(week3)).thenReturn(week3);
-		when(weekRepository.save(weeka)).thenReturn(weeka);
-		when(weekRepository.save(weekb)).thenReturn(weekb);
-		
-		List<Week> weeks2015 = new ArrayList<>();
-		weeks2015.add(week1);
-		weeks2015.add(week2);
-		weeks2015.add(week3);
-		
-		List<Week> weeks2016 = new ArrayList<>();
-		weeks2016.add(weeka);
-		weeks2016.add(weekb);
-		
-		when(weekRepository.findBySeasonId(s2015)).thenReturn(weeks2015);
-		when(weekRepository.findBySeasonId(s2016)).thenReturn(weeks2016);
-		
-		List<Week> weeks = weekService.getWeeksBySeason(s2015);
-		assertTrue(weeks.contains(week1));
-		assertTrue(weeks.contains(week2));
-		assertTrue(weeks.contains(week3));
-		
-		assertFalse(weeks.contains(weeka));
-		assertFalse(weeks.contains(weekb));
-		
-		weeks = weekService.getWeeksBySeason(s2016);
-		assertFalse(weeks.contains(week1));
-		assertFalse(weeks.contains(week2));
-		assertFalse(weeks.contains(week3));
-		
-		assertTrue(weeks.contains(weeka));
-		assertTrue(weeks.contains(weekb));
+
+	@Rule
+	public ExpectedException expectedEx = ExpectedException.none();
+
+	@Before
+	public void setup() {
+		MockitoAnnotations.initMocks(this);
 	}
 
+	/*@Test
+	public void getWeeksBySeason_seasonIdIsNull_throwsNullPointerException() {
+		expectedEx.expect(NullPointerException.class);
+		String seasonId = UUID.randomUUID().toString();
+		when(weekRepositoryMock.findBySeasonId(seasonId)).thenReturn(null);
+		weekService.getWeeksBySeason(seasonId);
+	}*/
+
 	@Test
-	public void getWeeksByLeague()
-	{
+	public void getWeeksBySeason_seasonIdIsNotNull_returnsListOfWeeks() {
+		String seasonId = UUID.randomUUID().toString();
+		Week week1 = new Week();
+		week1.setId(UUID.randomUUID().toString());
+		week1.setSeasonId(seasonId);
+		week1.setWeekNumber((int) (Math.random() + 1));
+
+		Week week2 = new Week();
+		week2.setId(UUID.randomUUID().toString());
+		week2.setSeasonId(seasonId);
+		week2.setWeekNumber((int) (Math.random() + 1));
+		
+		Week week3 = new Week();
+		week3.setId(UUID.randomUUID().toString());
+		week3.setSeasonId(UUID.randomUUID().toString());
+		week3.setWeekNumber((int) (Math.random() + 1));
+		
+		when(weekRepositoryMock.save(week1)).thenReturn(week1);
+		when(weekRepositoryMock.save(week2)).thenReturn(week2);
+		when(weekRepositoryMock.save(week3)).thenReturn(week3);
+
+		List<Week> weeksPair1 = new ArrayList<>();
+		weeksPair1.add(week1);
+		weeksPair1.add(week2);
+//		List<Week> weeksPair2 = new ArrayList<>();
+//		weeksPair2.add(week3);
+
+		when(weekRepositoryMock.findBySeasonId(seasonId)).thenReturn(weeksPair1);
+		
+
+		weekService.getWeeksBySeason(seasonId);
+	}
+	
+	
+	/*@Test
+	public void getWeeksByLeague_leagueIdIsNull_throwsNullPointerException() {
+		expectedEx.expect(NullPointerException.class);
 		String leagueId = UUID.randomUUID().toString();
-		String s2015 = UUID.randomUUID().toString();
-		String s2016 = UUID.randomUUID().toString();
-		
 		LeagueView leagueView = new LeagueView();
-		leagueView.setId(leagueId);
-		leagueView.setSeasonId(s2016);
-		leagueView.setLeagueName("Pickem 2016");
+		when(leagueIntServiceMock.getLeagueById(leagueId)).thenReturn(null);
+		when(weekService.getWeeksBySeason(leagueView.getSeasonId())).thenReturn(null);
+		weekService.getWeeksByLeague(leagueId);
+	}*/
+	
+	@Test
+	public void getWeeksByLeague_leagueIdIsNotNull_returnsListOfWeeks() {
+		String leagueId = UUID.randomUUID().toString();
+		String seasonId = UUID.randomUUID().toString();
+		Week week1 = new Week();
+		week1.setId(UUID.randomUUID().toString());
+		week1.setSeasonId(seasonId);
+		week1.setWeekNumber((int) (Math.random() + 1));
+
+		Week week2 = new Week();
+		week2.setId(UUID.randomUUID().toString());
+		week2.setSeasonId(seasonId);
+		week2.setWeekNumber((int) (Math.random() + 1));
 		
-		Week week1 = createWeek(s2015, 1);
-		Week week2 = createWeek(s2015, 2);
-		Week week3 = createWeek(s2015, 3);
+		Week week3 = new Week();
+		week3.setId(UUID.randomUUID().toString());
+		week3.setSeasonId(UUID.randomUUID().toString());
+		week3.setWeekNumber((int) (Math.random() + 1));
 		
-		Week weeka = createWeek(s2016, 1);
-		Week weekb = createWeek(s2016, 2);
-		
-		
-		when(weekRepository.save(week2)).thenReturn(week2);
-		when(weekRepository.save(week3)).thenReturn(week3);
-		when(weekRepository.save(weeka)).thenReturn(weeka);
-		when(weekRepository.save(weekb)).thenReturn(weekb);
-		
+		when(weekRepositoryMock.save(week1)).thenReturn(week1);
+		when(weekRepositoryMock.save(week2)).thenReturn(week2);
+		when(weekRepositoryMock.save(week3)).thenReturn(week3);
+
+		List<Week> weeksPair1 = new ArrayList<>();
+		weeksPair1.add(week1);
+		weeksPair1.add(week2);
+		List<Week> weeksPair2 = new ArrayList<>();
+		weeksPair2.add(week3);
+		LeagueView leagueView =new LeagueView();
+		leagueView.setId(UUID.randomUUID().toString());
+		leagueView.setLeagueId(UUID.randomUUID().toString());
+		leagueView.setSeasonId(seasonId);
+		leagueView.setLeagueName("newLeague");
 		when(leagueIntServiceMock.getLeagueById(leagueId)).thenReturn(leagueView);
-		
-		List<Week> weeks2015 = new ArrayList<>();
-		weeks2015.add(week1);
-		weeks2015.add(week2);
-		weeks2015.add(week3);
-		
-		List<Week> weeks2016 = new ArrayList<>();
-		weeks2016.add(weeka);
-		weeks2016.add(weekb);
-		when(weekRepository.findBySeasonId(s2015)).thenReturn(weeks2015);
-		when(weekRepository.findBySeasonId(s2016)).thenReturn(weeks2016);
-		
-		List<Week> weeks = weekService.getWeeksByLeague(leagueId);
-		
-		assertFalse(weeks.contains(week1));
-		assertFalse(weeks.contains(week2));
-		assertFalse(weeks.contains(week3));
-		
-		assertTrue(weeks.contains(weeka));
-		assertTrue(weeks.contains(weekb));
+		when(weekService.getWeeksBySeason(leagueView.getSeasonId())).thenReturn(weeksPair1); 
+		weekService.getWeeksByLeague(leagueId);
 	}
 
-	private Week createWeek(String seasonId, int weekNumber)
-	{
-		Week week = new WeekBuilder()
-			.withSeasonId(seasonId)
-			.withWeekNumber(weekNumber)
-			.build();
-		
+
+	@Test
+	public void createWeekShouldCallSaveOnWeekRepository() {
+		String seasonId = UUID.randomUUID().toString();
+		int weekNumber = (int) (Math.random() + 1);
+		Week week = new WeekBuilder().withSeasonId(seasonId).withWeekNumber(weekNumber).build();
+
 		weekService.createWeek(week);
-		
-		return week;	
+
+		verify(weekRepositoryMock).save(week);
 	}
 }

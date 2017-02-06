@@ -20,6 +20,17 @@
 		</div>
 	</div>
 	
+	<div class="form-group">
+		<label for="season-select" class="col-lg-2 control-label">Leagues</label>
+		<div class="col-lg-10">
+			<select ng-model="leaguesBySeason.leagueId" required id="season-select" class="form-control">
+				<option ng-repeat="league in seasonalLeagues" value="{{league.id}}">
+					 {{league.leagueName}}
+				</option>
+			</select>
+		</div>
+	</div>
+	
 	
 	<div class="form-group">
    		<div class="col-lg-10 col-lg-offset-2">

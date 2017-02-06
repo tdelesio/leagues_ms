@@ -1,5 +1,6 @@
 package com.makeurpicks.service;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -17,8 +18,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.makeurpicks.domain.League;
-import com.makeurpicks.domain.LeagueBuilder;
 import com.makeurpicks.domain.LeagueType;
 import com.makeurpicks.domain.Season;
 import com.makeurpicks.domain.SeasonBuilder;
@@ -143,6 +142,22 @@ public class SeasonServiceTest {
 				.build();
 		when(seasonRepositoryMock.findOne(season.getId())).thenReturn(null);
 		seasonService.deleteSeason(seasonId);
+	}
+	
+	
+	@Test
+	public void getSeasonById_seasonId_returnSeason() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(System.currentTimeMillis());
+		int currentYear = calendar.get(Calendar.YEAR);
+		String seasonId=UUID.randomUUID().toString();
+		Season season = new SeasonBuilder(seasonId)
+				.withStartYear(currentYear)
+				.withEndYear(currentYear+1)
+				.withLeagueType(LeagueType.pickem)
+				.build();
+		when(seasonRepositoryMock.findOne(season.getId())).thenReturn(season);
+		assertEquals(season.getId(), seasonId);
 	}
 
 }
