@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 public class LeagueValidationException extends RuntimeException {
 
 	public enum LeagueExceptions {LEAGUE_NAME_IS_NULL, LEAGUE_NAME_IN_USE, SEASON_ID_IS_NULL, ADMIN_NOT_FOUND, 
-		PLAYER_NOT_FOUND, LEAGUE_NOT_FOUND, INVALID_LEAGUE_PASSWORD,INVALID_LEAGUE_ID}
+		PLAYER_NOT_FOUND, LEAGUE_NOT_FOUND, INVALID_LEAGUE_PASSWORD,INVALID_LEAGUE_ID, SEASON_NOT_FOUND}
 	private List<LeagueExceptions> exceptions;
 	
 	public LeagueValidationException(LeagueExceptions... leagueExceptions)

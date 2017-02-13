@@ -50,6 +50,18 @@ public class SeasonController {
 		return LeagueType.values();
 	}
 	
+	@RequestMapping(method=RequestMethod.GET, value="/leaguetypes/{leagueType}")
+	public @ResponseBody List<Season> getSeasonsByLeagueType(@PathVariable String leagueType)
+	{
+		return seasonService.getSeasonsByLeagueType(leagueType);
+	}
+	
+	@RequestMapping(method=RequestMethod.GET, value="/{id}")
+	public @ResponseBody Season getSeasonById(@PathVariable String id)
+	{
+		return seasonService.getSeasonById(id);
+	}
+	
 	@RequestMapping(method=RequestMethod.DELETE, value="/{id}")
 //	@PreAuthorize("#userName == authentication.name")
 	@PreAuthorize("hasRole('ADMIN')")

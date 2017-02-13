@@ -104,6 +104,14 @@
 		};
 	});
 	
+	app.directive('listleaguesOnseason', function() {
+		return {
+			restrict: 'E',
+			templateUrl: 'partials/listleaguesOnseason.html'
+		};
+	});
+	
+	
 	
 	app.factory('leagueService', function ($http, $log) {
 	$log.debug('leagueService');
@@ -146,7 +154,7 @@
 		$scope.showseasons=true;
 		$scope.season={};
 		$scope.season.leagueType = "pickem";
-		$scope.season.leagueTypes="pickem";
+		$scope.season.leagueTypes=["pickem"];
 		$scope.season.startYear = 2017;
 		$scope.season.endYear = 2018;
 		
@@ -218,14 +226,45 @@
 	
 		$scope.league = {};
 		$scope.season = {};
+		$scope.leaguesBySeason = {};
 		$scope.showgames=true;
 		$scope.hideplayers=false;
+		$scope.leaguesBySeason.leagueTypes = [];
+		
 		
 		leagueService.getLeagues().then(function(data) {
 			$scope.leagues = data;
 		});
 		
+		$http.get('/admin/leagues/types').success(function(data) {
+			var arrayLength = data.length;
+			for (var i = 0; i < arrayLength; i++) {
+				$scope.leaguesBySeason.leagueTypes.push(data[i]);
+			}
+		});
+		
+		$scope.$watch('leaguesBySeason.leagueType', function (newValue, oldValue, scope) {
+		$http.get('/admin/leagues/seasons/leaguetypes/'+$scope.leaguesBySeason.leagueType).success(function(data) {
+			$scope.allseasons = data;
+		});
+		});
+		
+		$scope.$watch('leaguesBySeason.seasonId', function (newValue, oldValue, scope) {
+			$http.get('/admin/leagues/seasonid/'+$scope.leaguesBySeason.seasonId).success(function(data) {
+				$scope.seasonalLeagues = data;
+			});
+			});
+		
+//		$scope.$watch('league.seasonId', function (newValue, oldValue, scope) {
+//			$http.get('/admin/leagues/seasons/'+$scope.league.seasonId).success(function(data) {
+//				$scope.leaguesBySeason.leagueTypes = [];
+//				$scope.leaguesBySeason.leagueTypes.push(data.leagueType);
+//			});
+//			
+//		});
+//		
 		$http.get('/admin/leagues/seasons/current').success(function(data) {
+//			console.log(JSON.stringify(data));
 			$scope.seasons = data;
 			if (data[0] === undefined)
 				$scope.showgames=false;
@@ -236,6 +275,13 @@
 		$scope.season.startYear = 2016;
 		$scope.season.endYear = 2017;
 		$scope.season.leagueType = "pickem";
+		
+		this.getReqLeagues = function(){
+			$http.get('/admin/leagues/seasonid/'+$scope.leaguesBySeason.seasonId).success(function(data) {
+//				console.log(data);
+				$scope.leagueValues = data;
+			});
+		}
 		
 		
 		this.addLeague = function() {

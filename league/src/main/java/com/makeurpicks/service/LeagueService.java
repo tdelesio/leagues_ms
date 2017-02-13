@@ -116,6 +116,11 @@ public class LeagueService {
 	public League getLeagueByName(String leagueName) {
 		return leagueRepository.findByLeagueName(leagueName);
 	}
+	
+	public List<League> getLeagueBySeasonId(String seasonId) {
+		return leagueRepository.findBySeasonId(seasonId);
+	}
+
 
 	/*public League getLeagueByName(String name) {
 		Iterable<League> leagues = leagueRepository.findAll();

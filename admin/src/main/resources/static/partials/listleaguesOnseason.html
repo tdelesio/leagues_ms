@@ -1,0 +1,60 @@
+<form name="createLeague" ng-submit="createLeagueCtrl.getReqLeagues()" class="form-horizontal">
+<fieldset>
+   <div class="form-group">
+			 <label for="leaguetype-input"
+				class="col-lg-2 control-label">League Type</label>
+			<div class="col-lg-10">
+			<select ng-model="leaguesBySeason.leagueType" required id="leaguetype-input" class="form-control" ng-options="x for x in leaguesBySeason.leagueTypes">
+			</select>
+			<!-- <input ng-model="season.leagueType" required id="leaguetype-input" class="form-control" value="pickem"/> -->
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="season-select" class="col-lg-2 control-label">Season</label>
+		<div class="col-lg-10">
+			<select ng-model="leaguesBySeason.seasonId" required id="season-select" class="form-control">
+				<option ng-repeat="season in allseasons" value="{{season.id}}">
+					 {{season.startYear}} - {{season.endYear}}
+				</option>
+			</select>
+		</div>
+	</div>
+	
+	<div class="form-group">
+		<label for="season-select" class="col-lg-2 control-label">Leagues</label>
+		<div class="col-lg-10">
+			<select ng-model="leaguesBySeason.leagueId" required id="season-select" class="form-control">
+				<option ng-repeat="league in seasonalLeagues" value="{{league.id}}">
+					 {{league.leagueName}}
+				</option>
+			</select>
+		</div>
+	</div>
+	
+	
+	<div class="form-group">
+   		<div class="col-lg-10 col-lg-offset-2">
+   			<button class="btn btn-primary">Get Leagues</button>
+   		</div>
+	
+</fieldset>
+</form>
+
+<table class="table table-striped table-hover ">
+<thead>
+<tr>
+	<th>id</th>
+	<th>admin</th>
+	<th>season</th>
+	<th>league name</th>
+	</tr>
+</thead>
+<tr id="league" ng-repeat="league in leagueValues" >
+
+	<td>{{league.id}}</td> 
+	<td>{{league.adminId}}</td>
+	<td>{{league.seasonId}}</td>
+	<td>{{league.leagueName}}</td>
+		
+</tr>
+</table>

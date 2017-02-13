@@ -40,7 +40,7 @@ public class PickServiceTest {
 
 	@Autowired
 	@InjectMocks
-	private PickService service;
+	private PickService pickService;
 	
 	@Mock
 	private GameIntegrationService gameIntegrationMock;
@@ -61,9 +61,70 @@ public class PickServiceTest {
 	public void makePick_ValidateIdIsSet() {
 		Pick pick = new Pick();
 		pick.setId(null);
-		pick = service.makePick(pick);
+		pick = pickService.makePick(pick);
 		assertTrue(pick.getId() != null);
 		assertTrue(pick.getId() instanceof String);
+
+	}
+	
+	@Test
+	public void validatePick_pickIsNull_throwsPickValidationException() {
+		expectedEx.expect(PickValidationException.class);
+	    expectedEx.expectMessage(PickExceptions.PICK_IS_NULL.toString());
+	    pickService.validatePick(null, true);
+
+	}
+	
+	@Test
+	public void validatePick_gameIdIsNull_throwsPickValidationException() {
+		expectedEx.expect(PickValidationException.class);
+	    expectedEx.expectMessage(PickExceptions.GAME_IS_NULL.toString());
+	    Pick pick = new Pick();
+	    pickService.validatePick(pick, true);
+	}
+	
+	@Test
+	public void validatePick_teamIdIsNull_throwsPickValidationException() {
+		expectedEx.expect(PickValidationException.class);
+	    expectedEx.expectMessage(PickExceptions.TEAM_IS_NULL.toString());
+	    Pick pick = new Pick();
+	    pick.setGameId(UUID.randomUUID().toString());
+	    pickService.validatePick(pick, true);
+
+	}
+	
+	@Test
+	public void validatePick_weekIdIsNull_throwsPickValidationException() {
+		expectedEx.expect(PickValidationException.class);
+	    expectedEx.expectMessage(PickExceptions.WEEK_IS_NULL.toString());
+	    Pick pick = new Pick();
+	    pick.setGameId(UUID.randomUUID().toString());
+	    pick.setTeamId(UUID.randomUUID().toString());
+	    pickService.validatePick(pick, true);
+
+	}
+	
+	@Test
+	public void validatePick_leagueIdIsNull_throwsPickValidationException() {
+		expectedEx.expect(PickValidationException.class);
+	    expectedEx.expectMessage(PickExceptions.LEAGUE_IS_NULL.toString());
+	    Pick pick = new Pick();
+	    pick.setGameId(UUID.randomUUID().toString());
+	    pick.setTeamId(UUID.randomUUID().toString());
+	    pick.setWeekId(UUID.randomUUID().toString());
+	    pickService.validatePick(pick, true);
+
+	}
+	@Test
+	public void validatePick_playerIdIsNull_throwsPickValidationException() {
+		expectedEx.expect(PickValidationException.class);
+	    expectedEx.expectMessage(PickExceptions.PLAYER_IS_NUll.toString());
+	    Pick pick = new Pick();
+	    pick.setGameId(UUID.randomUUID().toString());
+	    pick.setTeamId(UUID.randomUUID().toString());
+	    pick.setWeekId(UUID.randomUUID().toString());
+	    pick.setLeagueId(UUID.randomUUID().toString());
+	    pickService.validatePick(pick, true);
 
 	}
 	
@@ -73,7 +134,7 @@ public class PickServiceTest {
 		Pick pick = new Pick();
 		try
 		{
-			service.validatePick(pick, false);
+			pickService.validatePick(pick, false);
 			fail("Game ID is null");
 		}
 		catch (PickValidationException exception)
@@ -81,103 +142,122 @@ public class PickServiceTest {
 			assertTrue(exception.hasSpecificException(PickExceptions.GAME_IS_NULL));
 		}
 	}
+//	
+//	@Test
+//	public void validatePicks_TeamIdIsNotNull()
+//	{
+//		Pick pick = new Pick();
+//		pick.setGameId(UUID.randomUUID().toString());
+//		try
+//		{
+//			pickService.validatePick(pick, false);
+//			fail("Team ID is null");
+//		}
+//		catch (PickValidationException exception)
+//		{
+//			assertTrue(exception.hasSpecificException(PickExceptions.TEAM_IS_NULL));
+//		}
+//	}
+//	
+//	@Test
+//	public void validatePicks_WeekIdIsNotNull()
+//	{
+//		Pick pick = new Pick();
+//		pick.setGameId(UUID.randomUUID().toString());
+//		pick.setTeamId(UUID.randomUUID().toString());
+//		try
+//		{
+//			pickService.validatePick(pick, false);
+//			fail();
+//		}
+//		catch (PickValidationException exception)
+//		{
+//			assertTrue(exception.hasSpecificException(PickExceptions.WEEK_IS_NULL));
+//		}
+//	}
+	
+//	@Test
+//	public void validatePicks_LeagueIdIsNotNull()
+//	{
+//		Pick pick = new Pick();
+//		pick.setGameId(UUID.randomUUID().toString());
+//		pick.setTeamId(UUID.randomUUID().toString());
+//		pick.setWeekId(UUID.randomUUID().toString());
+//		try
+//		{
+//			pickService.validatePick(pick, false);
+//			fail();
+//		}
+//		catch (PickValidationException exception)
+//		{
+//			assertTrue(exception.hasSpecificException(PickExceptions.LEAGUE_IS_NULL));
+//		}
+//	}
+//	
+//	@Test
+//	public void validatePicks_PlayerIdIsNotNull()
+//	{
+//		Pick pick = new Pick();
+//		pick.setGameId(UUID.randomUUID().toString());
+//		pick.setTeamId(UUID.randomUUID().toString());
+//		pick.setWeekId(UUID.randomUUID().toString());
+//		pick.setLeagueId(UUID.randomUUID().toString());
+//		try
+//		{
+//			pickService.validatePick(pick, false);
+//			fail();
+//		}
+//		catch (PickValidationException exception)
+//		{
+//			assertTrue(exception.hasSpecificException(PickExceptions.PLAYER_IS_NUll));
+//		}
+//	}
+	
 	
 	@Test
-	public void validatePicks_TeamIdIsNotNull()
+	public void validatePicks_gameIsNull_throwsPickValidationException()
 	{
-		Pick pick = new Pick();
-		pick.setGameId(UUID.randomUUID().toString());
-		try
-		{
-			service.validatePick(pick, false);
-			fail("Team ID is null");
-		}
-		catch (PickValidationException exception)
-		{
-			assertTrue(exception.hasSpecificException(PickExceptions.TEAM_IS_NULL));
-		}
-	}
-	
-	@Test
-	public void validatePicks_WeekIdIsNotNull()
-	{
-		Pick pick = new Pick();
-		pick.setGameId(UUID.randomUUID().toString());
-		pick.setTeamId(UUID.randomUUID().toString());
-		try
-		{
-			service.validatePick(pick, false);
-			fail();
-		}
-		catch (PickValidationException exception)
-		{
-			assertTrue(exception.hasSpecificException(PickExceptions.WEEK_IS_NULL));
-		}
-	}
-	
-	@Test
-	public void validatePicks_LeagueIdIsNotNull()
-	{
-		Pick pick = new Pick();
-		pick.setGameId(UUID.randomUUID().toString());
-		pick.setTeamId(UUID.randomUUID().toString());
-		pick.setWeekId(UUID.randomUUID().toString());
-		try
-		{
-			service.validatePick(pick, false);
-			fail();
-		}
-		catch (PickValidationException exception)
-		{
-			assertTrue(exception.hasSpecificException(PickExceptions.LEAGUE_IS_NULL));
-		}
-	}
-	
-	@Test
-	public void validatePicks_PlayerIdIsNotNull()
-	{
-		Pick pick = new Pick();
-		pick.setGameId(UUID.randomUUID().toString());
-		pick.setTeamId(UUID.randomUUID().toString());
-		pick.setWeekId(UUID.randomUUID().toString());
-		pick.setLeagueId(UUID.randomUUID().toString());
-		try
-		{
-			service.validatePick(pick, false);
-			fail();
-		}
-		catch (PickValidationException exception)
-		{
-			assertTrue(exception.hasSpecificException(PickExceptions.PLAYER_IS_NUll));
-		}
-	}
-	
-	@Test
-	public void validatePicks_GameIDIsValidGame()
-	{
-		Pick pick = new Pick();
-		String gameId = UUID.randomUUID().toString();
-		pick.setGameId(gameId);
-		pick.setTeamId(UUID.randomUUID().toString());
-		pick.setWeekId(UUID.randomUUID().toString());
-		pick.setLeagueId(UUID.randomUUID().toString());
-		pick.setPlayerId(UUID.randomUUID().toString());
+		expectedEx.expect(PickValidationException.class);
+	    expectedEx.expectMessage(PickExceptions.PLAYER_IS_NUll.toString());
+	    Pick pick = new Pick();
+//	    String gameId = UUID.randomUUID().toString();
+//	    pick.setGameId(gameId);
+//	    pick.setTeamId(UUID.randomUUID().toString());
+//	    pick.setWeekId(UUID.randomUUID().toString());
+//	    pick.setPlayerId(UUID.randomUUID().toString());
 		
-		when(gameIntegrationMock.getGameById(gameId)).thenReturn(null);
-		try
-		{
-			service.validatePick(pick, false);
-			fail();
-		}
-		catch (PickValidationException exception)
-		{
-			assertTrue(exception.hasSpecificException(PickExceptions.GAME_IS_NULL));
-		}
+		when(gameIntegrationMock.getGameById(pick.getGameId())).thenReturn(null);
+			pickService.validatePick(pick, true);
 	}
+	
+//	@Test
+//	public void validatePicks_GameIDIsValidGame()
+//	{
+//		Pick pick = new Pick();
+//		String gameId = UUID.randomUUID().toString();
+//		pick.setGameId(gameId);
+//		pick.setTeamId(UUID.randomUUID().toString());
+//		pick.setWeekId(UUID.randomUUID().toString());
+//		pick.setLeagueId(UUID.randomUUID().toString());
+//		pick.setPlayerId(UUID.randomUUID().toString());
+//		
+//		when(gameIntegrationMock.getGameById(gameId)).thenReturn(null);
+//		try
+//		{
+//			pickService.validatePick(pick, false);
+//			fail();
+//		}
+//		catch (PickValidationException exception)
+//		{
+//			assertTrue(exception.hasSpecificException(PickExceptions.GAME_IS_NULL));
+//		}
+//	}
 	
 	@Test
 	public void validatePicks_TeamsPassedArePlayingEachOther()
 	{
+		expectedEx.expect(PickValidationException.class);
+	    expectedEx.expectMessage(PickExceptions.TEAM_NOT_PLAYING_IN_GAME.toString());
 		Pick pick = new Pick();
 		String gameId = UUID.randomUUID().toString();
 		pick.setGameId(gameId);
@@ -193,21 +273,44 @@ public class PickServiceTest {
 		gameResponse.setDogId(UUID.randomUUID().toString());
 		gameResponse.setGameStart(ZonedDateTime.now().plusDays(1));
 		when(gameIntegrationMock.getGameById(gameId)).thenReturn(gameResponse);
-		try
-		{
-			service.validatePick(pick, false);
-			fail();
-		}
-		catch (PickValidationException exception)
-		{
-//			System.out.println(exception);
-			assertTrue(exception.hasSpecificException(PickExceptions.TEAM_NOT_PLAYING_IN_GAME));
-		}
+			pickService.validatePick(pick, true);
 	}
+	
+//	@Test
+//	public void validatePicks_TeamsPassedArePlayingEachOther()
+//	{
+//		Pick pick = new Pick();
+//		String gameId = UUID.randomUUID().toString();
+//		pick.setGameId(gameId);
+//		String teamId = UUID.randomUUID().toString();
+//		pick.setTeamId(teamId);
+//		pick.setWeekId(UUID.randomUUID().toString());
+//		pick.setLeagueId(UUID.randomUUID().toString());
+//		pick.setPlayerId(UUID.randomUUID().toString());
+//		
+//		GameResponse gameResponse = new GameResponse();
+//		gameResponse.setId(gameId);
+//		gameResponse.setFavId(UUID.randomUUID().toString());
+//		gameResponse.setDogId(UUID.randomUUID().toString());
+//		gameResponse.setGameStart(ZonedDateTime.now().plusDays(1));
+//		when(gameIntegrationMock.getGameById(gameId)).thenReturn(gameResponse);
+//		try
+//		{
+//			pickService.validatePick(pick, false);
+//			fail();
+//		}
+//		catch (PickValidationException exception)
+//		{
+////			System.out.println(exception);
+//			assertTrue(exception.hasSpecificException(PickExceptions.TEAM_NOT_PLAYING_IN_GAME));
+//		}
+//	}
 	
 	@Test
 	public void validatePicks_GameHasNotStartedNoPicksAllowed()
 	{
+		expectedEx.expect(PickValidationException.class);
+	    expectedEx.expectMessage(PickExceptions.GAME_HAS_ALREADY_STARTED.toString());
 		Pick pick = new Pick();
 		String gameId = UUID.randomUUID().toString();
 		pick.setGameId(gameId);
@@ -224,17 +327,40 @@ public class PickServiceTest {
 		gameResponse.setGameStart(ZonedDateTime.now().minusDays(1));
 		when(gameIntegrationMock.getGameById(gameId)).thenReturn(gameResponse);
 		
-		try
-		{
-			service.validatePick(pick, false);
-			fail();
-		}
-		catch (PickValidationException exception)
-		{
-//			System.out.println(exception);
-			assertTrue(exception.hasSpecificException(PickExceptions.GAME_HAS_ALREADY_STARTED));
-		}
+			pickService.validatePick(pick, false);
 	}
+		
+	
+//	@Test
+//	public void validatePicks_GameHasNotStartedNoPicksAllowed()
+//	{
+//		Pick pick = new Pick();
+//		String gameId = UUID.randomUUID().toString();
+//		pick.setGameId(gameId);
+//		String teamId = UUID.randomUUID().toString();
+//		pick.setTeamId(teamId);
+//		pick.setWeekId(UUID.randomUUID().toString());
+//		pick.setLeagueId(UUID.randomUUID().toString());
+//		pick.setPlayerId(UUID.randomUUID().toString());
+//		
+//		GameResponse gameResponse = new GameResponse();
+//		gameResponse.setId(gameId);
+//		gameResponse.setFavId(UUID.randomUUID().toString());
+//		gameResponse.setDogId(UUID.randomUUID().toString());
+//		gameResponse.setGameStart(ZonedDateTime.now().minusDays(1));
+//		when(gameIntegrationMock.getGameById(gameId)).thenReturn(gameResponse);
+//		
+//		try
+//		{
+//			pickService.validatePick(pick, false);
+//			fail();
+//		}
+//		catch (PickValidationException exception)
+//		{
+////			System.out.println(exception);
+//			assertTrue(exception.hasSpecificException(PickExceptions.GAME_HAS_ALREADY_STARTED));
+//		}
+//	}
 		
 	
 	@Test
@@ -263,7 +389,7 @@ public class PickServiceTest {
 		when(gameIntegrationMock.getGameById(gameId)).thenReturn(gameResponse);
 		when(pickRepositoryMock.findOne(pickId)).thenReturn(null);
 		
-		service.updatePick(pick);
+		pickService.updatePick(pick);
 	}
 	
 	@Test()
@@ -301,7 +427,7 @@ public class PickServiceTest {
 		when(pickRepositoryMock.findOne(pickId)).thenReturn(pickFromDS);
 		when(doublePickRepositoryMock.findDoubleForPlayer(leagueId, weekId, playerId)).thenReturn(doublePick);
 		
-		service.updatePick(pick);
+		pickService.updatePick(pick);
 		
 		verify(doublePickRepositoryMock).delete(doublePick);
 	}
@@ -339,7 +465,7 @@ public class PickServiceTest {
 		when(gameIntegrationMock.getGameById(gameId)).thenReturn(gameResponse);		
 		when(pickRepositoryMock.findOne(pickId)).thenReturn(pickFromDS);
 		
-		service.updatePick(pick);
+		pickService.updatePick(pick);
 		
 		verify(pickRepositoryMock).save(pick);
 	}
@@ -359,7 +485,7 @@ public class PickServiceTest {
 		
 		when(picksByWeekRepositoryMock.findPlayersByWeek(leagueId, weekId)).thenReturn(null);
 		
-		Map<String, Pick> map = service.getPicksByWeekAndPlayer(leagueId, weekId, playerId);
+		Map<String, Pick> map = pickService.getPicksByWeekAndPlayer(leagueId, weekId, playerId);
 		
 		assertTrue(map.size() == 0);
 	}
@@ -392,7 +518,7 @@ public class PickServiceTest {
 		when(picksByWeekRepositoryMock.findPlayersByWeek(leagueId, weekId)).thenReturn(playersByWeekMap);
 		when(pickRepositoryMock.findOne(pickId)).thenReturn(pick);
 		
-		Map<String, Pick> map = service.getPicksByWeekAndPlayer(leagueId, weekId, playerId);
+		Map<String, Pick> map = pickService.getPicksByWeekAndPlayer(leagueId, weekId, playerId);
 		
 		assertTrue(map.size() == 0);
 
@@ -401,7 +527,7 @@ public class PickServiceTest {
 		when(picksByWeekRepositoryMock.findPlayersByWeek(leagueId, weekId)).thenReturn(playersByWeekMap);
 		when(pickRepositoryMock.findOne(pickId)).thenReturn(pick);
 		
-		map = service.getPicksByWeekAndPlayer(leagueId, weekId, playerId);
+		map = pickService.getPicksByWeekAndPlayer(leagueId, weekId, playerId);
 		
 		assertTrue(map.size() == 0);
 		
@@ -432,7 +558,7 @@ public class PickServiceTest {
 		when(picksByWeekRepositoryMock.findPlayersByWeek(leagueId, weekId)).thenReturn(playersByWeekMap);
 		when(pickRepositoryMock.findOne(pickId)).thenReturn(pick);
 		
-		Map<String, Pick> map = service.getPicksByWeekAndPlayer(leagueId, weekId, playerId);
+		Map<String, Pick> map = pickService.getPicksByWeekAndPlayer(leagueId, weekId, playerId);
 		
 		assertEquals(map.get(gameId).getId(), pickId);
 	}
@@ -457,7 +583,7 @@ public class PickServiceTest {
 		
 		when(picksByWeekRepositoryMock.findPlayersByWeek(leagueId, weekId)).thenReturn(null);
 		
-		Map<String, Pick> map = service.getOtherPicksByWeekAndPlayer(leagueId, weekId, playerId);
+		Map<String, Pick> map = pickService.getOtherPicksByWeekAndPlayer(leagueId, weekId, playerId);
 		
 		assertTrue(map.size() == 0);
 	}
@@ -487,7 +613,7 @@ public class PickServiceTest {
 		when(picksByWeekRepositoryMock.findPlayersByWeek(leagueId, weekId)).thenReturn(playersByWeekMap);
 		when(pickRepositoryMock.findOne(pickId)).thenReturn(pick);
 		
-		Map<String, Pick> map = service.getOtherPicksByWeekAndPlayer(leagueId, weekId, playerId);
+		Map<String, Pick> map = pickService.getOtherPicksByWeekAndPlayer(leagueId, weekId, playerId);
 		
 		assertEquals(map.get(gameId).getId(), pickId);
 	}
@@ -505,13 +631,13 @@ public class PickServiceTest {
 		pick.setLeagueId(leagueId);
 		
 		when(picksByWeekRepositoryMock.findPlayersByWeek(leagueId, weekId)).thenReturn(null);
-		Map<String, Map<String, Pick>> map = service.getPicksByWeek(leagueId, weekId);
+		Map<String, Map<String, Pick>> map = pickService.getPicksByWeek(leagueId, weekId);
 		
 		assertTrue(map.size() == 0);
 		
 		Map<String, Map<String, String>> playersByWeekMap = new HashMap<>();
 		when(picksByWeekRepositoryMock.findPlayersByWeek(leagueId, weekId)).thenReturn(playersByWeekMap);
-		map = service.getPicksByWeek(leagueId, weekId);
+		map = pickService.getPicksByWeek(leagueId, weekId);
 		
 		assertTrue(map.size() == 0);
 	}
@@ -535,7 +661,7 @@ public class PickServiceTest {
 		
 		playersByWeekMap.put(playerId, gamesMap);
 		when(picksByWeekRepositoryMock.findPlayersByWeek(leagueId, weekId)).thenReturn(playersByWeekMap);
-		Map<String, Map<String, Pick>> map = service.getPicksByWeek(leagueId, weekId);
+		Map<String, Map<String, Pick>> map = pickService.getPicksByWeek(leagueId, weekId);
 		
 		assertTrue(map.size() > 0);
 	}
@@ -552,7 +678,7 @@ public class PickServiceTest {
 		doublePick.setId(doublePickId);
 		when(doublePickRepositoryMock.findDoubleForPlayer(leagueId, weekId, playerId)).thenReturn(doublePick);
 		
-		DoublePick doublePickDS = service.getDoublePickForPlayer(leagueId, weekId, playerId);
+		DoublePick doublePickDS = pickService.getDoublePickForPlayer(leagueId, weekId, playerId);
 		
 		verify(doublePickRepositoryMock).findDoubleForPlayer(leagueId, weekId, playerId);		
 		assertEquals(doublePick.getId(), doublePickId);
@@ -573,7 +699,7 @@ public class PickServiceTest {
 		String loggedInPlayerId = UUID.randomUUID().toString();
 		
 		when(pickRepositoryMock.findOne(pickId)).thenReturn(null);
-		service.makeDoublePick(pickId, loggedInPlayerId);
+		pickService.makeDoublePick(pickId, loggedInPlayerId);
 		verify(pickRepositoryMock).findOne(pickId);
 	}
 	
@@ -596,7 +722,7 @@ public class PickServiceTest {
 		
 		when(pickRepositoryMock.findOne(pickId)).thenReturn(pick);
 		when(gameIntegrationMock.getGameById(gameId)).thenReturn(gameResponse);
-		service.makeDoublePick(pickId, loggedInPlayerId);
+		pickService.makeDoublePick(pickId, loggedInPlayerId);
 		verify(gameIntegrationMock).getGameById(gameId);
 	}
 
@@ -621,7 +747,7 @@ public class PickServiceTest {
 		
 		when(pickRepositoryMock.findOne(pickId)).thenReturn(pick);
 		when(gameIntegrationMock.getGameById(gameId)).thenReturn(gameResponse);
-		service.makeDoublePick(pickId, loggedInPlayerId);
+		pickService.makeDoublePick(pickId, loggedInPlayerId);
 	}
 	
 	@Test
@@ -653,7 +779,7 @@ public class PickServiceTest {
 		when(gameIntegrationMock.getGameById(gameId)).thenReturn(gameResponse);
 		when(doublePickRepositoryMock.findDoubleForPlayer(leagueId, weekId, loggedInPlayerId)).thenReturn(null);
 		
-		service.makeDoublePick(pickId, loggedInPlayerId);
+		pickService.makeDoublePick(pickId, loggedInPlayerId);
 		
 		verify(doublePickRepositoryMock).save(doublePick);
 	}
@@ -699,7 +825,7 @@ public class PickServiceTest {
 		when(pickRepositoryMock.findOne(originalPickId)).thenReturn(originalPpick);
 		when(gameIntegrationMock.getGameById(gameId)).thenReturn(originalGameResponse);
 		
-		service.makeDoublePick(pickId, loggedInPlayerId);
+		pickService.makeDoublePick(pickId, loggedInPlayerId);
 		
 	}
 	
@@ -740,7 +866,7 @@ public class PickServiceTest {
 		when(pickRepositoryMock.findOne(originalPickId)).thenReturn(originalPpick);
 		when(gameIntegrationMock.getGameById(originalGameId)).thenReturn(originalGameResponse);
 		
-		DoublePick doublePickReturned = service.makeDoublePick(pickId, loggedInPlayerId);
+		DoublePick doublePickReturned = pickService.makeDoublePick(pickId, loggedInPlayerId);
 		
 		verify(doublePickRepositoryMock).save(doublePick);
 		
